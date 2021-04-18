@@ -1,1 +1,3 @@
-#Quezy app
+#Quizy app
+
+Application for making quizzes.
