@@ -1,5 +1,4 @@
 export default function Paging({ paging }) {
-  debugger;
   return <>
     {paging.onChange && <div className={"paging"}>
       <button disabled={paging.currentIndex === 0} onClick={() => paging.onChange(paging.currentIndex - 1)}>Back</button>

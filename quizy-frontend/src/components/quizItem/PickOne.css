@@ -1,0 +1,11 @@
+.btn-correct {
+    background-color: darkseagreen;
+}
+
+.btn-incorrect {
+    background-color: crimson;
+}
+
+.btn-disabled {
+    background-color: bisque;
+}

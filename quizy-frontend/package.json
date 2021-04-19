@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dnd-kit/core": "^2.1.2",
+    "@dnd-kit/modifiers": "^1.0.5",
+    "@dnd-kit/sortable": "^2.0.1",
+    "@dnd-kit/utilities": "^1.0.3",
     "@testing-library/jest-dom": "^5.11.10",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
