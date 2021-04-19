@@ -159,6 +159,8 @@ export default function Quiz() {
     questions: quizData
   }
 
+  console.log(JSON.stringify(quiz))
+
 
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([])
