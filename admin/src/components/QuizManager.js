@@ -21,10 +21,8 @@ export default function QuizManager() {
 
   }, [])
 
-
-
   return <div>
-    {data.map(item =>  <div><Link to={`/quiz/${item.slug}`}>{item.title}</Link></div>)}
+    {data.map(item => <div><Link to={`/quiz/${item.slug}`}>{item.title}</Link></div>)}
   </div>
 
 }

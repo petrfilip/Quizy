@@ -11,7 +11,7 @@ Modules
 - client - GUI modules for user
 
 The frontend is made in React. 
-For development go to `client`, run `npm install` and `npm start`.
+For development go to `client` or `admin`, run `npm install` and `npm start`.
 
 The backend is made in PHP (with Slim framework). To run the backend is possible with command
 `php -S localhost:8888 -t api/public/`

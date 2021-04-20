@@ -1,7 +1,8 @@
 import { useState } from "react";
+import PickOneAnswerEditor from "./quizItem/PickOneAnswerEditor";
+import PickMultipleAnswerEditor from "./quizItem/PickMultipleAnswerEditor";
 
 export default function QuizItemEditor({ question }) {
-
 
   const [data, setData] = useState(question)
 
@@ -9,9 +10,23 @@ export default function QuizItemEditor({ question }) {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
-
     data[name] = value
 
+    const newData = Object.assign({}, data);
+    setData(newData)
+  }
+
+  const answerChangedHandler = (answers) => {
+    data.answers = answers;
+    const newData = Object.assign({}, data);
+    setData(newData)
+  }
+
+
+
+
+  const onCorrectAnswerChangeHandler = (correct) => {
+    data.correct = correct;
     const newData = Object.assign({}, data);
     setData(newData)
   }
@@ -24,9 +39,33 @@ export default function QuizItemEditor({ question }) {
       <option value={"sequence"}>Sequence</option>
     </select>
 
-    <textarea name={"question"} value={data.question} onChange={handleInputChange} />
+    <textarea name={"question"} value={data.question} onChange={handleInputChange}/>
+
+
+    <hr/>
+
+
+    {data.type === "pickOne" && <PickOneAnswerEditor
+      answers={data.answers}
+      correctAnswer={question.correct}
+      onCorrectAnswerChange={onCorrectAnswerChangeHandler}
+      onAnswerChange={answerChangedHandler}
+    />
+    }
+    {data.type === "pickMultiple" && <PickMultipleAnswerEditor
+      answers={data.answers}
+      correctAnswer={question.correct}
+      onCorrectAnswerChange={onCorrectAnswerChangeHandler}
+      onAnswerChange={answerChangedHandler}
+    />}
+
+    <hr/>
 
     <button>Submit</button>
+    <button>Delete</button>
 
+    <pre>{JSON.stringify(data, null, 2)}</pre>
   </div>
 }
+
+
