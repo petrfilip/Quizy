@@ -60,6 +60,12 @@ $app->post('/quiz', function (Request $request, Response $response, $args) {
     return $response;
 });
 
+//todo improve it
+$app->options('/quiz', function (Request $request, Response $response, $args) {
+    $response = $response->withHeader('Content-Type', 'application/json');
+    return $response;
+});
+
 $app->map(['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], '/{routes:.+}', function ($request, $response) {
     throw new HttpNotFoundException($request);
 });

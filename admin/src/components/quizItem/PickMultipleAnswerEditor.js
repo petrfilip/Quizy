@@ -27,7 +27,6 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
       onCorrectAnswerChange(filtered)
       setCorrect(filtered)
     }
-    // onCorrectAnswerChange(correct)
 
   }
 
@@ -44,13 +43,15 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
                checked={correct && correct.filter(i => i == index).length}
                value={index} onChange={onAnswerChangeHandler}
         />
+
+
         <AnswerFields key={`answer-${index}`}
                       id={index} answer={item}
                       onInputChange={onInputChange}/>
       </div>
     )}
 
-    <button onClick={addNewAnswer}>+</button>
+    <button onClick={addNewAnswer}>Add more answer</button>
 
 
   </>

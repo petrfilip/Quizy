@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Route } from "react-router-dom";
 import { Tabs } from "react-simple-tabs-component";
 import QuizItemEditor from "./QuizItemEditor";
 
@@ -22,6 +21,19 @@ export default function QuizItemManager({ slug }) {
       .finally(() => setIsPending(false))
 
   }, [])
+
+  const persistQuizHandler = () => {
+    fetch(`${process.env.REACT_APP_BASE_URI}/quiz`, {
+      method: 'POST', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // body data type must match "Content-Type" header
+    }).then(r => r.json())
+      .then(json => setData(json))
+      .finally(() => {
+      });
+  }
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -60,6 +72,12 @@ export default function QuizItemManager({ slug }) {
     }
   ))
 
+  const addNewQuestionHandler = () => {
+    const defaultQuestion = { type: "pickOne", question: "New", answers: [{},{},{},{}] }
+    data.questions.push(defaultQuestion)
+    setData({ ...data })
+  }
+
   const [selectedTab, setSelectedTab] = useState(tabs[0].index)
 
   return <div>
@@ -67,6 +85,11 @@ export default function QuizItemManager({ slug }) {
     {error && <div>{error}</div>}
 
     <Tabs tabs={tabs} onClick={setSelectedTab} selectedTab={selectedTab}/>
+
+    <button onClick={persistQuizHandler}>Persist quiz</button>
+
+    <button onClick={addNewQuestionHandler}>Add question</button>
+    <pre>{JSON.stringify(data, null, 2)}</pre>
 
 
   </div>

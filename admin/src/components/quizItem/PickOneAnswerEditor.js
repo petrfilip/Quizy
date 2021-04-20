@@ -25,14 +25,15 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
   }
 
   return <>
-    {JSON.stringify(correct)}
-    {answers.map((item, index) =>
+    {answers && answers.map((item, index) =>
       <div key={`pickOne-${index}`}>
         <input type="radio" id={index} name={"question"}
                checked={index == correct}
                value={index}
                onChange={onCorrectAnswerChangeHandler}
         />
+
+
         <AnswerFields key={`answer-${index}`}
                       id={index}
                       answer={item}
@@ -41,7 +42,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
       </div>
     )}
 
-    <button onClick={addNewAnswer}>+</button>
+    <button onClick={addNewAnswer}>Add more answer</button>
 
 
   </>

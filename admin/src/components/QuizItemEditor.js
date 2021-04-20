@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PickOneAnswerEditor from "./quizItem/PickOneAnswerEditor";
 import PickMultipleAnswerEditor from "./quizItem/PickMultipleAnswerEditor";
 
 export default function QuizItemEditor({ question }) {
 
   const [data, setData] = useState(question)
+
+
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -21,9 +23,6 @@ export default function QuizItemEditor({ question }) {
     const newData = Object.assign({}, data);
     setData(newData)
   }
-
-
-
 
   const onCorrectAnswerChangeHandler = (correct) => {
     data.correct = correct;
@@ -61,10 +60,8 @@ export default function QuizItemEditor({ question }) {
 
     <hr/>
 
-    <button>Submit</button>
-    <button>Delete</button>
+    {/*<button>Delete this question</button>*/}
 
-    <pre>{JSON.stringify(data, null, 2)}</pre>
   </div>
 }
 

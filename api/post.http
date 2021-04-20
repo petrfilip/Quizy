@@ -3,7 +3,7 @@ POST http://localhost:8888/quiz
 Content-Type: application/json
 
 {
-  "slug": "react-pro-zacatecniky",
+  "slug": "abcd",
   "title": "React pro začátečníky",
   "description": "Základy Reactu pro začátečníky",
   "heroImage": "",
@@ -35,106 +35,6 @@ Content-Type: application/json
         }
       ],
       "correct": 1,
-      "comment": "Použije se useEffect"
-    },
-    {
-      "id": 1,
-      "type": "pickOne",
-      "question": "Další otázka?",
-      "answers": [
-        {
-          "id": 4,
-          "text": "První odpověď",
-          "comments": "Tato volba není správná, protože je ..."
-        },
-        {
-          "id": 5,
-          "text": "Druhá",
-          "comments": "Tato volba není správná, protože je ..."
-        },
-        {
-          "id": 6,
-          "text": "Třetí",
-          "comments": "Tato volba není správná, protože je ..."
-        }
-      ],
-      "correct": 6,
-      "comment": "Použije se useEffect"
-    },
-    {
-      "id": 2,
-      "type": "pickOneSourceCode",
-      "question": "Nová otázka?",
-      "answers": [
-        {
-          "id": 0,
-          "text": "const paging = {\n    currentIndex: currentQuestionIndex,\n    total: quizData.length,\n    onChange: (index) => {\n      setCurrentQuestionIndex(index)\n    }\n  }"
-        },
-        {
-          "id": 1,
-          "text": "useState",
-          "comments": "Tato volba není správná, protože je ..."
-        },
-        {
-          "id": 2,
-          "text": "useContext",
-          "comments": "Tato volba není správná, protože je ..."
-        }
-      ],
-      "correct": 1,
-      "comment": "Použije se useEffect"
-    },
-    {
-      "id": 3,
-      "type": "sequence",
-      "question": "Nejnovější otázka?",
-      "answers": [
-        {
-          "id": 0,
-          "text": "useEffect"
-        },
-        {
-          "id": 1,
-          "text": "useState"
-        },
-        {
-          "id": 2,
-          "text": "useContext"
-        }
-      ],
-      "correct": 1,
-      "comment": "Použije se useEffect"
-    },
-    {
-      "id": 30,
-      "type": "pickMultiple",
-      "question": "Multiple otázka?",
-      "answers": [
-        {
-          "id": 550,
-          "text": "useEffect"
-        },
-        {
-          "id": 551,
-          "text": "useState"
-        },
-        {
-          "id": 5522,
-          "text": "AAAA"
-        },
-        {
-          "id": 5523,
-          "text": "BBBB"
-        },
-        {
-          "id": 5524,
-          "text": "CCCC"
-        }
-      ],
-      "correct": [
-        550,
-        5522
-      ],
       "comment": "Použije se useEffect"
     }
   ]
