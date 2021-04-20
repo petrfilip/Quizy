@@ -24,6 +24,11 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
     onAnswerChange([...answers])
   }
 
+  const removeAnswer = (index) => {
+    answers.splice(index, 1)
+    onAnswerChange([...answers])
+  }
+
   return <>
     {answers && answers.map((item, index) =>
       <div key={`pickOne-${index}`}>
@@ -39,6 +44,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
                       answer={item}
                       onInputChange={onInputChange}
         />
+        <button onClick={() => removeAnswer(index)}>-</button>
       </div>
     )}
 

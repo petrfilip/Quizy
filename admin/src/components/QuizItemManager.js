@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Tabs } from "react-simple-tabs-component";
 import QuizItemEditor from "./QuizItemEditor";
+import QuizItemMain from "./QuizItemMain";
 
 export default function QuizItemManager({ slug }) {
 
@@ -42,14 +43,13 @@ export default function QuizItemManager({ slug }) {
 
     data[name] = value
 
-    const newData = Object.assign({}, data);
+    const newData = { ...data };
     setData(newData)
   }
+  const Main = () => <div>
+    <QuizItemMain data={data} />
+  </div>
 
-  const Main = () => <div><input type={"text"} name={"title"} value={data.title} onChange={handleInputChange}/>
-    <input type={"text"} name={"slug"} value={data.slug} onChange={handleInputChange}/>
-    <textarea name={"description"} value={data.description} onChange={handleInputChange}/>
-    <input type={"text"} name={"heroImage"} value={data.heroImage} onChange={handleInputChange}/></div>
 
   const tabs = [
     {
@@ -58,6 +58,7 @@ export default function QuizItemManager({ slug }) {
       Component: Main // Tab Component
     },
   ]
+
 
   const Item = () => <div>
     <QuizItemEditor question={tabs[selectedTab].question}/>
@@ -73,7 +74,14 @@ export default function QuizItemManager({ slug }) {
   ))
 
   const addNewQuestionHandler = () => {
-    const defaultQuestion = { type: "pickOne", question: "New", answers: [{},{},{},{}] }
+    const defaultQuestion = {
+      type: "pickOne",
+      question: `New ${data.questions.length}`,
+      answers: [
+        { text: "" },
+        { text: "" }
+      ]
+    }
     data.questions.push(defaultQuestion)
     setData({ ...data })
   }
