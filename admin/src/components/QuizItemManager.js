@@ -135,7 +135,7 @@ export default function QuizItemManager({ slug }) {
           selectedTab={selectedTab}
 
     />
-    {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}
+    <pre>{JSON.stringify(data, null, 2)}</pre>
 
 
   </div>

@@ -1,5 +1,5 @@
 import { useState, useLayoutEffect } from "react";
-import Paging from "./Paging";
+import Paging from "../Paging";
 import PickOne from "./quizItem/PickOne";
 import PickOneSourceCode from "./quizItem/PickOneSourceCode";
 import SimpleSequence from "./quizItem/SimpleSequence";
