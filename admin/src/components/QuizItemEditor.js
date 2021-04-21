@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import PickOneAnswerEditor from "./quizItem/PickOneAnswerEditor";
 import PickMultipleAnswerEditor from "./quizItem/PickMultipleAnswerEditor";
 import MDEditor from "@uiw/react-md-editor";
+import FillTextFromOptions from "./quizItem/FillTextFromOptions";
+import FillTextExactly from "./quizItem/FillTextExactly";
 
 export default function QuizItemEditor({ question }) {
 
@@ -33,17 +35,26 @@ export default function QuizItemEditor({ question }) {
   }
 
   return <div>
-    <select value={data.questionType} name={"questionType"} onChange={handleInputChange}>
-      <option value={"pickOne"}>Pick one</option>
-      <option value={"pickMultiple"}>Pick multiple</option>
-      <option value={"sequence"}>Sequence</option>
-    </select>
+    <div>
+      Question type:
+      <select value={data.questionType} name={"questionType"} onChange={handleInputChange}>
+        <option value={"pickOne"}>Pick one</option>
+        <option value={"pickMultiple"}>Pick multiple</option>
+        <option value={"sequence"}>Sequence</option>
+        <option value={"fillTextFromOptions"}>Fill text from options</option>
+        <option value={"fillTextExactly"}>Fill text exactly</option>
+      </select>
+    </div>
 
-    <select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
-      <option value={"simpleInput"}>Simple input</option>
-      <option value={"codeEditor"}>Source code</option>
-      <option value={"markdown"}>Markdown</option>
-    </select>
+    <div>
+      Answer type:
+      <select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
+        <option value={"simpleInput"}>Simple input</option>
+        <option value={"codeEditor"}>Source code</option>
+        <option value={"markdown"}>Markdown</option>
+      </select>
+    </div>
+    <button>Delete question</button>
 
     <MDEditor
       value={data.question || ""}
@@ -72,6 +83,23 @@ export default function QuizItemEditor({ question }) {
     />
     }
     {data.questionType === "pickMultiple" && <PickMultipleAnswerEditor
+      answers={data.answers}
+      correctAnswer={question.correct}
+      onCorrectAnswerChange={onCorrectAnswerChangeHandler}
+      onAnswerChange={answerChangedHandler}
+      answerType={data.answerType}
+    />}
+
+    {data.questionType === "fillTextFromOptions" && <FillTextFromOptions
+      answers={data.answers}
+      correctAnswer={question.correct}
+      onCorrectAnswerChange={onCorrectAnswerChangeHandler}
+      onAnswerChange={answerChangedHandler}
+      answerType={data.answerType}
+    />}
+
+    {data.questionType === "fillTextExactly" && <FillTextExactly
+      question={data.question}
       answers={data.answers}
       correctAnswer={question.correct}
       onCorrectAnswerChange={onCorrectAnswerChangeHandler}

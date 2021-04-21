@@ -53,12 +53,12 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
 
   return (
     <>
-      <label
-        style={{
-          fontSize: "1em",
-          fontWeight: "bold"
-        }}
-        htmlFor={`field${id}`}>Answer{id}: </label>
+      {/*<label*/}
+      {/*  style={{*/}
+      {/*    fontSize: "1em",*/}
+      {/*    fontWeight: "bold"*/}
+      {/*  }}*/}
+      {/*  htmlFor={`field${id}`}>Answer{id}: </label>*/}
 
       {answerType === "simpleInput" && simpleInput}
       {answerType === "codeEditor" && codeEditor}
