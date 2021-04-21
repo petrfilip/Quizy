@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect } from "react";
 import { Tabs } from "react-simple-tabs-component";
 import QuizItemEditor from "./QuizItemEditor";
 import QuizItemMain from "./QuizItemMain";
 import 'react-simple-tabs-component/dist/index.css'
 import urlSlug from "url-slug"; // (Optional) Provide some basic style
 import { useHistory } from "react-router-dom";
+import "./QuizItemManager.css"
 
 export default function QuizItemManager({ slug }) {
 
@@ -64,20 +65,8 @@ export default function QuizItemManager({ slug }) {
       });
   }
 
-  const handleInputChange = (event) => {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value;
-    const name = target.name;
-
-    data[name] = value
-
-    const newData = { ...data };
-    setData(newData)
-  }
-
-
-  const onMainChange = (changed) =>{
-    setData({...changed})
+  const onMainChange = (changed) => {
+    setData({ ...changed })
   }
 
   const Main = () => <div>
@@ -93,7 +82,7 @@ export default function QuizItemManager({ slug }) {
   ]
 
   const Item = () => <div>
-    <QuizItemEditor question={tabs[selectedTab].question} />
+    <QuizItemEditor question={tabs[selectedTab].question}/>
   </div>
 
   data?.questions?.map(item => tabs.push(
@@ -132,7 +121,11 @@ export default function QuizItemManager({ slug }) {
 
     <button onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist quiz</button>
     <button onClick={addNewQuestionHandler}>Add question</button>
-    <Tabs orientation={"vertical"} tabs={tabs} onClick={setSelectedTab} selectedTab={selectedTab}/>
+    <Tabs orientation={"vertical"}
+          tabs={tabs} onClick={setSelectedTab}
+          selectedTab={selectedTab}
+
+    />
     {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}
 
 

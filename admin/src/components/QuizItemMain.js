@@ -3,13 +3,13 @@ import FlashCardItemEditor from "./FlashCardItemEditor";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
 
-export default function QuizItemMain({ data}) {
+export default function QuizItemMain({ data }) {
 
   const [componentData, setComponentData] = useState(data)
 
-  useLayoutEffect(()=> {
+  useLayoutEffect(() => {
     setComponentData(data)
-  },[])
+  }, [])
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -63,7 +63,7 @@ export default function QuizItemMain({ data}) {
     {componentData?.flashcards?.map((item, index) =>
 
       <div key={`fc-${index}`}>
-        <FlashCardItemEditor  flashcard={item}/>
+        <FlashCardItemEditor flashcard={item}/>
         <hr/>
       </div>
     )}

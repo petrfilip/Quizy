@@ -30,6 +30,12 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
 
   }
 
+  const removeAnswer = (index) => {
+    answers.splice(index, 1)
+    onAnswerChange([...answers])
+  }
+
+
   const addNewAnswer = () => {
     answers.push({})
     onAnswerChange([...answers])
@@ -43,13 +49,15 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
                checked={correct && correct.filter(i => i == index).length}
                value={index} onChange={onAnswerChangeHandler}
         />
-
-
         <AnswerFields key={`answer-${index}`}
                       id={index} answer={item}
                       onInputChange={onInputChange}
                       answerType={answerType}
         />
+
+        <button onClick={() => removeAnswer(index)}>-</button>
+
+        <hr/>
       </div>
     )}
 

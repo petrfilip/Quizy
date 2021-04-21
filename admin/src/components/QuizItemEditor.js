@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import PickOneAnswerEditor from "./quizItem/PickOneAnswerEditor";
 import PickMultipleAnswerEditor from "./quizItem/PickMultipleAnswerEditor";
+import MDEditor from "@uiw/react-md-editor";
 
 export default function QuizItemEditor({ question }) {
 
@@ -34,7 +35,6 @@ export default function QuizItemEditor({ question }) {
   return <div>
     <select value={data.questionType} name={"questionType"} onChange={handleInputChange}>
       <option value={"pickOne"}>Pick one</option>
-      <option value={"pickOneSourceCode"}>Pick one (source code)</option>
       <option value={"pickMultiple"}>Pick multiple</option>
       <option value={"sequence"}>Sequence</option>
     </select>
@@ -42,9 +42,22 @@ export default function QuizItemEditor({ question }) {
     <select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
       <option value={"simpleInput"}>Simple input</option>
       <option value={"codeEditor"}>Source code</option>
+      <option value={"markdown"}>Markdown</option>
     </select>
 
-    <textarea name={"question"} value={data.question} onChange={handleInputChange}/>
+    <MDEditor
+      value={data.question || ""}
+      onChange={(src) => {
+        handleInputChange({
+            target: {
+              value: src,
+              name: "question"
+            }
+          }
+        )
+      }
+      }
+    />
 
 
     <hr/>

@@ -2,11 +2,32 @@ import Editor from "react-simple-code-editor";
 import { highlight, languages } from "prismjs/components/prism-core";
 import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
-import "prismjs/themes/prism.css"; //Example style, you can use another
+import "prismjs/themes/prism.css";
+import MDEditor from "@uiw/react-md-editor";
+import React, { useState } from "react"; //Example style, you can use another
 
 export default function AnswerFields({ id, answer, onInputChange, answerType }) {
 
-  const simpleInput = <input id={id} type={"text"} name={"text"} value={answer.text} onChange={onInputChange}/>
+  const [shownReasons, setShownReasons] = useState(false)
+
+
+  const markdown = <MDEditor
+    value={answer.text || ""}
+    onChange={(src) => {
+      onInputChange({
+          target: {
+            id: id,
+            value: src,
+            name: "text",
+            type: "text"
+          }
+        }
+      )
+    }}
+  />
+
+  const simpleInput = <input id={id} type={"text"}
+                             name={"text"} value={answer.text} onChange={onInputChange}/>
 
   const codeEditor = <Editor
     value={answer?.text || ""}
@@ -32,13 +53,44 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
 
   return (
     <>
-      <label htmlFor={`field${id}`}>{id}: </label>
+      <label
+        style={{
+          fontSize: "1em",
+          fontWeight: "bold"
+        }}
+        htmlFor={`field${id}`}>Answer{id}: </label>
 
       {answerType === "simpleInput" && simpleInput}
       {answerType === "codeEditor" && codeEditor}
+      {answerType === "markdown" && markdown}
 
 
-      <textarea id={id} name={"reason"} value={answer.reason} onChange={onInputChange}/>
+      {/*<textarea id={id} name={"reason"} value={answer.reason} onChange={onInputChange}/>*/}
+
+
+      {!shownReasons && !answer.reason && <button onClick={() => setShownReasons(true)}>Add reason</button>}
+      {!shownReasons && answer.reason && <button onClick={() => setShownReasons(true)}>Edit reason</button>}
+      {shownReasons && <button onClick={() => setShownReasons(false)}>Hide reason</button>}
+      {shownReasons && <MDEditor
+        height={100}
+        preview={'edit'}
+        value={answer.reason || ""}
+        onChange={(src) => {
+          onInputChange({
+              target: {
+                id: id,
+                value: src,
+                name: "reason",
+                type: "text"
+              }
+            }
+          )
+        }
+        }
+      />}
+
+
+
     </>
   );
 }
