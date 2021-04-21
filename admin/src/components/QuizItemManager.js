@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useLayoutEffect } from "react";
 import { Tabs } from "react-simple-tabs-component";
 import QuizItemEditor from "./QuizItemEditor";
 import QuizItemMain from "./QuizItemMain";
+import 'react-simple-tabs-component/dist/index.css' // (Optional) Provide some basic style
+
 
 export default function QuizItemManager({ slug }) {
 
@@ -9,7 +11,7 @@ export default function QuizItemManager({ slug }) {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/quiz/${slug}`)
       .then(response => {
         if (response.ok) {
@@ -84,6 +86,7 @@ export default function QuizItemManager({ slug }) {
     }
     data.questions.push(defaultQuestion)
     setData({ ...data })
+    setSelectedTab(tabs.length)
   }
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].index)
@@ -92,12 +95,11 @@ export default function QuizItemManager({ slug }) {
     {isPending && "Loading data..."}
     {error && <div>{error}</div>}
 
-    <Tabs tabs={tabs} onClick={setSelectedTab} selectedTab={selectedTab}/>
 
     <button onClick={persistQuizHandler}>Persist quiz</button>
-
     <button onClick={addNewQuestionHandler}>Add question</button>
-    <pre>{JSON.stringify(data, null, 2)}</pre>
+    <Tabs orientation={"vertical"} tabs={tabs} onClick={setSelectedTab} selectedTab={selectedTab}/>
+    {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}
 
 
   </div>
