@@ -1,7 +1,7 @@
 import AnswerFields from "./AnswerFields";
 import { useState } from "react";
 
-export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange }) {
+export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
 
   const [correct, setCorrect] = useState(correctAnswer && correctAnswer || undefined)
 
@@ -43,6 +43,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
                       id={index}
                       answer={item}
                       onInputChange={onInputChange}
+                      answerType={answerType}
         />
         <button onClick={() => removeAnswer(index)}>-</button>
       </div>

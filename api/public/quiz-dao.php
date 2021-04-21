@@ -26,11 +26,6 @@ final class QuizDao
     static public function insertOrUpdate($data): array
     {
         $data = (array)$data;
-        if (!isset($data["_id"])) {
-            for ($i = 0; $i <= 2; $i++) {
-                $data["questions"][$i]["id"] = uniqid();
-            }
-        }
         return QuizDao::getDataStore("quiz")->updateOrInsert($data);
     }
 }

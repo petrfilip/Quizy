@@ -1,7 +1,7 @@
 import AnswerFields from "./AnswerFields";
 import { useState } from "react";
 
-export default function PickMultipleAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange }) {
+export default function PickMultipleAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
 
   const [correct, setCorrect] = useState(correctAnswer && Array.isArray(correctAnswer) && correctAnswer || [])
 
@@ -47,7 +47,9 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
 
         <AnswerFields key={`answer-${index}`}
                       id={index} answer={item}
-                      onInputChange={onInputChange}/>
+                      onInputChange={onInputChange}
+                      answerType={answerType}
+        />
       </div>
     )}
 

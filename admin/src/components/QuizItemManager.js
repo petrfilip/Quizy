@@ -1,17 +1,28 @@
-import React, { useEffect, useState ,useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import { Tabs } from "react-simple-tabs-component";
 import QuizItemEditor from "./QuizItemEditor";
 import QuizItemMain from "./QuizItemMain";
-import 'react-simple-tabs-component/dist/index.css' // (Optional) Provide some basic style
-
+import 'react-simple-tabs-component/dist/index.css'
+import urlSlug from "url-slug"; // (Optional) Provide some basic style
+import { useHistory } from "react-router-dom";
 
 export default function QuizItemManager({ slug }) {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
+  let history = useHistory();
 
   useLayoutEffect(() => {
+
+    if (slug === "newQuiz") {
+      setData({
+        title: "New quiz"
+      })
+      setIsPending(false)
+      return
+    }
+
     fetch(`${process.env.REACT_APP_BASE_URI}/quiz/${slug}`)
       .then(response => {
         if (response.ok) {
@@ -19,13 +30,21 @@ export default function QuizItemManager({ slug }) {
         }
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
-      .then(json => setData(json))
+      .then(json => {
+
+        setData(json)
+      })
       .catch((err) => setError(err.message))
       .finally(() => setIsPending(false))
 
-  }, [])
+  }, [slug])
 
   const persistQuizHandler = () => {
+
+    if (!data.slug) {
+      data.slug = urlSlug(data.title)
+    }
+
     fetch(`${process.env.REACT_APP_BASE_URI}/quiz`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -33,7 +52,14 @@ export default function QuizItemManager({ slug }) {
       },
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     }).then(r => r.json())
-      .then(json => setData(json))
+      .then(json => {
+        if (data._id) {
+          setData(json)
+        } else {
+          history.push(json.slug)
+          setData(json)
+        }
+      })
       .finally(() => {
       });
   }
@@ -48,10 +74,15 @@ export default function QuizItemManager({ slug }) {
     const newData = { ...data };
     setData(newData)
   }
-  const Main = () => <div>
-    <QuizItemMain data={data} />
-  </div>
 
+
+  const onMainChange = (changed) =>{
+    setData({...changed})
+  }
+
+  const Main = () => <div>
+    <QuizItemMain data={data} onChange={onMainChange}/>
+  </div>
 
   const tabs = [
     {
@@ -61,9 +92,8 @@ export default function QuizItemManager({ slug }) {
     },
   ]
 
-
   const Item = () => <div>
-    <QuizItemEditor question={tabs[selectedTab].question}/>
+    <QuizItemEditor question={tabs[selectedTab].question} />
   </div>
 
   data?.questions?.map(item => tabs.push(
@@ -76,8 +106,12 @@ export default function QuizItemManager({ slug }) {
   ))
 
   const addNewQuestionHandler = () => {
+
+    data.questions = data.questions || []
+
     const defaultQuestion = {
-      type: "pickOne",
+      questionType: "pickOne",
+      answerType: "simpleInput",
       question: `New ${data.questions.length}`,
       answers: [
         { text: "" },
@@ -96,7 +130,7 @@ export default function QuizItemManager({ slug }) {
     {error && <div>{error}</div>}
 
 
-    <button onClick={persistQuizHandler}>Persist quiz</button>
+    <button onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist quiz</button>
     <button onClick={addNewQuestionHandler}>Add question</button>
     <Tabs orientation={"vertical"} tabs={tabs} onClick={setSelectedTab} selectedTab={selectedTab}/>
     {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}

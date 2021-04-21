@@ -3,7 +3,7 @@ import FlashCardItemEditor from "./FlashCardItemEditor";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
 
-export default function QuizItemMain({ data }) {
+export default function QuizItemMain({ data}) {
 
   const [componentData, setComponentData] = useState(data)
 
@@ -17,9 +17,7 @@ export default function QuizItemMain({ data }) {
     const name = target.name;
 
     data[name] = value
-
-    const newData = { ...data };
-    setComponentData(newData)
+    setComponentData({ ...data })
   }
 
   const addNewFlashcard = () => {
@@ -38,8 +36,10 @@ export default function QuizItemMain({ data }) {
   }
 
   return <div>
+    <h2>Quiz info</h2>
     <input type={"text"} name={"title"} value={componentData.title} onChange={handleInputChange}/>
-    <input type={"text"} name={"slug"} value={urlSlug(componentData.title)} onChange={handleInputChange}/>
+    <input disabled={true} type={"text"} name={"slug"} value={urlSlug(componentData.title)} onChange={handleInputChange}/>
+
     <MDEditor
       value={componentData.description || ""}
       onChange={(src) => {
@@ -55,16 +55,17 @@ export default function QuizItemMain({ data }) {
     />
 
 
-    <input type={"text"} name={"heroImage"} value={componentData.heroImage} onChange={handleInputChange}/>
+    <input type={"text"} placeholder={"heroImage"} name={"heroImage"} value={componentData.heroImage} onChange={handleInputChange}/>
 
     <hr/>
+    <h2>Flash Cards</h2>
 
     {componentData?.flashcards?.map((item, index) =>
 
-      <>
-        <FlashCardItemEditor key={`fc-${index}`} flashcard={item}/>
+      <div key={`fc-${index}`}>
+        <FlashCardItemEditor  flashcard={item}/>
         <hr/>
-      </>
+      </div>
     )}
     <button onClick={addNewFlashcard}>Add flashcard</button>
 
