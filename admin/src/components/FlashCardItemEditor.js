@@ -28,6 +28,7 @@ export default function FlashCardItemEditor({ flashcard }) {
 
   return <div>
     <input
+      placeholder={"Flash cart title"}
       type={"text"}
       name={"title"}
       value={componentData.title}

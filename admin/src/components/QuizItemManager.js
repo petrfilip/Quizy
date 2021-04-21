@@ -112,6 +112,13 @@ export default function QuizItemManager({ slug }) {
     setSelectedTab(tabs.length)
   }
 
+  const removeQuestionHandler = () => {
+
+    data.questions.splice(selectedTab-1, 1)
+    setData({ ...data })
+    setSelectedTab(selectedTab-1)
+  }
+
   const [selectedTab, setSelectedTab] = useState(tabs[0].index)
 
   return <div>
@@ -121,6 +128,8 @@ export default function QuizItemManager({ slug }) {
 
     <button onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist quiz</button>
     <button onClick={addNewQuestionHandler}>Add question</button>
+    <button onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</button>
+
     <Tabs orientation={"vertical"}
           tabs={tabs} onClick={setSelectedTab}
           selectedTab={selectedTab}

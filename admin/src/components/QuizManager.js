@@ -24,6 +24,8 @@ export default function QuizManager() {
 
 
   return <div>
+    {isPending && "Loading data"}
+    {error}
     {data.map(item => <div key={`quizLink-${item.slug}`}><Link  to={`/quiz/${item.slug}`}>{item.title}</Link></div>)}
     <div><Link to={`/quiz/newQuiz`}>Add new quiz</Link></div>
   </div>

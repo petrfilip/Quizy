@@ -16,22 +16,25 @@ export default function QuizItemEditor({ question }) {
     question[name] = value
     data[name] = value
 
-    const newData = Object.assign({}, data);
-    setData(newData)
+    setData({ ...data })
   }
 
   const answerChangedHandler = (answers) => {
     data.answers = answers;
     question.answers = answers;
-    const newData = Object.assign({}, data);
-    setData(newData)
+    setData({ ...data })
   }
 
   const onCorrectAnswerChangeHandler = (correct) => {
     data.correct = correct;
     question.correct = correct;
-    const newData = Object.assign({}, data);
-    setData(newData)
+    setData({ ...data })
+  }
+
+  const onUpdateParametersHandler = (parameters) => {
+    data.parameters = parameters
+    question.parameters = parameters;
+    setData({...data})
   }
 
   return <div>
@@ -54,7 +57,6 @@ export default function QuizItemEditor({ question }) {
         <option value={"markdown"}>Markdown</option>
       </select>
     </div>
-    <button>Delete question</button>
 
     <MDEditor
       value={data.question || ""}
@@ -77,6 +79,8 @@ export default function QuizItemEditor({ question }) {
     {data.questionType === "pickOne" && <PickOneAnswerEditor
       answers={data.answers}
       correctAnswer={question.correct}
+      parameters={data.parameters}
+      onUpdateParameters={onUpdateParametersHandler}
       onCorrectAnswerChange={onCorrectAnswerChangeHandler}
       onAnswerChange={answerChangedHandler}
       answerType={data.answerType}
@@ -102,6 +106,8 @@ export default function QuizItemEditor({ question }) {
       question={data.question}
       answers={data.answers}
       correctAnswer={question.correct}
+      parameters={data.parameters}
+      onUpdateParameters={onUpdateParametersHandler}
       onCorrectAnswerChange={onCorrectAnswerChangeHandler}
       onAnswerChange={answerChangedHandler}
       answerType={data.answerType}

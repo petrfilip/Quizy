@@ -57,7 +57,6 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
 
         <button onClick={() => removeAnswer(index)}>-</button>
 
-        <hr/>
       </div>
     )}
 

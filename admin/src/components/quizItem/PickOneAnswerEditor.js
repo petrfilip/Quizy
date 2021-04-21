@@ -1,7 +1,7 @@
 import AnswerFields from "./AnswerFields";
 import { useState } from "react";
 
-export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
+export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
 
   const [correct, setCorrect] = useState(correctAnswer && correctAnswer || undefined)
 
@@ -9,6 +9,15 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
     const target = event.target;
     setCorrect(target.id)
     onCorrectAnswerChange(target.id)
+  }
+
+  const updateParameters = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    parameters = parameters || {}
+    parameters[name] = value
+    onUpdateParameters({...parameters})
   }
 
   const onInputChange = (event) => {
@@ -50,6 +59,12 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
     )}
 
     <button onClick={addNewAnswer}>Add more answer</button>
+    <button>Edit parameters</button>
+
+    <hr/>
+    <label>Column layout:</label>
+    <input type="number" name={"layout"} max={4} min={1} value={parameters?.layout} onChange={updateParameters}/>
+
 
 
   </>
