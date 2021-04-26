@@ -15,14 +15,12 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
   }, [questionItem.index])
 
   const isCorrect = () => {
-    debugger
     const arrayOfSelected = selected.map(arrayItem => arrayItem.checkedItem.index).sort();
     const diff = [...correct].filter((i, index) => arrayOfSelected[index] != i)
     return diff.length === 0
   }
 
   const isItemCorrect = (item) => {
-    debugger
     const diff = correct.findIndex(i => i == item.index)
     return diff !== -1
   }

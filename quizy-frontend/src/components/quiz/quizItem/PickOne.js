@@ -85,7 +85,6 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
     </div>
 
     const button = () => {
-      debugger
       if (selected && selected.index == item.index && isCorrect(selected) && isCorrect(item)) {
         return correctButton
       } else if (selected && selected.index != item.index && !isCorrect(selected) && isCorrect(item)) {

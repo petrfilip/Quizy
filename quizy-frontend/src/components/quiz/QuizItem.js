@@ -4,10 +4,13 @@ import PickOneSourceCode from "./quizItem/PickOneSourceCode";
 import SimpleSequence from "./quizItem/SimpleSequence";
 import PickMultiple from "./quizItem/PickMultiple";
 import MarkdownPreview from "@uiw/react-markdown-preview";
+import FillTextExactly from "./quizItem/FillTextExactly";
 
 export default function QuizItem({ question, answer, onAnswerSubmit }) {
 
   const [selected, setSelected] = useState(answer)
+  const [customView, setCustomView] = useState()
+  const [showCustomView, setShowCustomView] = useState(true)
 
   useLayoutEffect(() => {
     setSelected(answer);
@@ -24,7 +27,10 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
       <div className={"question-frame"}>
         {selected && question.comment}
 
-        <MarkdownPreview source={question.question}/>
+        <div>
+          {customView && <button onClick={() => setShowCustomView(!showCustomView)}>Show origin</button>}
+          <MarkdownPreview source={showCustomView && customView || question.question}/>
+        </div>
 
         {question.questionType === "pickOne" && <PickOne
           questionItem={question}
@@ -42,6 +48,12 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
           onSubmit={onSubmitHandler}/>}
 
         {question.questionType === "pickMultiple" && <PickMultiple
+          questionItem={question}
+          selectedItem={answer}
+          onSubmit={onSubmitHandler}/>}
+
+        {question.questionType === "fillTextExactly" && <FillTextExactly
+          setCustomView={setCustomView}
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}

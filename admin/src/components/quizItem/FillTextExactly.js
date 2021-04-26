@@ -54,7 +54,7 @@ export default function FillTextExactly({ question, answers, onAnswerChange, cor
         <button onClick={() => setShowPreview(true)}>Show result preview</button>}
     </div>
     {answers && answers.map((item, index) =>
-      <div key={`pickOne-${index}`}>
+      <div key={`fillExact-${index}`}>
 
         <label
           style={{

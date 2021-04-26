@@ -6,7 +6,7 @@ export default function AnswerFields({ id, content, answerType }) {
 
 
   const markdown = <MarkdownPreview source={content || ""}/>
-  const simpleInput = <div>{content}</div>
+  const simpleInput = <MarkdownPreview source={content || ""}/>
   const codeEditor = <div>{content}</div>
   // const codeEditor = <SyntaxHighlighter language="javascript">
   //   {answer.text}
