@@ -1,5 +1,4 @@
 import FlashCards from "../flashcards/FlashCards";
-import CourseList from "./CourseList";
 import { useHistory, useLocation } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import Quiz from "../quiz/Quiz";
@@ -52,7 +51,7 @@ export default function CourseItem({ slug }) {
   return <div>
     <h3>{data.title}</h3>
     {currentAction === "flashcards" && data.flashcards && <FlashCards flashcards={data.flashcards}/>}
-    {currentAction === "quiz" && data.flashcards && <Quiz quizData={data.questions}/>}
+    {currentAction === "quiz" && data.questions && <Quiz quizData={data.questions}/>}
     {currentAction === "choice" && <>{choiceQuiz} {choiceFlashcards}</>}
   </div>
 

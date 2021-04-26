@@ -1,12 +1,12 @@
 import { useState, useLayoutEffect } from "react";
-import Paging from "../Paging";
 import PickOne from "./quizItem/PickOne";
 import PickOneSourceCode from "./quizItem/PickOneSourceCode";
 import SimpleSequence from "./quizItem/SimpleSequence";
 import PickMultiple from "./quizItem/PickMultiple";
+import MarkdownPreview from "@uiw/react-markdown-preview";
 
 export default function QuizItem({ question, answer, onAnswerSubmit }) {
-  // console.log(question)
+
   const [selected, setSelected] = useState(answer)
 
   useLayoutEffect(() => {
@@ -17,28 +17,31 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
     setSelected(answer);
     onAnswerSubmit(question, answer, isCorrect)
   }
+  console.log(answer)
 
   return (
     <>
       <div className={"question-frame"}>
         {selected && question.comment}
 
-        {question.type === "pickOne" && <PickOne
+        <MarkdownPreview source={question.question}/>
+
+        {question.questionType === "pickOne" && <PickOne
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}
 
-        {question.type === "pickOneSourceCode" && <PickOneSourceCode
+        {question.questionType === "pickOneSourceCode" && <PickOneSourceCode
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}
 
-        {question.type === "sequence" && <SimpleSequence
+        {question.questionType === "sequence" && <SimpleSequence
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}
 
-        {question.type === "pickMultiple" && <PickMultiple
+        {question.questionType === "pickMultiple" && <PickMultiple
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}

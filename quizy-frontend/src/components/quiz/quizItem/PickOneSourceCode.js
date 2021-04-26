@@ -4,7 +4,7 @@ import { docco, a11yDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import "./PickOneSourceCode.css"
 
 export default function PickOneSourceCode({ questionItem, selectedItem, onSubmit }) {
-  const { question, answers, correct } = questionItem;
+  const {  answers, correct } = questionItem;
 
   const [selected, setSelected] = useState(selectedItem)
 
@@ -105,7 +105,6 @@ export default function PickOneSourceCode({ questionItem, selectedItem, onSubmit
 
   return (
     <>
-      {<h2>{question}</h2>}
 
       {answers && answers.map(item =>
         <div key={item.id}>

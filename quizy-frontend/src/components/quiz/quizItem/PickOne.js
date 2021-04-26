@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect } from "react";
 import "./PickOne.css"
+import AnswerFields from "./AnswerFields";
 
 export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   const { question, answers, correct } = questionItem;
@@ -8,10 +9,10 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
 
   useLayoutEffect(() => {
     setSelected(selectedItem)
-  }, [questionItem.id])
+  }, [questionItem.index])
 
-  const isCorrect = (selected) => {
-    return selected.id === correct
+  const isCorrect = (item) => {
+    return item.index == correct
   }
 
   const onSubmitHandler = (selectedAnswer) => {
@@ -19,9 +20,9 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
     onSubmit(questionItem, selectedAnswer, isCorrect(selectedAnswer));
   }
 
-  function renderButton(item) {
-
-    const correctButton = selected && selected.id === item.id && <button
+  function renderButton(index, item) {
+    item.index = index
+    const correctButton = <div
       className={"btn-correct"}
       onClick={() => {
         if (selected) {
@@ -30,10 +31,11 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
         onSubmitHandler(item)
       }}
     >
-      {item.text}
-    </button>
+      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
 
-    const incorrectButton = selected && selected.id === item.id && !isCorrect(selected) && <button
+    </div>
+
+    const incorrectButton = <div
       className={"btn-incorrect"}
       onClick={() => {
         if (selected) {
@@ -42,10 +44,11 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
         onSubmitHandler(item)
       }}
     >
-      {item.text}
-    </button>
+      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
 
-    const notSelectedCorrectButton = selected && selected.id !== item.id && !isCorrect(selected) && <button
+    </div>
+
+    const notSelectedCorrectButton = <div
       className={"btn-correct"}
       onClick={() => {
         if (selected) {
@@ -54,10 +57,11 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
         onSubmitHandler(item)
       }}
     >
-      {item.text}
-    </button>
+      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
 
-    const selectedButton = selected && selected.id !== item.id && <button
+    </div>
+
+    const selectedButton = <div
       className={"btn-disabled"}
       onClick={() => {
         if (selected) {
@@ -66,33 +70,52 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
         onSubmitHandler(item)
       }}
     >
-      {item.text}
-    </button>
+      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
 
-    const noOptionSelectedButton = !selected && <button onClick={() => {
+    </div>
+
+    const noOptionSelectedButton = <div onClick={() => {
       if (selected) {
         return
       }
       onSubmitHandler(item)
     }}>
-      {item.text}
-    </button>
+      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
+
+    </div>
+
+    const button = () => {
+      debugger
+      if (selected && selected.index == item.index && isCorrect(selected) && isCorrect(item)) {
+        return correctButton
+      } else if (selected && selected.index != item.index && !isCorrect(selected) && isCorrect(item)) {
+        return notSelectedCorrectButton
+      } else if (selected && selected.index != item.index && isCorrect(selected) && !isCorrect(item)) {
+        return selectedButton
+      } else if (selected && selected.index == item.index && !isCorrect(selected) && !isCorrect(item)) {
+        return incorrectButton
+      } else if (selected) {
+        return selectedButton
+      } else {
+        return noOptionSelectedButton
+      }
+    }
 
     return <>
-      {selected && isCorrect(selected) ? correctButton : incorrectButton}
-      {selected && isCorrect(item) ? notSelectedCorrectButton : selectedButton}
-      {noOptionSelectedButton}
+      {button()}
+      {/*item:{JSON.stringify(item)}*/}
+      {/*selected: {JSON.stringify(selected)}*/}
+      {/*{selected && item.index === selected.index && isCorrect(selected) ? correctButton : incorrectButton}*/}
+      {/*{selected && item.index !== selected.index  ? notSelectedCorrectButton : selectedButton}*/}
+      {/*{noOptionSelectedButton}*/}
     </>;
   }
 
   return (
     <>
-      {<h2>{question}</h2>}
-
-
-      {answers && answers.map(item =>
-        <div key={`${questionItem.id}-${item.id}`}>
-          {renderButton(item)}
+      {answers && answers.map((item, index) =>
+        <div key={`pickOne}-${index}`}>
+          {renderButton(index, item)}
         </div>)}
 
     </>)

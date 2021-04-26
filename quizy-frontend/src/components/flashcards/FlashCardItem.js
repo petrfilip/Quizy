@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import "./FlashCardItem.css"
 
 export default function FlashCardItem({ flashcard }) {
   const [isTurned, setIsTurned] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setIsTurned(false)
   }, [flashcard])
 
