@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function QuizManager() {
+export default function LessonLoader() {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/quiz`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons`)
       .then(response => {
         if (response.ok) {
           return response.json()

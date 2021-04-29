@@ -18,7 +18,7 @@ import { SortableItem } from "./SortableItem";
 import { restrictToVerticalAxis, restrictToWindowEdges } from "@dnd-kit/modifiers";
 
 export default function SimpleSequence({ questionItem, selectedItem, onSubmit }) {
-  const { question, answers, correct } = questionItem;
+  const {  answers, correct } = questionItem;
 
   const [selected, setSelected] = useState(selectedItem || answers)
   const [isSubmitted, setIsSubmitted] = useState(selectedItem)
@@ -47,7 +47,6 @@ export default function SimpleSequence({ questionItem, selectedItem, onSubmit })
 
   return (
     <>
-      {<h2>{question}</h2>}
 
       <DndContext
         sensors={sensors}

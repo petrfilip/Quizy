@@ -9,7 +9,6 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
   const [isSubmitted, setIsSubmitted] = useState(selectedItem && selectedItem.length)
 
   useLayoutEffect(() => {
-    console.log(selectedItem)
     setIsSubmitted(selectedItem || false)
     setSelected(selectedItem || [])
   }, [questionItem.index])

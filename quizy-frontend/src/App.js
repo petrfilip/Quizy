@@ -1,8 +1,8 @@
 import './App.css';
 import Quiz from "./components/quiz/Quiz";
-import CoursePage from "./components/course/CoursePage";
+import LessonPage from "./components/lesson/LessonPage";
 import { BrowserRouter as Router, Link, Route, Switch, useParams } from "react-router-dom";
-import CourseItem from "./components/course/CourseItem";
+import LessonItem from "./components/lesson/LessonItem";
 
 function App() {
 
@@ -25,7 +25,7 @@ function App() {
                   <CourseItemPage />
                 </Route>
                 <Route path="/course">
-                  <CoursePage/>
+                  <LessonPage/>
                 </Route>
                 <Route path="/">
                   <Home/>
@@ -42,7 +42,7 @@ function App() {
 
 function CourseItemPage() {
   let { slug } = useParams();
-  return <><h2>QuizManager</h2><CourseItem slug={slug}/></>;
+  return <><h2>QuizManager</h2><LessonItem slug={slug}/></>;
 }
 
 function Home() {

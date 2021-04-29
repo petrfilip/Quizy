@@ -2,7 +2,7 @@ import AnswerFields from "./AnswerFields";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import MarkdownPreview from '@uiw/react-markdown-preview';
 
-export default function FillTextExactly({ question, answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
+export default function FillTextExactlyAnswerEditor({ question, answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
 
   const [showPreview, setShowPreview] = useState(false)
 

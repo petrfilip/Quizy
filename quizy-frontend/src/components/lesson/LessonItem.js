@@ -3,7 +3,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import Quiz from "../quiz/Quiz";
 
-export default function CourseItem({ slug }) {
+export default function LessonItem({ slug }) {
 
   const [currentAction, setCurrentAction] = useState("choice")
   const [data, setData] = useState({})
@@ -22,7 +22,7 @@ export default function CourseItem({ slug }) {
       return
     }
 
-    fetch(`${process.env.REACT_APP_BASE_URI}/quiz/${slug}`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${slug}`)
       .then(response => {
         if (response.ok) {
           return response.json()

@@ -16,6 +16,19 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
     setSelected([...selected])
   }
 
+  const isItemCorrect = (index, item) => {
+    return correct[index] == item
+  }
+
+  const isCorrect = () => {
+    return selected.filter((item, i) => !isItemCorrect(i, item)).length === 0
+  }
+
+  const onSubmitHandler = () => {
+    setIsSubmitted(true)
+    onSubmit(questionItem, selected, isCorrect());
+  }
+
   let text = question && question.match(/\${([^}]+)}/g) && selected.reduce((acc, item, i) => {
     return selected[i] ? acc.replace(question.match(/\${([^}]+)}/g)[i], selected[i]) : acc
   }, question);
@@ -33,9 +46,24 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
           }}
           htmlFor={`${index}`}>{index}: </label>
 
-        <input id={index} value={selected[index]} onChange={onInputChange} autoComplete={"off"}/>
+        <input id={index} value={selected[index]} onChange={onInputChange} autoComplete={"off"} disabled={isSubmitted}/>
+        {isSubmitted && !isItemCorrect(index, selected[index]) && <span>{correct[index]}</span>}
       </div>
     )}
+
+
+    <button onClick={() => {
+      if (isSubmitted) {
+        return
+      }
+      onSubmitHandler()
+    }
+    }
+    >
+      {!isSubmitted && "Hotovo"}
+      {isSubmitted && isCorrect() && "Správně"}
+      {isSubmitted && !isCorrect() && "Chyba"}
+    </button>
   </>
 
 }

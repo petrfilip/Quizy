@@ -4,7 +4,7 @@ namespace App;
 
 use SleekDB\Store;
 
-final class QuizDao
+final class LessonRepository
 {
     static private function getDataStore($storeName): Store
     {
@@ -13,19 +13,19 @@ final class QuizDao
 
     static public function findAll(): array
     {
-        return QuizDao::getDataStore("quiz")->findAll();
+        return LessonRepository::getDataStore("quiz")->findAll();
     }
 
 
     static public function getBySlug($slug): array
     {
         $condition = ["slug", "===", $slug];
-        return QuizDao::getDataStore("quiz")->findOneBy($condition);
+        return LessonRepository::getDataStore("quiz")->findOneBy($condition);
     }
 
     static public function insertOrUpdate($data): array
     {
         $data = (array)$data;
-        return QuizDao::getDataStore("quiz")->updateOrInsert($data);
+        return LessonRepository::getDataStore("quiz")->updateOrInsert($data);
     }
 }

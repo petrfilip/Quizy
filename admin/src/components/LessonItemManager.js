@@ -1,13 +1,13 @@
 import React, { useState, useLayoutEffect } from "react";
 import { Tabs } from "react-simple-tabs-component";
-import QuizItemEditor from "./QuizItemEditor";
+import QuizQuestionEditor from "./quiz/QuizQuestionEditor";
 import QuizItemMain from "./QuizItemMain";
 import 'react-simple-tabs-component/dist/index.css'
 import urlSlug from "url-slug"; // (Optional) Provide some basic style
 import { useHistory } from "react-router-dom";
-import "./QuizItemManager.css"
+import "./LessonItemManager.css"
 
-export default function QuizItemManager({ slug }) {
+export default function LessonItemManager({ slug }) {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
@@ -24,7 +24,7 @@ export default function QuizItemManager({ slug }) {
       return
     }
 
-    fetch(`${process.env.REACT_APP_BASE_URI}/quiz/${slug}`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${slug}`)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -46,7 +46,7 @@ export default function QuizItemManager({ slug }) {
       data.slug = urlSlug(data.title)
     }
 
-    fetch(`${process.env.REACT_APP_BASE_URI}/quiz`, {
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       headers: {
         'Content-Type': 'application/json'
@@ -82,7 +82,7 @@ export default function QuizItemManager({ slug }) {
   ]
 
   const Item = () => <div>
-    <QuizItemEditor question={tabs[selectedTab].question}/>
+    <QuizQuestionEditor question={tabs[selectedTab].question}/>
   </div>
 
   data?.questions?.map(item => tabs.push(
@@ -126,7 +126,7 @@ export default function QuizItemManager({ slug }) {
     {error && <div>{error}</div>}
 
 
-    <button onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist quiz</button>
+    <button onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</button>
     <button onClick={addNewQuestionHandler}>Add question</button>
     <button onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</button>
 
@@ -135,7 +135,7 @@ export default function QuizItemManager({ slug }) {
           selectedTab={selectedTab}
 
     />
-    <pre>{JSON.stringify(data, null, 2)}</pre>
+    {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}
 
 
   </div>

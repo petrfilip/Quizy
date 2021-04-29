@@ -6,95 +6,74 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   const { question, answers, correct } = questionItem;
 
   const [selected, setSelected] = useState(selectedItem)
+  const [isSubmitted, setIsSubmitted] = useState(selectedItem && selectedItem.length)
 
   useLayoutEffect(() => {
-    setSelected(selectedItem)
+    setIsSubmitted(selectedItem || false)
+    setSelected(selectedItem || [])
   }, [questionItem.index])
 
-  const isCorrect = (item) => {
+  const isCorrect = () => {
+    return selected.index == correct
+  }
+
+  const isItemCorrect = (item) => {
+    debugger
     return item.index == correct
   }
 
-  const onSubmitHandler = (selectedAnswer) => {
-    setSelected(selectedAnswer);
-    onSubmit(questionItem, selectedAnswer, isCorrect(selectedAnswer));
+  const isInSelected = (item) => {
+    return selected && selected.index == item.index
   }
+
+  const onCheckHandler = (checkedItem, checked) => {
+      console.log(checkedItem)
+      setSelected(checkedItem)
+  }
+
+  const onSubmitHandler = () => {
+    setIsSubmitted(true)
+    onSubmit(questionItem, selected, isCorrect());
+  }
+
+  const boxStyle = {
+    padding: "10px",
+    margin: "10px"
+  };
+
+  const checkBoxStyle = {
+    marginRight: "10px",
+    transform: "scale(1.5)"
+  };
 
   function renderButton(index, item) {
     item.index = index
-    const correctButton = <div
-      className={"btn-correct"}
-      onClick={() => {
-        if (selected) {
-          return
-        }
-        onSubmitHandler(item)
-      }}
-    >
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
 
+    const correctButton = <div style={boxStyle} className={"btn-correct"}>
+      <input type={"radio"} checked={isInSelected(item)} style={checkBoxStyle} disabled={true}/>
+      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
     </div>
 
-    const incorrectButton = <div
-      className={"btn-incorrect"}
-      onClick={() => {
-        if (selected) {
-          return
-        }
-        onSubmitHandler(item)
-      }}
-    >
+    const incorrectButton = <div style={boxStyle} className={"btn-incorrect"}>
+      <input type={"radio"} checked={isInSelected(item)} style={checkBoxStyle} disabled={true}/>
       <AnswerFields answerType={questionItem.answerType} content={item.text}/>
-
     </div>
 
-    const notSelectedCorrectButton = <div
-      className={"btn-correct"}
-      onClick={() => {
-        if (selected) {
-          return
-        }
-        onSubmitHandler(item)
-      }}
-    >
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
-
-    </div>
-
-    const selectedButton = <div
-      className={"btn-disabled"}
-      onClick={() => {
-        if (selected) {
-          return
-        }
-        onSubmitHandler(item)
-      }}
-    >
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
-
-    </div>
-
-    const noOptionSelectedButton = <div onClick={() => {
-      if (selected) {
-        return
-      }
-      onSubmitHandler(item)
-    }}>
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
-
+    const noOptionSelectedButton = <div style={boxStyle}>
+      <input type={"radio"} id={`${item.index}`}
+             name={"pickOne"}
+             onChange={(e) => onCheckHandler(item, e.target.checked)}
+             style={checkBoxStyle}/>
+      <label htmlFor={`${item.index}`}><AnswerFields
+        answerType={questionItem.answerType}
+        content={item.text}/></label>
     </div>
 
     const button = () => {
-      if (selected && selected.index == item.index && isCorrect(selected) && isCorrect(item)) {
+      if (isSubmitted && isItemCorrect(item)) {
         return correctButton
-      } else if (selected && selected.index != item.index && !isCorrect(selected) && isCorrect(item)) {
-        return notSelectedCorrectButton
-      } else if (selected && selected.index != item.index && isCorrect(selected) && !isCorrect(item)) {
-        return selectedButton
-      } else if (selected && selected.index == item.index && !isCorrect(selected) && !isCorrect(item)) {
+      } else if (isSubmitted && !isItemCorrect(item)) {
         return incorrectButton
-      } else if (selected) {
-        return selectedButton
       } else {
         return noOptionSelectedButton
       }
@@ -102,20 +81,28 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
 
     return <>
       {button()}
-      {/*item:{JSON.stringify(item)}*/}
-      {/*selected: {JSON.stringify(selected)}*/}
-      {/*{selected && item.index === selected.index && isCorrect(selected) ? correctButton : incorrectButton}*/}
-      {/*{selected && item.index !== selected.index  ? notSelectedCorrectButton : selectedButton}*/}
-      {/*{noOptionSelectedButton}*/}
     </>;
   }
 
   return (
     <>
       {answers && answers.map((item, index) =>
-        <div key={`pickOne}-${index}`}>
+        <div key={`pickMultiple-${index}`}>
           {renderButton(index, item)}
         </div>)}
+
+      <button onClick={() => {
+        if (isSubmitted) {
+          return
+        }
+        onSubmitHandler()
+      }
+      }
+      >
+        {!isSubmitted && "Hotovo"}
+        {isSubmitted && isCorrect() && "Správně"}
+        {isSubmitted && !isCorrect() && "Chyba"}
+      </button>
 
     </>)
 }

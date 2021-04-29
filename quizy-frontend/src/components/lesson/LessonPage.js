@@ -1,14 +1,14 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function CoursePage() {
+export default function LessonPage() {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
 
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/quiz`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons`)
       .then(response => {
         if (response.ok) {
           return response.json()

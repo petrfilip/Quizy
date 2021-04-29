@@ -1,7 +1,7 @@
 import AnswerFields from "./AnswerFields";
 import { useState } from "react";
 
-export default function FillTextFromOptions({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
+export default function FillTextFromOptionsAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
 
   const [correct, setCorrect] = useState(correctAnswer && correctAnswer || undefined)
 

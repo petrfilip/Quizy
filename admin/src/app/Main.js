@@ -5,8 +5,8 @@ import {
   Route,
   Link, useParams
 } from "react-router-dom";
-import QuizManager from "../components/QuizManager";
-import QuizItemManager from "../components/QuizItemManager";
+import LessonLoader from "../components/LessonLoader";
+import LessonItemManager from "../components/LessonItemManager";
 import "./Main.css"
 
 export default function Main() {
@@ -49,12 +49,12 @@ function Home() {
 }
 
 function QuizManagerPage() {
-  return <><h2>QuizManager</h2><QuizManager/></>;
+  return <><h2>QuizManager</h2><LessonLoader/></>;
 }
 
 function QuizItemManagerPage() {
   let { slug } = useParams();
-  return <><h2>QuizManager</h2><QuizItemManager slug={slug}/></>;
+  return <><h2>QuizManager</h2><LessonItemManager slug={slug}/></>;
 }
 
 function Users() {

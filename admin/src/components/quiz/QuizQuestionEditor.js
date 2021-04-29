@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import PickOneAnswerEditor from "./quizItem/PickOneAnswerEditor";
-import PickMultipleAnswerEditor from "./quizItem/PickMultipleAnswerEditor";
+import PickOneAnswerEditor from "./PickOneAnswerEditor";
+import PickMultipleAnswerEditor from "./PickMultipleAnswerEditor";
 import MDEditor from "@uiw/react-md-editor";
-import FillTextFromOptions from "./quizItem/FillTextFromOptions";
-import FillTextExactly from "./quizItem/FillTextExactly";
+import FillTextFromOptionsAnswerEditor from "./FillTextFromOptionsAnswerEditor";
+import FillTextExactlyAnswerEditor from "./FillTextExactlyAnswerEditor";
 
-export default function QuizItemEditor({ question }) {
+export default function QuizQuestionEditor({ question }) {
 
   const [data, setData] = useState(question)
 
@@ -94,7 +94,7 @@ export default function QuizItemEditor({ question }) {
       answerType={data.answerType}
     />}
 
-    {data.questionType === "fillTextFromOptions" && <FillTextFromOptions
+    {data.questionType === "fillTextFromOptions" && <FillTextFromOptionsAnswerEditor
       answers={data.answers}
       correctAnswer={question.correct}
       onCorrectAnswerChange={onCorrectAnswerChangeHandler}
@@ -102,7 +102,7 @@ export default function QuizItemEditor({ question }) {
       answerType={data.answerType}
     />}
 
-    {data.questionType === "fillTextExactly" && <FillTextExactly
+    {data.questionType === "fillTextExactly" && <FillTextExactlyAnswerEditor
       question={data.question}
       answers={data.answers}
       correctAnswer={question.correct}

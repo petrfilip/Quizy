@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
-import FlashCardItemEditor from "./FlashCardItemEditor";
+import FlashCardItemEditor from "./flashcard/FlashCardItemEditor";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
 
