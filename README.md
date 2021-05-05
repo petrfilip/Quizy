@@ -6,9 +6,9 @@ Free to use application for making quizzes.
 It is self-hosted solution based on simple tech stack.
 
 Modules
-- admin - GUI module for managing quizzes
-- api - API module which holds data (data are kept in flat files SleekDB)
-- client - GUI modules for user
+- _admin_ - GUI module for managing quizzes
+- _api_ - API module which holds data (data are kept in flat files SleekDB)
+- _client_ - GUI modules for user
 
 The frontend is made in React. 
 For development go to `client` or `admin`, run `npm install` and `npm start`.
