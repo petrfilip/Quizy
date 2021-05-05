@@ -23,6 +23,11 @@ final class LessonRepository
         return LessonRepository::getDataStore("quiz")->findOneBy($condition);
     }
 
+    static public function deleteById($id)
+    {
+        return LessonRepository::getDataStore("quiz")->deleteById($id);
+    }
+
     static public function insertOrUpdate($data): array
     {
         $data = (array)$data;

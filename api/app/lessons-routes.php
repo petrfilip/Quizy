@@ -15,6 +15,10 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             return $response;
         });
+        $group->options('/{id}', function (Request $request, Response $response, $args) {
+            $response = $response->withHeader('Content-Type', 'application/json');
+            return $response;
+        });
 
         $group->get('', function (Request $request, Response $response, $args) {
             $data = LessonRepository::findAll();
@@ -27,6 +31,15 @@ return function (App $app) {
 
         $group->get('/{slug}', function (Request $request, Response $response, $args) {
             $data = LessonRepository::getBySlug($args["slug"]);
+            $payload = json_encode($data);
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write($payload);
+            return $response;
+        });
+
+        $group->delete('/{id}', function (Request $request, Response $response, $args) {
+            $data = LessonRepository::deleteById($args["id"]); // add deleteAt
             $payload = json_encode($data);
 
             $response = $response->withHeader('Content-Type', 'application/json');

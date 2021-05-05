@@ -39,7 +39,7 @@ export default function LessonItem({ slug }) {
   }, [slug])
 
   const choiceQuiz = <div onClick={() => {
-    history.push(`${location.pathname}/quiz`)
+    history.push(`${location.pathname}/lessons`)
     setCurrentAction("quiz")
   }}>Quiz</div>
 

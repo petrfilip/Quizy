@@ -126,9 +126,9 @@ export default function LessonItemManager({ slug }) {
     {error && <div>{error}</div>}
 
 
-    <button onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</button>
-    <button onClick={addNewQuestionHandler}>Add question</button>
-    <button onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</button>
+    <button className={"btn btn-blue"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</button>
+    <button className={"btn btn-blue"} onClick={addNewQuestionHandler}>Add question</button>
+    <button className={"btn btn-blue"} onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</button>
 
     <Tabs orientation={"vertical"}
           tabs={tabs} onClick={setSelectedTab}

@@ -42,7 +42,7 @@ function App() {
 
 function CourseItemPage() {
   let { slug } = useParams();
-  return <><h2>QuizManager</h2><LessonItem slug={slug}/></>;
+  return <><LessonItem slug={slug}/></>;
 }
 
 function Home() {

@@ -8,26 +8,41 @@ import {
 import LessonLoader from "../components/LessonLoader";
 import LessonItemManager from "../components/LessonItemManager";
 import "./Main.css"
+import Navbar from "./Navbar";
 
 export default function Main() {
+  const nav = [
+    {
+      title: "Dashboard",
+      to: "/"
+    },
+    {
+      title: "Lessons",
+      to: "/lessons"
+    },
+    {
+      title: "Courses",
+      to: "/courses"
+    },
+    {
+      title: "Users",
+      to: "/users"
+    }
+  ]
 
   return (
     <Router>
       <div>
-        <nav>
-          <Link to="/">Dashboard</Link>
-          <Link to="/quiz">Quizzes</Link>
-          <Link to="/users">Users</Link>
-        </nav>
+        <Navbar items={nav} />
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <div className={"page-content"}>
           <Switch>
-            <Route path="/quiz/:slug">
+            <Route path="/lessons/:slug">
               <QuizItemManagerPage/>
             </Route>
-            <Route path="/quiz">
+            <Route path="/lessons">
               <QuizManagerPage/>
             </Route>
             <Route path="/users">

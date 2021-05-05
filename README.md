@@ -74,11 +74,11 @@ Whole application is composed of the following objects:
   "title": "React Quiz",
   "description": "Some basics about React",
   "heroImage": "https://host/path/to/image.jpg",
-  "lessonList": [ // list of questions
-    "lessonId-123",
-    "anotherLessonId-456"
+  "lessonList": [ // list of lessons
+    "lessonId-123", // lesson id
+    "anotherLessonId-456" // lesson id
   ],
-  ... // more questions
+  ...
 }
 ```
 

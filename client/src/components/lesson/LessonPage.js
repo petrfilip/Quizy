@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 
 export default function LessonPage() {
 
@@ -7,7 +7,7 @@ export default function LessonPage() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/lessons`)
       .then(response => {
         if (response.ok) {
@@ -22,7 +22,7 @@ export default function LessonPage() {
   }, [])
 
   return <div>
-    {isPending && "Loading data"}
+    {/*{isPending && "Loading data"}*/}
     {error}
     {data.map(item => <div key={`quizLink-${item.slug}`}><Link to={`/course/${item.slug}`}>{item.title}</Link></div>)}
   </div>
