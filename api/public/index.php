@@ -14,8 +14,13 @@ require __DIR__ . './../src/Middleware/CorsMiddleware.php';
 require __DIR__ . './../src/Middleware/JwtMiddleware.php';
 
 require __DIR__ . '/../repository/lesson-repository.php';
+require __DIR__ . '/../repository/user-repository.php';
+require __DIR__ . '/../app/ErrorUtils.php';
+require __DIR__ . '/../app/Utils.php';
 
 define("DATABASE_ROOT", __DIR__ . "/../database");
+
+define("JWT_KEY", "TODO");
 
 $app = AppFactory::create();
 
@@ -31,6 +36,9 @@ $app->get('/', function (Request $request, Response $response, $args) {
     $response->getBody()->write("Hello");
     return $response;
 });
+
+$loginRoute = require __DIR__ . '/../app/login-routes.php';
+$loginRoute($app);
 
 $usersRoutes = require __DIR__ . '/../app/users-routes.php';
 $usersRoutes($app);

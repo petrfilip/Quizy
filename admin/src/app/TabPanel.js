@@ -53,10 +53,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function VerticalTabs({ tabs, selectedTab, setSelectedTab}) {
   const classes = useStyles();
-  const [value, setValue] = React.useState(selectedTab);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
     setSelectedTab(newValue)
   };
 
@@ -65,7 +63,7 @@ export default function VerticalTabs({ tabs, selectedTab, setSelectedTab}) {
       <Tabs
         orientation="vertical"
         variant="scrollable"
-        value={value}
+        value={selectedTab}
         onChange={handleChange}
         aria-label="Vertical tabs example"
         className={classes.tabs}
@@ -73,7 +71,7 @@ export default function VerticalTabs({ tabs, selectedTab, setSelectedTab}) {
         {tabs.map((tabItem, i)=> <Tab label={tabItem.label} {...a11yProps(i)} />)}
       </Tabs>
       {tabs.map((tabItem, i)=>
-        <TabPanel value={value} index={i}>
+        <TabPanel value={selectedTab} index={i}>
           {tabItem.Component()}
       </TabPanel>)}
     </div>

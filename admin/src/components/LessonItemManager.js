@@ -10,11 +10,14 @@ import { Button, ButtonGroup } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
 import SaveIcon from "@material-ui/icons/Save";
-import { SnackbarProvider, useSnackbar } from 'notistack';
+import {  useSnackbar } from 'notistack';
 import VerticalTabs from "../app/TabPanel";
+import {  Prompt } from "react-router-dom";
+
 
 export default function LessonItemManager({ slug }) {
 
+  const [isPersisted, setIsPersisted] = useState(true)
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
@@ -49,6 +52,7 @@ export default function LessonItemManager({ slug }) {
 
   const persistQuizHandler = () => {
 
+
     if (!data.slug) {
       data.slug = urlSlug(data.title)
     }
@@ -68,6 +72,7 @@ export default function LessonItemManager({ slug }) {
           setData(json)
         }
       }).then(() => {
+      setIsPersisted(true)
       enqueueSnackbar('Lesson persisted', { variant: "success" });
     })
       .catch(() => {
@@ -109,6 +114,8 @@ export default function LessonItemManager({ slug }) {
 
   const addNewQuestionHandler = () => {
 
+    isPersisted && setIsPersisted(false)
+
     data.questions = data.questions || []
 
     const defaultQuestion = {
@@ -127,6 +134,9 @@ export default function LessonItemManager({ slug }) {
 
   const removeQuestionHandler = () => {
 
+    isPersisted && setIsPersisted(false)
+
+
     data.questions.splice(selectedTab - 1, 1)
     setData({ ...data })
     setSelectedTab(selectedTab - 1)
@@ -138,10 +148,15 @@ export default function LessonItemManager({ slug }) {
     {isPending && "Loading data..."}
     {error && <div>{error}</div>}
 
+    <Prompt
+      when={!isPersisted}
+      message={location =>
+        `The lesson is not saved. Are you sure you wanna leave without saving it?`
+      }
+    />
 
     <ButtonGroup color="primary" aria-label="outlined primary button group">
-
-      <Button startIcon={<SaveIcon/>} color={"primary"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</Button>
+      <Button variant={isPersisted && "outlined" || "contained"} startIcon={<SaveIcon/>} color={"primary"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</Button>
       <Button startIcon={<AddIcon/>} onClick={addNewQuestionHandler}>Add question</Button>
       <Button startIcon={<DeleteIcon/>} color={"secondary"} onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</Button>
     </ButtonGroup>

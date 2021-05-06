@@ -1,49 +1,42 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import { Link as RouterLink } from "react-router-dom";
 
-export default function Navbar({ fixed, items }) {
-  const [navbarOpen, setNavbarOpen] = React.useState(false);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
+}));
+
+export default function Navbar({ items }) {
+  const classes = useStyles();
+
   return (
-    <>
-      <nav className="relative flex flex-wrap items-center justify-between px-2 py-3 bg-blue-500 mb-3">
-        <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
-          <div className="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
-            <a
-              className="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-nowrap uppercase text-white"
-              href="#pablo"
-            >
-             Quizy Admin
-            </a>
-            <button
-              className="text-white cursor-pointer text-xl leading-none px-3 py-1 border border-solid border-transparent rounded bg-transparent block lg:hidden outline-none focus:outline-none"
-              type="button"
-              onClick={() => setNavbarOpen(!navbarOpen)}
-            >
-              <i className="fas fa-bars"></i>
-            </button>
-          </div>
-          <div
-            className={
-              "lg:flex flex-grow items-center" +
-              (navbarOpen ? " flex" : " hidden")
-            }
-            id="example-navbar-danger"
-          >
-            <ul className="flex flex-col lg:flex-row list-none lg:ml-auto">
-              {items.map(item => {
-                return <li className="nav-item">
-                  <Link
-                    className="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
-                    to={item.to}
-                  >
-                    <span className="ml-2">{item.title}</span>
-                  </Link>
-                </li>
-              })}
-            </ul>
-          </div>
-        </div>
-      </nav>
-    </>
+    <div className={classes.root}>
+      <AppBar position="static">
+        <Toolbar>
+
+          <Typography variant="h6" className={classes.title}>
+            Quizy app
+          </Typography>
+          {items.map(item => {
+            return <Button startIcon={item.icon} color="inherit" component={RouterLink} to={item.to}>{item.title}</Button>
+          })}
+
+        </Toolbar>
+      </AppBar>
+    </div>
   );
 }

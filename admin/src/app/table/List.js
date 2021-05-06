@@ -268,8 +268,8 @@ function Table({ columns, data, component }) {
         // className={classes.gridContainer}
         justify="center"
       >
-        {rows.map(({ original }) => (
-          <Grid item xs={12} sm={6} md={3}>
+        {rows.map(({ original }, i) => (
+          <Grid key={`listItem-${i}`} item xs={12} sm={6} md={3}>
             {component(original)}
           </Grid>
         ))}

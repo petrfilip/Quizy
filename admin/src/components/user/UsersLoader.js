@@ -1,21 +1,18 @@
 import React, { useLayoutEffect, useState } from "react";
-import List from "../app/table/List";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Badge, Chip, Link } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { Link as RouterLink } from 'react-router-dom';
-import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { useSnackbar } from "notistack";
-import { useAuth } from "../app/AuthContext";
+import { useAuth } from "../../app/AuthContext";
+import List from "../../app/table/List";
 
-export default function LessonLoader() {
+export default function UserLoader() {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
@@ -24,7 +21,7 @@ export default function LessonLoader() {
   const { authTokens } = useAuth();
 
   useLayoutEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/lessons`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/users`)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -40,7 +37,7 @@ export default function LessonLoader() {
   const deleteItem = (lessonId) => {
     console.log(data)
     setIsPending(true)
-    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${lessonId}`,
+    fetch(`${process.env.REACT_APP_BASE_URI}/users/${lessonId}`,
       {
         method: 'DELETE',
         headers: new Headers({
@@ -77,8 +74,7 @@ export default function LessonLoader() {
 
   const columns = [
     {
-      Header: 'Title',
-      accessor: 'title'
+      accessor: 'mail'
     }
   ];
 
@@ -89,18 +85,16 @@ export default function LessonLoader() {
     <Button color={"primary"}
             startIcon={<AddIcon/>}
             variant="outlined"
-            to={`/lessons/newQuiz`}
+            to={`/user/newUser`}
             component={RouterLink}
-    >Add new quiz</Button>
-    <List columns={columns} data={data} component={(item) => {
-      return OutlinedCard(item, deleteItemDialog)
-    }}/>
+    >Add new user</Button>
+    <List columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
 
   </>
 
 }
 
-function OutlinedCard(lessonItem, onDelete) {
+function OutlinedCard(userItem, onDelete) {
 
   return (
     <Card variant="outlined">
@@ -116,21 +110,14 @@ function OutlinedCard(lessonItem, onDelete) {
       {/*/>*/}
       <CardContent>
         <Typography>
-          {lessonItem.title}
+          {userItem.mail}
         </Typography>
 
 
       </CardContent>
       <CardActions>
-        <Badge badgeContent={lessonItem && lessonItem.flashcards && lessonItem.flashcards.length || "0"} color="primary">
-          <MenuBookIcon/>
-        </Badge>
-        <Badge badgeContent={lessonItem.questions && lessonItem.questions.length || "0"} color="primary">
-          <QuestionAnswerIcon/>
-        </Badge>
-
-        <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/lessons/${lessonItem.slug}`}>Edit</Button>
-        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(lessonItem)}>Delete</Button>
+        <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/user/${userItem._id}`}>Edit</Button>
+        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(userItem)}>Delete</Button>
       </CardActions>
     </Card>
   );

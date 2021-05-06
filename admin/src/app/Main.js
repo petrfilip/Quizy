@@ -7,26 +7,42 @@ import {
 } from "react-router-dom";
 import LessonLoader from "../components/LessonLoader";
 import LessonItemManager from "../components/LessonItemManager";
+import UsersLoader from "../components/user/UsersLoader";
 import "./Main.css"
 import Navbar from "./Navbar";
+import PeopleIcon from '@material-ui/icons/People';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import HomeIcon from '@material-ui/icons/Home';
+import ViewComfyIcon from '@material-ui/icons/ViewComfy';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import Login from "./Login";
 
 export default function Main() {
   const nav = [
     {
       title: "Dashboard",
-      to: "/"
+      to: "/",
+      icon: <HomeIcon/>
     },
     {
       title: "Lessons",
-      to: "/lessons"
+      to: "/lessons",
+      icon: <MenuBookIcon/>
     },
     {
       title: "Courses",
-      to: "/courses"
+      to: "/courses",
+      icon: <ViewComfyIcon/>
     },
     {
-      title: "Users",
-      to: "/users"
+      title: "",
+      to: "/users",
+      icon: <PeopleIcon/>
+    },
+    {
+      title: "",
+      to: "/profile",
+      icon: <AccountCircleIcon/>
     }
   ]
 
@@ -46,7 +62,13 @@ export default function Main() {
               <QuizManagerPage/>
             </Route>
             <Route path="/users">
-              <Users/>
+              <UsersLoader/>
+            </Route>
+            <Route path="/login">
+              <Login/>
+            </Route>
+            <Route path="/profile">
+              <Profile/>
             </Route>
             <Route path="/">
               <Home/>
@@ -72,6 +94,9 @@ function QuizItemManagerPage() {
   return <><LessonItemManager slug={slug}/></>;
 }
 
-function Users() {
-  return <h2>Users</h2>;
+
+
+function Profile() {
+  return <h2>Profile</h2>;
 }
+
