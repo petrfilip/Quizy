@@ -11,6 +11,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
 import SaveIcon from "@material-ui/icons/Save";
 import { SnackbarProvider, useSnackbar } from 'notistack';
+import VerticalTabs from "../app/TabPanel";
 
 export default function LessonItemManager({ slug }) {
 
@@ -144,11 +145,13 @@ export default function LessonItemManager({ slug }) {
       <Button startIcon={<AddIcon/>} onClick={addNewQuestionHandler}>Add question</Button>
       <Button startIcon={<DeleteIcon/>} color={"secondary"} onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</Button>
     </ButtonGroup>
-    <Tabs orientation={"vertical"}
-          tabs={tabs} onClick={setSelectedTab}
-          selectedTab={selectedTab}
+    <VerticalTabs tabs={tabs} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
+    {/*<VerticalTabs tabs={tabs} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>*/}
+    {/*<Tabs orientation={"vertical"}*/}
+    {/*      tabs={tabs} onClick={setSelectedTab}*/}
+    {/*      selectedTab={selectedTab}*/}
 
-    />
+    {/*/>*/}
     {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}
 
 
