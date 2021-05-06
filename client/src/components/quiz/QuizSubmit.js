@@ -1,3 +1,5 @@
+import { Button } from "@material-ui/core";
+
 export default function QuizSubmit() {
-  return <button>Submit</button>
+  return <Button>Submit</Button>
 }

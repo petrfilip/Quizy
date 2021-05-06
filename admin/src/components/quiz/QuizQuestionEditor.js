@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import PickOneAnswerEditor from "./PickOneAnswerEditor";
 import PickMultipleAnswerEditor from "./PickMultipleAnswerEditor";
 import MDEditor from "@uiw/react-md-editor";
@@ -64,7 +64,6 @@ export default function QuizQuestionEditor({ question }) {
       <InputLabel id="demo-simple-select-label"> Answer type:</InputLabel>
       <Select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
         <MenuItem value={"simpleInput"}>Simple input</MenuItem>
-        <MenuItem value={"codeEditor"}>Source code</MenuItem>
         <MenuItem value={"markdown"}>Markdown</MenuItem>
       </Select>
     </FormControl>

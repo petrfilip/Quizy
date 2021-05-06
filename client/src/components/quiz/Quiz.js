@@ -4,10 +4,11 @@ import QuizScore from "./QuizScore";
 import { Timer } from "../Timer";
 import QuizProgress from "./QuizProgress";
 import Paging from "../Paging";
+import { Container, Paper } from "@material-ui/core";
 
-export default function Quiz({quizData}) {
+export default function Quiz({ quizData }) {
 
-  useEffect(()=> {
+  useEffect(() => {
     const quiz = quizData.map((item, index) => {
       item.index = index;
       return item;
@@ -49,20 +50,36 @@ export default function Quiz({quizData}) {
   }
 
   return (
-    <>
-      <Timer/>
-      <QuizProgress current={answers.length} total={quizItems.length}/>
-      <QuizScore score={getScore()} total={answers.length}/>
-      <QuizScore score={getScore()} total={quizItems.length}/>
-      {quizItems[currentQuestionIndex] && <QuizItem
-        key={`quizItem-${currentQuestionIndex}`}
-        question={quizItems[currentQuestionIndex]}
-        answer={getAnswerByQuestionIndex(quizItems[currentQuestionIndex].index)}
-        onAnswerSubmit={onAnswerSubmitHandler}
-      />}
-      <Paging paging={paging}/>
-      <button>Odeslat hotový formulář</button>
+    <Container maxWidth="md" style={{ minHeight: '500px' }}>
 
-    </>
+      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
+        <Paper>
+          {quizItems[currentQuestionIndex] && <QuizItem
+            key={`quizItem-${currentQuestionIndex}`}
+            question={quizItems[currentQuestionIndex]}
+            answer={getAnswerByQuestionIndex(quizItems[currentQuestionIndex].index)}
+            onAnswerSubmit={onAnswerSubmitHandler}
+          />}
+
+        </Paper>
+      </Container>
+
+
+      <Container maxWidth="md" style={{
+        margin: "10px", alignItems: "center",
+        flexDirection: "row", display: "flex", justifyContent: "space-between",
+      }}>
+        <Timer/>
+        <QuizProgress current={answers.length} total={quizItems.length}/>
+        <QuizScore score={getScore()} total={answers.length}/>
+        <QuizScore score={getScore()} total={quizItems.length}/>
+      </Container><Container maxWidth="md" style={{ textAlign: "center", margin: "10px" }}>
+      <Paper>
+        <Paging paging={paging}/>
+        {/*<Button>Odeslat hotový formulář</Button>*/}
+      </Paper>
+    </Container>
+    </Container>
   )
 }
+

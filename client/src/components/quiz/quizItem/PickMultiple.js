@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect } from "react";
 import "./PickOne.css"
 import AnswerFields from "./AnswerFields";
+import { Button, Checkbox, FormControlLabel } from "@material-ui/core";
 
 export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
   const { question, answers, correct } = questionItem;
@@ -46,35 +47,42 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
   }
 
   const boxStyle = {
-    padding: "10px",
-    margin: "10px"
-  };
-
-  const checkBoxStyle = {
-    marginRight: "10px",
-    transform: "scale(1.5)"
+    display: "flex",
   };
 
   function renderButton(index, item) {
     item.index = index
 
     const correctButton = <div style={boxStyle} className={"btn-correct"}>
-      <input type={"checkbox"} checked={isInSelected(item)} style={checkBoxStyle} disabled={true}/>
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
+
+      <FormControlLabel
+        disabled={true}
+        id={`checkbox-${item.index}`}
+        checked={isInSelected(item)}
+        onChange={(e) => onCheckHandler(item, e.target.checked)}
+        control={<Checkbox/>}
+        label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
+      />
     </div>
 
     const incorrectButton = <div style={boxStyle} className={"btn-incorrect"}>
-      <input type={"checkbox"} checked={isInSelected(item)} style={checkBoxStyle} disabled={true}/>
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
+      <FormControlLabel
+        disabled={true}
+        checked={isInSelected(item)}
+        onChange={(e) => onCheckHandler(item, e.target.checked)}
+        id={`checkbox-${item.index}`}
+        control={<Checkbox/>}
+        label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
+      />
     </div>
 
     const noOptionSelectedButton = <div style={boxStyle}>
-      <input type={"checkbox"} id={`${item.index}`}
-             onChange={(e) => onCheckHandler(item, e.target.checked)}
-             style={checkBoxStyle}/>
-      <label htmlFor={`${item.index}`}><AnswerFields
-        answerType={questionItem.answerType}
-        content={item.text}/></label>
+      <FormControlLabel
+        id={`checkbox-${item.index}`}
+        onChange={(e) => onCheckHandler(item, e.target.checked)}
+        control={<Checkbox/>}
+        label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
+      />
     </div>
 
     const button = () => {
@@ -99,7 +107,7 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
           {renderButton(index, item)}
         </div>)}
 
-      <button onClick={() => {
+      <Button fullWidth variant={"contained"} onClick={() => {
         if (isSubmitted) {
           return
         }
@@ -110,7 +118,7 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
         {!isSubmitted && "Hotovo"}
         {isSubmitted && isCorrect() && "Správně"}
         {isSubmitted && !isCorrect() && "Chyba"}
-      </button>
+      </Button>
 
     </>)
 }

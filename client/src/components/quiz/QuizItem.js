@@ -1,10 +1,10 @@
 import { useState, useLayoutEffect } from "react";
 import PickOne from "./quizItem/PickOne";
-import PickOneSourceCode from "./quizItem/PickOneSourceCode";
 import SimpleSequence from "./quizItem/SimpleSequence";
 import PickMultiple from "./quizItem/PickMultiple";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import FillTextExactly from "./quizItem/FillTextExactly";
+import { Button, Container } from "@material-ui/core";
 
 export default function QuizItem({ question, answer, onAnswerSubmit }) {
 
@@ -23,21 +23,14 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
   console.log(answer)
 
   return (
-    <>
-      <div className={"question-frame"}>
+    <Container maxWidth="md" style={{ minHeight: '500px' }}>
         {selected && question.comment}
 
-        <div>
-          {customView && <button onClick={() => setShowCustomView(!showCustomView)}>Show origin</button>}
+        <Container>
+          {customView && <Button onClick={() => setShowCustomView(!showCustomView)}>Show origin</Button>}
           <MarkdownPreview source={showCustomView && customView || question.question}/>
-        </div>
-
+        </Container>
         {question.questionType === "pickOne" && <PickOne
-          questionItem={question}
-          selectedItem={answer}
-          onSubmit={onSubmitHandler}/>}
-
-        {question.questionType === "pickOneSourceCode" && <PickOneSourceCode
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}
@@ -57,6 +50,5 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
           questionItem={question}
           selectedItem={answer}
           onSubmit={onSubmitHandler}/>}
-      </div>
-    </>)
+    </Container>)
 }

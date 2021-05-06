@@ -31,6 +31,7 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
   />
 
   const simpleInput = <TextField id={id} type={"text"}
+                                 autoComplete={"off"}
                              name={"text"} value={answer.text} onChange={onInputChange}/>
 
   const codeEditor = <Editor

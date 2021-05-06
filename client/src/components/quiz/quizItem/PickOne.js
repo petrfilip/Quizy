@@ -1,6 +1,7 @@
 import { useState, useLayoutEffect } from "react";
 import "./PickOne.css"
 import AnswerFields from "./AnswerFields";
+import { Button } from "@material-ui/core";
 
 export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   const { question, answers, correct } = questionItem;
@@ -18,7 +19,6 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   }
 
   const isItemCorrect = (item) => {
-    debugger
     return item.index == correct
   }
 
@@ -91,7 +91,7 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
           {renderButton(index, item)}
         </div>)}
 
-      <button onClick={() => {
+      <Button fullWidth variant={"contained"} onClick={() => {
         if (isSubmitted) {
           return
         }
@@ -102,7 +102,7 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
         {!isSubmitted && "Hotovo"}
         {isSubmitted && isCorrect() && "Správně"}
         {isSubmitted && !isCorrect() && "Chyba"}
-      </button>
+      </Button>
 
     </>)
 }

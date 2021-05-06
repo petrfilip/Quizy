@@ -1,6 +1,5 @@
 import { useState } from "react";
-import AnswerFields from "./AnswerFields";
-import MarkdownPreview from "@uiw/react-markdown-preview";
+import { Button, TextField } from "@material-ui/core";
 
 export default function FillTextExactly({ questionItem, selectedItem, onSubmit, setCustomView }) {
 
@@ -38,21 +37,16 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
   return <>
     {answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
-
-        <label
-          style={{
-            fontSize: "1em",
-            fontWeight: "bold"
-          }}
-          htmlFor={`${index}`}>{index}: </label>
-
-        <input id={index} value={selected[index]} onChange={onInputChange} autoComplete={"off"} disabled={isSubmitted}/>
-        {isSubmitted && !isItemCorrect(index, selected[index]) && <span>{correct[index]}</span>}
+        <TextField variant="outlined" helperText={isSubmitted && !isItemCorrect(index, selected[index]) && correct[index]}
+                   error={isSubmitted && !isItemCorrect(index, selected[index])}
+                   fullWidth
+                   label={`${index}`} id={index} value={selected[index]}
+                   onChange={onInputChange} autoComplete={"off"} disabled={isSubmitted}/>
       </div>
     )}
 
 
-    <button onClick={() => {
+    <Button variant={"contained"} fullWidth onClick={() => {
       if (isSubmitted) {
         return
       }
@@ -63,7 +57,7 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
       {!isSubmitted && "Hotovo"}
       {isSubmitted && isCorrect() && "Správně"}
       {isSubmitted && !isCorrect() && "Chyba"}
-    </button>
+    </Button>
   </>
 
 }

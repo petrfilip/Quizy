@@ -1,3 +1,5 @@
+import { Typography } from "@material-ui/core";
+
 export default function QuizProgress({ current, total }) {
-  return <div>Progress: {current} / {total}</div>
+  return <Typography>Progress: {current} / {total}</Typography>
 }

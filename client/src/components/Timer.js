@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Typography } from "@material-ui/core";
 
 const formatTime = (timer) => {
   const getSeconds = `0${(timer % 60)}`.slice(-2)
@@ -53,6 +54,6 @@ export const Timer = () => {
   }, [])
 
   return (
-    <span>{formatTime(timer)}</span>
+    <Typography>{formatTime(timer)}</Typography>
   );
 }
