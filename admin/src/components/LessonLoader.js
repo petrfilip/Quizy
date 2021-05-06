@@ -1,6 +1,16 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import TableR from "../app/table/Table";
+import List from "../app/table/List";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { Chip, Link } from "@material-ui/core";
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
+import AddIcon from '@material-ui/icons/Add';
+import { Link as RouterLink } from 'react-router-dom';
+
 
 export default function LessonLoader() {
 
@@ -53,39 +63,76 @@ export default function LessonLoader() {
     }
   }
 
-  const columns =  [
-      {
-        id: 'actions',
-        Header: () => null,
-        // accessor: 'title', // accessor is the "key" in the data
-        accessor: (row) => row,
-        Cell: ({ value }) => <div>
-          <Link to={`/lessons/${value.slug}`}>Edit</Link>
-          <Link to={`#`} onClick={() => deleteItemDialog(value)}> <i className="material-icons">Delete</i> </Link>
-        </div>
-      },
-      {
-        Header: 'Title',
-        accessor: 'title'
-      },
-      {
-        Header: 'Q',
-        accessor: 'questions.length',
-      },
-      {
-        Header: 'FC',
-        accessor: (row) => row.flashcards && row.flashcards.length || 0
-      }
-    ];
+  const columns = [
+    {
+      id: 'actions',
+      Header: () => null,
+      // accessor: 'title', // accessor is the "key" in the data
+      accessor: (row) => row,
+      Cell: ({ value }) => <div>
+        <Link to={`/lessons/${value.slug}`}>Edit</Link>
+        <Link to={`#`} onClick={() => deleteItemDialog(value)}> <i className="material-icons">Delete</i> </Link>
+      </div>
+    },
+    {
+      Header: 'Title',
+      accessor: 'title'
+    },
+    {
+      Header: 'Q',
+      accessor: 'questions.length',
+    },
+    {
+      Header: 'FC',
+      accessor: (row) => row.flashcards && row.flashcards.length || 0
+    }
+  ];
 
   return <div>
     {isPending && "Loading data"}
     {error}
 
-    <Link to={`/lessons/newQuiz`}>Add new quiz</Link>
-    <TableR columns={columns} data={data}/>
+    <Button color={"primary"}
+            startIcon={<AddIcon/>}
+            variant="outlined"
+            to={`/lessons/newQuiz`}
+            component={RouterLink}
+    >Add new quiz</Button>
+    <List columns={columns} data={data} component={(item) => {
+      return OutlinedCard(item)
+    }}/>
 
   </div>
 
+}
+
+function OutlinedCard(lessonItem) {
+
+  return (
+    <Card variant="outlined">
+      {/*<CardMedia*/}
+      {/*  style={{*/}
+      {/*    width: "auto",*/}
+      {/*    maxHeight: "200px",*/}
+      {/*  }}*/}
+      {/*  component="img"*/}
+      {/*  alt="Contemplative Reptile"*/}
+      {/*  image="https://via.placeholder.com/500"*/}
+      {/*  title="Contemplative Reptile"*/}
+      {/*/>*/}
+      <CardContent>
+        <Typography>
+          {lessonItem.title}
+        </Typography>
+        <Chip label={lessonItem.questions && lessonItem.questions.length || 0}/>
+        <Chip label={lessonItem.flashcards && lessonItem.flashcards.length || 0}/>
+      </CardContent>
+      <CardActions>
+
+        <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/lessons/${lessonItem.slug}`}>Edit</Button>
+        <Button color={"secondary"} startIcon={<DeleteIcon/>} >Delete</Button>
+      </CardActions>
+    </Card>
+  );
 }
 

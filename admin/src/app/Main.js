@@ -64,12 +64,12 @@ function Home() {
 }
 
 function QuizManagerPage() {
-  return <><h2>QuizManager</h2><LessonLoader/></>;
+  return <><LessonLoader/></>;
 }
 
 function QuizItemManagerPage() {
   let { slug } = useParams();
-  return <><h2>QuizManager</h2><LessonItemManager slug={slug}/></>;
+  return <><LessonItemManager slug={slug}/></>;
 }
 
 function Users() {

@@ -1,6 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { Grid, TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 // A great library for fuzzy filtering/sorting items
 
 const Styles = styled.div`
@@ -46,21 +48,16 @@ function GlobalFilter({
   }, 0)
 
   return (
-    <span>
-      Search:{' '}
-      <input
-        value={value || ""}
-        onChange={e => {
-          setValue(e.target.value);
-          onChange(e.target.value);
-        }}
-        placeholder={`${count} records...`}
-        style={{
-          fontSize: '1.1rem',
-          border: '0',
-        }}
-      />
-    </span>
+    <TextField fullWidth id="outlined-basic"
+               label="Search"
+               variant="outlined"
+               value={value || ""}
+               onChange={e => {
+                 setValue(e.target.value);
+                 onChange(e.target.value);
+               }}
+               placeholder={`${count} records...`}/>
+
   )
 }
 
@@ -210,7 +207,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = val => !val
 
 // Our table component
-function Table({ columns, data }) {
+function Table({ columns, data, component }) {
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -240,13 +237,8 @@ function Table({ columns, data }) {
   )
 
   const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
     rows,
-    prepareRow,
     state,
-    visibleColumns,
     preGlobalFilteredRows,
     setGlobalFilter,
   } = useTable(
@@ -262,47 +254,28 @@ function Table({ columns, data }) {
 
   return (
     <>
-      <table {...getTableProps()}>
-        <thead>
-        <tr>
-          <th
-            colSpan={visibleColumns.length}
-            style={{
-              textAlign: 'left',
-            }}
-          >
-            <GlobalFilter
-              preGlobalFilteredRows={preGlobalFilteredRows}
-              globalFilter={state.globalFilter}
-              setGlobalFilter={setGlobalFilter}
-            />
-          </th>
-        </tr>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>
-                {column.render('Header')}
-                {/* Render the columns filter UI */}
-                {/*<div>{column.canFilter ? column.render('Filter') : null}</div>*/}
-              </th>
-            ))}
-          </tr>
+
+      <GlobalFilter
+        preGlobalFilteredRows={preGlobalFilteredRows}
+        globalFilter={state.globalFilter}
+        setGlobalFilter={setGlobalFilter}
+      />
+
+
+      <Grid
+        container
+        spacing={4}
+        // className={classes.gridContainer}
+        justify="center"
+      >
+        {rows.map(({ original }) => (
+          <Grid item xs={12} sm={6} md={3}>
+            {component(original)}
+          </Grid>
         ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-              })}
-            </tr>
-          )
-        })}
-        </tbody>
-      </table>
+
+      </Grid>
+
 
     </>
   )
@@ -322,11 +295,11 @@ function filterGreaterThan(rows, id, filterValue) {
 // check, but here, we want to remove the filter if it's not a number
 filterGreaterThan.autoRemove = val => typeof val !== 'number'
 
-export default function TableR({columns, data}) {
+export default function List({ columns, data, component }) {
 
   return (
     <Styles>
-      <Table columns={columns} data={data} />
+      <Table columns={columns} data={data} component={component}/>
     </Styles>
   )
 }
