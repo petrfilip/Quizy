@@ -1,5 +1,9 @@
 import AnswerFields from "./AnswerFields";
 import { useState } from "react";
+import { Button } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Checkbox from '@material-ui/core/Checkbox';
+import AddIcon from "@material-ui/icons/Add";
 
 export default function PickMultipleAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
 
@@ -44,7 +48,7 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
   return <>
     {answers.map((item, index) =>
       <div key={`pickMultiple-${index}`}>
-        <input type="checkbox" id={index}
+        <Checkbox id={index}
                name={"question"}
                checked={correct && correct.filter(i => i == index).length}
                value={index} onChange={onAnswerChangeHandler}
@@ -55,12 +59,12 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
                       answerType={answerType}
         />
 
-        <button onClick={() => removeAnswer(index)}>-</button>
+        <Button onClick={() => removeAnswer(index)} startIcon={<DeleteIcon />} />
 
       </div>
     )}
 
-    <button onClick={addNewAnswer}>Add more answer</button>
+    <Button startIcon={<AddIcon />} onClick={addNewAnswer}>Add more answer</Button>
 
 
   </>

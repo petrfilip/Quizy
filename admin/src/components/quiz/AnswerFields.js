@@ -4,7 +4,11 @@ import "prismjs/components/prism-clike";
 import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism.css";
 import MDEditor from "@uiw/react-md-editor";
-import React, { useState } from "react"; //Example style, you can use another
+import React, { useState } from "react";
+import { Button, TextField } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import EditIcon from "@material-ui/icons/Edit"; //Example style, you can use another
+import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
 
 export default function AnswerFields({ id, answer, onInputChange, answerType }) {
 
@@ -26,7 +30,7 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
     }}
   />
 
-  const simpleInput = <input id={id} type={"text"}
+  const simpleInput = <TextField id={id} type={"text"}
                              name={"text"} value={answer.text} onChange={onInputChange}/>
 
   const codeEditor = <Editor
@@ -68,9 +72,9 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
       {/*<textarea id={id} name={"reason"} value={answer.reason} onChange={onInputChange}/>*/}
 
 
-      {!shownReasons && !answer.reason && <button onClick={() => setShownReasons(true)}>Add reason</button>}
-      {!shownReasons && answer.reason && <button onClick={() => setShownReasons(true)}>Edit reason</button>}
-      {shownReasons && <button onClick={() => setShownReasons(false)}>Hide reason</button>}
+      {!shownReasons && !answer.reason && <Button startIcon={<AddIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>Add reason</Button>}
+      {!shownReasons && answer.reason && <Button startIcon={<EditIcon />} color={"secondary"} onClick={() => setShownReasons(true)}>Edit reason</Button>}
+      {shownReasons && <Button startIcon={<VisibilityOffIcon/>} color={"secondary"} onClick={() => setShownReasons(false)}>Hide reason</Button>}
       {shownReasons && <MDEditor
         height={100}
         preview={'edit'}

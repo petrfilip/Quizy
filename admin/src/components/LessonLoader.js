@@ -11,7 +11,6 @@ import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { Link as RouterLink } from 'react-router-dom';
 
-
 export default function LessonLoader() {
 
   const [data, setData] = useState([])
@@ -65,30 +64,12 @@ export default function LessonLoader() {
 
   const columns = [
     {
-      id: 'actions',
-      Header: () => null,
-      // accessor: 'title', // accessor is the "key" in the data
-      accessor: (row) => row,
-      Cell: ({ value }) => <div>
-        <Link to={`/lessons/${value.slug}`}>Edit</Link>
-        <Link to={`#`} onClick={() => deleteItemDialog(value)}> <i className="material-icons">Delete</i> </Link>
-      </div>
-    },
-    {
       Header: 'Title',
       accessor: 'title'
-    },
-    {
-      Header: 'Q',
-      accessor: 'questions.length',
-    },
-    {
-      Header: 'FC',
-      accessor: (row) => row.flashcards && row.flashcards.length || 0
     }
   ];
 
-  return <div>
+  return <>
     {isPending && "Loading data"}
     {error}
 
@@ -102,7 +83,7 @@ export default function LessonLoader() {
       return OutlinedCard(item)
     }}/>
 
-  </div>
+  </>
 
 }
 
@@ -130,7 +111,7 @@ function OutlinedCard(lessonItem) {
       <CardActions>
 
         <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/lessons/${lessonItem.slug}`}>Edit</Button>
-        <Button color={"secondary"} startIcon={<DeleteIcon/>} >Delete</Button>
+        <Button color={"secondary"} startIcon={<DeleteIcon/>}>Delete</Button>
       </CardActions>
     </Card>
   );

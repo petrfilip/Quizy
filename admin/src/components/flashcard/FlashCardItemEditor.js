@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import MDEditor from '@uiw/react-md-editor';
+import { TextField } from "@material-ui/core";
 
 export default function FlashCardItemEditor({ flashcard }) {
 
@@ -15,25 +16,15 @@ export default function FlashCardItemEditor({ flashcard }) {
     setComponentData(newData)
   }
 
-  const style = {
-    width:"100%",
-    padding: "5px",
-    borderRight: "0px",
-    borderTop: "0px",
-    borderBottom: "0px",
-    borderLeft: "1px solid red",
-    backgroundColor: "#f8f8f8",
-    fontSize: "1.5em"
-  }
 
   return <div>
-    <input
+    <TextField
+      fullWidth
       placeholder={"Flash cart title"}
       type={"text"}
       name={"title"}
       value={componentData.title}
       onChange={handleInputChange}
-      style={style}
     />
     {/*<textarea name={"description"} value={componentData.description} onChange={handleInputChange}/>*/}
 

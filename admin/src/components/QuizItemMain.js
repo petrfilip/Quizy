@@ -2,6 +2,8 @@ import React, { useState, useEffect, useLayoutEffect } from "react";
 import FlashCardItemEditor from "./flashcard/FlashCardItemEditor";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
+import { Button, TextField, Typography } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 
 export default function QuizItemMain({ data }) {
 
@@ -36,9 +38,9 @@ export default function QuizItemMain({ data }) {
   }
 
   return <div>
-    <h2>Quiz info</h2>
-    <input type={"text"} name={"title"} value={componentData.title} onChange={handleInputChange}/>
-    <input disabled={true} type={"text"} name={"slug"} value={urlSlug(componentData.title)} onChange={handleInputChange}/>
+    <Typography variant="h3">Quiz info</Typography>
+    <TextField type={"text"} name={"title"} value={componentData.title} onChange={handleInputChange}/>
+    <TextField disabled={true} type={"text"} name={"slug"} value={urlSlug(componentData.title)} onChange={handleInputChange}/>
 
     <MDEditor
       value={componentData.description || ""}
@@ -55,7 +57,7 @@ export default function QuizItemMain({ data }) {
     />
 
 
-    <input type={"text"} placeholder={"heroImage"} name={"heroImage"} value={componentData.heroImage} onChange={handleInputChange}/>
+    <TextField fullWidth type={"text"} placeholder={"heroImage"} name={"heroImage"} value={componentData.heroImage} onChange={handleInputChange}/>
 
     <hr/>
     <h2>Flash Cards</h2>
@@ -67,7 +69,8 @@ export default function QuizItemMain({ data }) {
         <hr/>
       </div>
     )}
-    <button onClick={addNewFlashcard}>Add flashcard</button>
+    <Button             startIcon={<AddIcon/>}
+                        variant={"outlined"} onClick={addNewFlashcard}>Add flashcard</Button>
 
   </div>
 }

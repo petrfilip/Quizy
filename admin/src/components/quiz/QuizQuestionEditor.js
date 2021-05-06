@@ -4,6 +4,7 @@ import PickMultipleAnswerEditor from "./PickMultipleAnswerEditor";
 import MDEditor from "@uiw/react-md-editor";
 import FillTextFromOptionsAnswerEditor from "./FillTextFromOptionsAnswerEditor";
 import FillTextExactlyAnswerEditor from "./FillTextExactlyAnswerEditor";
+import { FormControl, InputLabel, makeStyles, MenuItem, Select } from "@material-ui/core";
 
 export default function QuizQuestionEditor({ question }) {
 
@@ -37,26 +38,36 @@ export default function QuizQuestionEditor({ question }) {
     setData({...data})
   }
 
-  return <div>
-    <div>
-      Question type:
-      <select value={data.questionType} name={"questionType"} onChange={handleInputChange}>
-        <option value={"pickOne"}>Pick one</option>
-        <option value={"pickMultiple"}>Pick multiple</option>
-        <option value={"sequence"}>Sequence</option>
-        <option value={"fillTextFromOptions"}>Fill text from options</option>
-        <option value={"fillTextExactly"}>Fill text exactly</option>
-      </select>
-    </div>
+  const classes = makeStyles((theme) => ({
+    formControl: {
+      margin: theme.spacing(1),
+      minWidth: 220,
+    },
+    selectEmpty: {
+      marginTop: theme.spacing(2),
+    },
+  }))();
 
-    <div>
-      Answer type:
-      <select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
-        <option value={"simpleInput"}>Simple input</option>
-        <option value={"codeEditor"}>Source code</option>
-        <option value={"markdown"}>Markdown</option>
-      </select>
-    </div>
+  return <>
+    <FormControl className={classes.formControl}>
+      <InputLabel id="demo-simple-select-label">Question type</InputLabel>
+      <Select value={data.questionType} name={"questionType"} onChange={handleInputChange}>
+        <MenuItem value={"pickOne"}>Pick one</MenuItem>
+        <MenuItem value={"pickMultiple"}>Pick multiple</MenuItem>
+        <MenuItem value={"sequence"}>Sequence</MenuItem>
+        <MenuItem value={"fillTextFromOptions"}>Fill text from options</MenuItem>
+        <MenuItem value={"fillTextExactly"}>Fill text exactly</MenuItem>
+      </Select>
+    </FormControl>
+
+    <FormControl className={classes.formControl}>
+      <InputLabel id="demo-simple-select-label"> Answer type:</InputLabel>
+      <Select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
+        <MenuItem value={"simpleInput"}>Simple input</MenuItem>
+        <MenuItem value={"codeEditor"}>Source code</MenuItem>
+        <MenuItem value={"markdown"}>Markdown</MenuItem>
+      </Select>
+    </FormControl>
 
     <MDEditor
       value={data.question || ""}
@@ -120,7 +131,7 @@ export default function QuizQuestionEditor({ question }) {
     {/*{JSON.stringify(data)}*/}
 
 
-  </div>
+  </>
 }
 
 

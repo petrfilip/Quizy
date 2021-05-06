@@ -6,6 +6,11 @@ import 'react-simple-tabs-component/dist/index.css'
 import urlSlug from "url-slug"; // (Optional) Provide some basic style
 import { useHistory } from "react-router-dom";
 import "./LessonItemManager.css"
+import { Button, ButtonGroup } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import AddIcon from "@material-ui/icons/Add";
+import SaveIcon from "@material-ui/icons/Save";
+import { SnackbarProvider, useSnackbar } from 'notistack';
 
 export default function LessonItemManager({ slug }) {
 
@@ -13,6 +18,7 @@ export default function LessonItemManager({ slug }) {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
   let history = useHistory();
+  const { enqueueSnackbar } = useSnackbar();
 
   useLayoutEffect(() => {
 
@@ -60,6 +66,12 @@ export default function LessonItemManager({ slug }) {
           history.push(json.slug)
           setData(json)
         }
+      }).then(() => {
+      enqueueSnackbar('Lesson persisted', { variant: "success" });
+    })
+      .catch(() => {
+        enqueueSnackbar('Lesson not persisted', { variant: "error" });
+
       })
       .finally(() => {
       });
@@ -114,9 +126,9 @@ export default function LessonItemManager({ slug }) {
 
   const removeQuestionHandler = () => {
 
-    data.questions.splice(selectedTab-1, 1)
+    data.questions.splice(selectedTab - 1, 1)
     setData({ ...data })
-    setSelectedTab(selectedTab-1)
+    setSelectedTab(selectedTab - 1)
   }
 
   const [selectedTab, setSelectedTab] = useState(tabs[0].index)
@@ -126,10 +138,12 @@ export default function LessonItemManager({ slug }) {
     {error && <div>{error}</div>}
 
 
-    <button className={"btn btn-blue"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</button>
-    <button className={"btn btn-blue"} onClick={addNewQuestionHandler}>Add question</button>
-    <button className={"btn btn-blue"} onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</button>
+    <ButtonGroup color="primary" aria-label="outlined primary button group">
 
+      <Button startIcon={<SaveIcon/>} color={"primary"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</Button>
+      <Button startIcon={<AddIcon/>} onClick={addNewQuestionHandler}>Add question</Button>
+      <Button startIcon={<DeleteIcon/>} color={"secondary"} onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</Button>
+    </ButtonGroup>
     <Tabs orientation={"vertical"}
           tabs={tabs} onClick={setSelectedTab}
           selectedTab={selectedTab}

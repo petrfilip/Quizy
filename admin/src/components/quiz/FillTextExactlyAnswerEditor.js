@@ -1,7 +1,9 @@
 import AnswerFields from "./AnswerFields";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import MarkdownPreview from '@uiw/react-markdown-preview';
-
+import { Button, Checkbox, FormControlLabel } from "@material-ui/core";
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 export default function FillTextExactlyAnswerEditor({ question, answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
 
   const [showPreview, setShowPreview] = useState(false)
@@ -50,8 +52,8 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
       {!question.match(/\${([^}]+)}/g) && "This `${1}` is placeholder. Put `${1}` into the question. "
       + "Which cause new field. For each placeholder use unique inner text such as `${1}`, `${2}`, or `${WhateverYouWant}`.  "}
       {showPreview ?
-        <div onClick={() => setShowPreview(false)}><MarkdownPreview source={text}/></div> :
-        <button onClick={() => setShowPreview(true)}>Show result preview</button>}
+        <Button variant={"text"} startIcon={<VisibilityOffIcon />} onClick={() => setShowPreview(false)}><MarkdownPreview source={text}/></Button> :
+        <Button variant={"text"} startIcon={<VisibilityIcon />} onClick={() => setShowPreview(true)}>Show result preview</Button>}
     </div>
     {answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
@@ -73,14 +75,29 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
     )}
 
     <div>
-      <div>
-        <label>Ignore cases:</label>
-        <input type="checkbox" name={"ignoreCases"} checked={parameters?.ignoreCases} onChange={updateParameters}/>
-      </div>
-      <div>
-        <label>Strip empty characters:</label>
-        <input type="checkbox" name={"stripEmptyCharacters"} checked={parameters?.stripEmptyCharacters} onChange={updateParameters}/>
-      </div>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={parameters?.ignoreCases}
+            onChange={updateParameters}
+            name="ignoreCases"
+            color="primary"
+          />
+        }
+        label="Ignore cases"
+      />
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={parameters?.stripEmptyCharacters}
+            onChange={updateParameters}
+            name="stripEmptyCharacters"
+            color="primary"
+          />
+        }
+        label="Strip empty characters"
+      />
     </div>
 
   </>

@@ -1,5 +1,8 @@
 import AnswerFields from "./AnswerFields";
 import { useState } from "react";
+import { Button, FormControl, InputLabel, Radio, TextField } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import AddIcon from "@material-ui/icons/Add";
 
 export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
 
@@ -17,7 +20,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
     const name = target.name;
     parameters = parameters || {}
     parameters[name] = value
-    onUpdateParameters({...parameters})
+    onUpdateParameters({ ...parameters })
   }
 
   const onInputChange = (event) => {
@@ -41,7 +44,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
   return <>
     {answers && answers.map((item, index) =>
       <div key={`pickOne-${index}`}>
-        <input type="radio" id={index} name={"question"}
+        <Radio  id={index} name={"question"}
                checked={index == correct}
                value={index}
                onChange={onCorrectAnswerChangeHandler}
@@ -54,18 +57,14 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
                       onInputChange={onInputChange}
                       answerType={answerType}
         />
-        <button onClick={() => removeAnswer(index)}>-</button>
+        <Button startIcon={<DeleteIcon/>} onClick={() => removeAnswer(index)}/>
       </div>
     )}
 
-    <button onClick={addNewAnswer}>Add more answer</button>
-    <button>Edit parameters</button>
+    <Button startIcon={<AddIcon/>} onClick={addNewAnswer}>Add more answer</Button>
 
     <hr/>
-    <label>Column layout:</label>
-    <input type="number" name={"layout"} max={4} min={1} value={parameters?.layout} onChange={updateParameters}/>
-
-
+    <TextField label={"Column layout"} type="number" name={"layout"} max={4} min={1} value={parameters?.layout} onChange={updateParameters}/>
 
   </>
 }
