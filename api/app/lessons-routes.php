@@ -11,15 +11,6 @@ return function (App $app) {
 
     $app->group('/lessons', function (Group $group) {
 
-        $group->options('', function (Request $request, Response $response, $args) {
-            $response = $response->withHeader('Content-Type', 'application/json');
-            return $response;
-        });
-        $group->options('/{id}', function (Request $request, Response $response, $args) {
-            $response = $response->withHeader('Content-Type', 'application/json');
-            return $response;
-        });
-
         $group->get('', function (Request $request, Response $response, $args) {
             $data = LessonRepository::findAll();
             $payload = json_encode($data);

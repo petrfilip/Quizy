@@ -34,10 +34,10 @@ export default function UserLoader() {
 
   }, [])
 
-  const deleteItem = (lessonId) => {
+  const deleteItem = (user) => {
     console.log(data)
     setIsPending(true)
-    fetch(`${process.env.REACT_APP_BASE_URI}/users/${lessonId}`,
+    fetch(`${process.env.REACT_APP_BASE_URI}/users/${user._id}`,
       {
         method: 'DELETE',
         headers: new Headers({
@@ -50,10 +50,10 @@ export default function UserLoader() {
         }
         throw new Error(`Unable to delete data: ${response.statusText}`)
       })
-      .then(json => setData(removeFromCollection(lessonId)))
-      .then(() => enqueueSnackbar('Lesson deleted', { variant: "success" }))
+      .then(json => setData(removeFromCollection(user._id)))
+      .then(() => enqueueSnackbar(`User "${user.mail}" deleted`, { variant: "success" }))
       .catch((err) => {
-        enqueueSnackbar('Lesson not deleted', { variant: "error" });
+        enqueueSnackbar(`User "${user.mail}" not deleted`, { variant: "error" });
         setError(err.message)
       })
       .finally(() => setIsPending(false))
@@ -64,11 +64,11 @@ export default function UserLoader() {
     return data.filter((item) => item._id !== lessonId)
   }
 
-  const deleteItemDialog = (lesson) => {
+  const deleteItemDialog = (item) => {
     console.log(data)
 
-    if (window.confirm(`Are you sure to delete ${lesson.title} record?`)) {
-      deleteItem(lesson._id)
+    if (window.confirm(`Are you sure to delete "${item.name}" record?`)) {
+      deleteItem(item)
     }
   }
 
@@ -85,7 +85,7 @@ export default function UserLoader() {
     <Button color={"primary"}
             startIcon={<AddIcon/>}
             variant="outlined"
-            to={`/user/newUser`}
+            to={`/users/new`}
             component={RouterLink}
     >Add new user</Button>
     <List columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
@@ -116,8 +116,7 @@ function OutlinedCard(userItem, onDelete) {
 
       </CardContent>
       <CardActions>
-        <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/user/${userItem._id}`}>Edit</Button>
-        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(userItem)}>Delete</Button>
+        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(userItem)}/>
       </CardActions>
     </Card>
   );

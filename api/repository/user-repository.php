@@ -6,7 +6,6 @@ use SleekDB\Store;
 
 final class UserRepository
 {
-
     const REPOSITORY_NAME = 'user';
     static private function getDataStore($storeName): Store
     {
@@ -23,6 +22,12 @@ final class UserRepository
         $condition = ["mail", "===", $mail];
         return UserRepository::getDataStore(self::REPOSITORY_NAME)->findOneBy($condition);
     }
+
+    static public function deleteById($id)
+    {
+        return UserRepository::getDataStore(self::REPOSITORY_NAME)->deleteById($id);
+    }
+
 
     static public function insertOrUpdate($data): array
     {

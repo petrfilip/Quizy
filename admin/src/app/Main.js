@@ -16,6 +16,7 @@ import HomeIcon from '@material-ui/icons/Home';
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Login from "./Login";
+import AddUser from "../components/user/AddUser";
 
 export default function Main() {
   const nav = [
@@ -49,7 +50,7 @@ export default function Main() {
   return (
     <Router>
       <div>
-        <Navbar items={nav} />
+        <Navbar items={nav}/>
 
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -60,6 +61,9 @@ export default function Main() {
             </Route>
             <Route path="/lessons">
               <QuizManagerPage/>
+            </Route>
+            <Route path="/users/new">
+              <AddUser/>
             </Route>
             <Route path="/users">
               <UsersLoader/>
@@ -93,8 +97,6 @@ function QuizItemManagerPage() {
   let { slug } = useParams();
   return <><LessonItemManager slug={slug}/></>;
 }
-
-
 
 function Profile() {
   return <h2>Profile</h2>;
