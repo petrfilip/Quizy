@@ -5,7 +5,6 @@ import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from "notistack";
@@ -79,9 +78,7 @@ export default function UserLoader() {
   ];
 
   return <>
-    {isPending && "Loading data"}
     {error}
-
     <Button color={"primary"}
             startIcon={<AddIcon/>}
             variant="outlined"
@@ -89,7 +86,6 @@ export default function UserLoader() {
             component={RouterLink}
     >Add new user</Button>
     <List columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
-
   </>
 
 }

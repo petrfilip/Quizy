@@ -49,13 +49,13 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
 
   return <>
     <div>
-      {!question.match(/\${([^}]+)}/g) && "This `${1}` is placeholder. Put `${2}` into the question. "
+      {question && !question.match(/\${([^}]+)}/g) && "This `${1}` is placeholder. Put `${2}` into the question. "
       + "Which cause new field. For each placeholder use unique inner text such as `${3}`, `${4}`, or `${what}``.  "}
       {showPreview ?
         <Button variant={"text"} startIcon={<VisibilityOffIcon />} onClick={() => setShowPreview(false)}><MarkdownPreview source={text}/></Button> :
         <Button variant={"text"} startIcon={<VisibilityIcon />} onClick={() => setShowPreview(true)}>Show result preview</Button>}
     </div>
-    {answers && answers.map((item, index) =>
+    {question.match(/\${([^}]+)}/g) && answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
 
         <label
@@ -67,10 +67,12 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
 
         <AnswerFields key={`answer-${index}`}
                       id={index}
-                      answer={{ text: item }}
+                      answer={{ text: typeof item == 'object' ? "" : item}}
                       onInputChange={onInputChange}
                       answerType={answerType}
         />
+
+
       </div>
     )}
 
