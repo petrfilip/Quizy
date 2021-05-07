@@ -1,7 +1,7 @@
 import { useState, useLayoutEffect } from "react";
 import "./PickOne.css"
 import AnswerFields from "./AnswerFields";
-import { Button } from "@material-ui/core";
+import { Button, Checkbox, FormControlLabel, Radio, RadioGroup, TextField } from "@material-ui/core";
 
 export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   const { question, answers, correct } = questionItem;
@@ -27,8 +27,8 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   }
 
   const onCheckHandler = (checkedItem, checked) => {
-      console.log(checkedItem)
-      setSelected(checkedItem)
+    console.log(checkedItem)
+    setSelected(checkedItem)
   }
 
   const onSubmitHandler = () => {
@@ -37,36 +37,41 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   }
 
   const boxStyle = {
-    padding: "10px",
-    margin: "10px"
-  };
-
-  const checkBoxStyle = {
-    marginRight: "10px",
-    transform: "scale(1.5)"
+    display: "flex",
+    marginBottom: '5px'
   };
 
   function renderButton(index, item) {
     item.index = index
 
     const correctButton = <div style={boxStyle} className={"btn-correct"}>
-      <input type={"radio"} checked={isInSelected(item)} style={checkBoxStyle} disabled={true}/>
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
+      <FormControlLabel
+        disabled={true}
+        checked={isInSelected(item)}
+        control={<Radio/>}
+        label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
+      />
     </div>
 
     const incorrectButton = <div style={boxStyle} className={"btn-incorrect"}>
-      <input type={"radio"} checked={isInSelected(item)} style={checkBoxStyle} disabled={true}/>
-      <AnswerFields answerType={questionItem.answerType} content={item.text}/>
+      <FormControlLabel
+        disabled={true}
+        checked={isInSelected(item)}
+        control={<Radio/>}
+        label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
+      />
     </div>
 
     const noOptionSelectedButton = <div style={boxStyle}>
-      <input type={"radio"} id={`${item.index}`}
-             name={"pickOne"}
-             onChange={(e) => onCheckHandler(item, e.target.checked)}
-             style={checkBoxStyle}/>
-      <label htmlFor={`${item.index}`}><AnswerFields
-        answerType={questionItem.answerType}
-        content={item.text}/></label>
+
+
+      <FormControlLabel
+        checked={isInSelected(item)}
+        onChange={(e) => onCheckHandler(item, e.target.checked)}
+        control={<Radio/>}
+        label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
+      />
+
     </div>
 
     const button = () => {
@@ -80,14 +85,16 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
     }
 
     return <>
-      {button()}
+      <RadioGroup aria-label="answer" name="pick-one-answer">
+        {button()}
+      </RadioGroup>
     </>;
   }
 
   return (
     <>
       {answers && answers.map((item, index) =>
-        <div key={`pickMultiple-${index}`}>
+        <div key={`pickOne-${index}`}>
           {renderButton(index, item)}
         </div>)}
 

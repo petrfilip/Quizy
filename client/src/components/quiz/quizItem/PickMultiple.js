@@ -43,23 +43,22 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
 
   const onSubmitHandler = () => {
     setIsSubmitted(true)
-    onSubmit(questionItem, selected, isCorrect(selected));
+    onSubmit(questionItem, selected, isCorrect());
   }
 
   const boxStyle = {
     display: "flex",
+    marginBottom: '5px'
   };
 
   function renderButton(index, item) {
     item.index = index
 
     const correctButton = <div style={boxStyle} className={"btn-correct"}>
-
       <FormControlLabel
         disabled={true}
         id={`checkbox-${item.index}`}
         checked={isInSelected(item)}
-        onChange={(e) => onCheckHandler(item, e.target.checked)}
         control={<Checkbox/>}
         label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
       />
@@ -69,7 +68,6 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
       <FormControlLabel
         disabled={true}
         checked={isInSelected(item)}
-        onChange={(e) => onCheckHandler(item, e.target.checked)}
         id={`checkbox-${item.index}`}
         control={<Checkbox/>}
         label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}
@@ -79,6 +77,7 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
     const noOptionSelectedButton = <div style={boxStyle}>
       <FormControlLabel
         id={`checkbox-${item.index}`}
+        checked={isInSelected(item)}
         onChange={(e) => onCheckHandler(item, e.target.checked)}
         control={<Checkbox/>}
         label={<AnswerFields answerType={questionItem.answerType} content={item.text}/>}

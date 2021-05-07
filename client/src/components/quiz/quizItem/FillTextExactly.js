@@ -37,11 +37,16 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
   return <>
     {answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
-        <TextField variant="outlined" helperText={isSubmitted && !isItemCorrect(index, selected[index]) && correct[index]}
-                   error={isSubmitted && !isItemCorrect(index, selected[index])}
-                   fullWidth
-                   label={`${index}`} id={index} value={selected[index]}
-                   onChange={onInputChange} autoComplete={"off"} disabled={isSubmitted}/>
+        <TextField
+          style={{marginBottom: '10px'}}
+          variant="outlined"
+          helperText={isSubmitted && !isItemCorrect(index, selected[index]) && "Correct answer: " + correct[index]}
+          error={isSubmitted && !isItemCorrect(index, selected[index])}
+          fullWidth
+          label={question.match(/\${([^}]+)}/g)[index]}
+          id={index}
+          value={selected[index]}
+          onChange={onInputChange} autoComplete={"off"} disabled={isSubmitted}/>
       </div>
     )}
 

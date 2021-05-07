@@ -4,7 +4,9 @@ import SimpleSequence from "./quizItem/SimpleSequence";
 import PickMultiple from "./quizItem/PickMultiple";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import FillTextExactly from "./quizItem/FillTextExactly";
-import { Button, Container } from "@material-ui/core";
+import { Badge, Button, Container } from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 export default function QuizItem({ question, answer, onAnswerSubmit }) {
 
@@ -16,39 +18,44 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
     setSelected(answer);
   }, [question.id])
 
-  const onSubmitHandler = (question, answer, isCorrect) => {
+  const onSubmitHandler = (inputQuestion, inputAnswer, isCorrect) => {
     setSelected(answer);
-    onAnswerSubmit(question, answer, isCorrect)
+    onAnswerSubmit(inputQuestion, inputAnswer, isCorrect)
   }
-  console.log(answer)
 
   return (
-    <Container maxWidth="md" style={{ minHeight: '500px' }}>
-        {selected && question.comment}
+    <Container maxWidth="md" style={{ minHeight: '580px' }}>
+      {selected && question.comment}
 
-        <Container>
-          {customView && <Button onClick={() => setShowCustomView(!showCustomView)}>Show origin</Button>}
-          <MarkdownPreview source={showCustomView && customView || question.question}/>
-        </Container>
-        {question.questionType === "pickOne" && <PickOne
-          questionItem={question}
-          selectedItem={answer}
-          onSubmit={onSubmitHandler}/>}
+      <Container style={{
+        paddingTop: '30px',
+        paddingBottom: '30px', borderBottom: '1px solid gray',
+        marginBottom: '30px'
+      }}>
+        <Badge
+          badgeContent={customView && showCustomView && <VisibilityOffIcon /> || customView && !showCustomView && <VisibilityIcon />  } color="secondary" onClick={() => customView && setShowCustomView(!showCustomView)}>
+        <MarkdownPreview source={showCustomView && customView || question.question}/>
+        </Badge>
+      </Container>
+      {question.questionType === "pickOne" && <PickOne
+        questionItem={question}
+        selectedItem={answer}
+        onSubmit={onSubmitHandler}/>}
 
-        {question.questionType === "sequence" && <SimpleSequence
-          questionItem={question}
-          selectedItem={answer}
-          onSubmit={onSubmitHandler}/>}
+      {question.questionType === "sequence" && <SimpleSequence
+        questionItem={question}
+        selectedItem={answer}
+        onSubmit={onSubmitHandler}/>}
 
-        {question.questionType === "pickMultiple" && <PickMultiple
-          questionItem={question}
-          selectedItem={answer}
-          onSubmit={onSubmitHandler}/>}
+      {question.questionType === "pickMultiple" && <PickMultiple
+        questionItem={question}
+        selectedItem={answer}
+        onSubmit={onSubmitHandler}/>}
 
-        {question.questionType === "fillTextExactly" && <FillTextExactly
-          setCustomView={setCustomView}
-          questionItem={question}
-          selectedItem={answer}
-          onSubmit={onSubmitHandler}/>}
+      {question.questionType === "fillTextExactly" && <FillTextExactly
+        setCustomView={setCustomView}
+        questionItem={question}
+        selectedItem={answer}
+        onSubmit={onSubmitHandler}/>}
     </Container>)
 }
