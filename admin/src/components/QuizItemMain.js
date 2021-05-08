@@ -11,7 +11,7 @@ export default function QuizItemMain({ data }) {
 
   useLayoutEffect(() => {
     setComponentData(data)
-  }, [])
+  }, [data]) //todo data.sys.revision
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -38,9 +38,9 @@ export default function QuizItemMain({ data }) {
   }
 
   return <div>
-    <Typography variant="h3">Quiz info</Typography>
-    <TextField type={"text"} name={"title"} value={componentData.title} onChange={handleInputChange}/>
-    <TextField disabled={true} type={"text"} name={"slug"} value={urlSlug(componentData.title)} onChange={handleInputChange}/>
+    <Typography variant="h5">Lesson info</Typography>
+    <TextField fullWidth type={"text"} name={"title"} value={componentData.title || ""} onChange={handleInputChange}/>
+    <TextField fullWidth disabled={true} type={"text"} name={"slug"} value={urlSlug(componentData.title || "")} onChange={handleInputChange}/>
 
     <MDEditor
       value={componentData.description || ""}
@@ -62,7 +62,7 @@ export default function QuizItemMain({ data }) {
     <hr/>
     <h2>Flash Cards</h2>
 
-    {componentData?.flashcards?.map((item, index) =>
+    {data?.flashcards?.map((item, index) =>
 
       <div key={`fc-${index}`}>
         <FlashCardItemEditor flashcard={item}/>

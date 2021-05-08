@@ -48,7 +48,7 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
   return <>
     {answers.map((item, index) =>
       <div key={`pickMultiple-${index}`}>
-        <Checkbox id={index}
+        <Checkbox id={`${index}`}
                name={"question"}
                checked={correct && correct.filter(i => i == index).length}
                value={index} onChange={onAnswerChangeHandler}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -51,8 +51,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function VerticalTabs({ tabs, selectedTab, setSelectedTab}) {
+export default function VerticalTabs({ tabs, selectedTab, setSelectedTab }) {
   const classes = useStyles();
+
+  useEffect(() => {
+  }, [tabs])
 
   const handleChange = (event, newValue) => {
     setSelectedTab(newValue)
@@ -68,12 +71,13 @@ export default function VerticalTabs({ tabs, selectedTab, setSelectedTab}) {
         aria-label="Vertical tabs example"
         className={classes.tabs}
       >
-        {tabs.map((tabItem, i)=> <Tab label={tabItem.label} {...a11yProps(i)} />)}
+        {tabs.map((tabItem, i) => <Tab key={`tabItem-header-${i}`} label={tabItem.label} {...a11yProps(i)} />)}
       </Tabs>
-      {tabs.map((tabItem, i)=>
-        <TabPanel value={selectedTab} index={i}>
+      {tabs.map((tabItem, i) =>
+        <TabPanel key={`tabItem-content-${i}`}
+                  value={selectedTab} index={i}>
           {tabItem.Component()}
-      </TabPanel>)}
+        </TabPanel>)}
     </div>
   );
 }

@@ -4,6 +4,7 @@ import MarkdownPreview from '@uiw/react-markdown-preview';
 import { Button, Checkbox, FormControlLabel } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+
 export default function FillTextExactlyAnswerEditor({ question, answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
 
   const [showPreview, setShowPreview] = useState(false)
@@ -52,8 +53,8 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
       {question && !question.match(/\${([^}]+)}/g) && "This `${1}` is placeholder. Put `${2}` into the question. "
       + "Which cause new field. For each placeholder use unique inner text such as `${3}`, `${4}`, or `${what}``.  "}
       {showPreview ?
-        <Button variant={"text"} startIcon={<VisibilityOffIcon />} onClick={() => setShowPreview(false)}><MarkdownPreview source={text}/></Button> :
-        <Button variant={"text"} startIcon={<VisibilityIcon />} onClick={() => setShowPreview(true)}>Show result preview</Button>}
+        <Button variant={"text"} startIcon={<VisibilityOffIcon/>} onClick={() => setShowPreview(false)}><MarkdownPreview source={text}/></Button> :
+        <Button variant={"text"} startIcon={<VisibilityIcon/>} onClick={() => setShowPreview(true)}>Show result preview</Button>}
     </div>
     {question.match(/\${([^}]+)}/g) && answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
@@ -66,8 +67,8 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
           htmlFor={`field${index}`}>{question.match(/\${([^}]+)}/g)[index]}: </label>
 
         <AnswerFields key={`answer-${index}`}
-                      id={index}
-                      answer={{ text: typeof item == 'object' ? "" : item}}
+                      id={`${index}`}
+                      answer={{ text: typeof item == 'object' ? "" : item }}
                       onInputChange={onInputChange}
                       answerType={answerType}
         />

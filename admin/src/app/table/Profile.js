@@ -46,7 +46,7 @@ function Profile(props) {
         </Avatar>
 
         <Typography component="h1" variant="h5">
-          User
+          Profile
         </Typography>
 
         {Object.entries(user).map(([key, value]) => {

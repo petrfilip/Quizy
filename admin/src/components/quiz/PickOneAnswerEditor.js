@@ -44,7 +44,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
   return <>
     {answers && answers.map((item, index) =>
       <div key={`pickOne-${index}`}>
-        <Radio  id={index} name={"question"}
+        <Radio id={`${index}`} name={"question"}
                checked={index == correct}
                value={index}
                onChange={onCorrectAnswerChangeHandler}

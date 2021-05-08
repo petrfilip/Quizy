@@ -35,7 +35,8 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
   setCustomView(text);
 
   return <>
-    {answers && answers.map((item, index) =>
+    {}
+    { question && question.match(/\${([^}]+)}/g) && answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
         <TextField
           style={{marginBottom: '10px'}}

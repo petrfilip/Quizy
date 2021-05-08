@@ -91,7 +91,7 @@ export default function LessonLoader() {
             variant="outlined"
             to={`/lessons/newQuiz`}
             component={RouterLink}
-    >Add new quiz</Button>
+    >Add new lesson</Button>
     <List columns={columns} data={data} component={(item) => {
       return OutlinedCard(item, deleteItemDialog)
     }}/>

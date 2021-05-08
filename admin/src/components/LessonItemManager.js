@@ -65,12 +65,11 @@ export default function LessonItemManager({ slug }) {
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     }).then(r => r.json())
       .then(json => {
-        if (data._id) {
-          setData(json)
-        } else {
+        if (!data._id) {
           history.push(json.slug)
-          setData(json)
         }
+        // setData(json) // todo add revision to entity
+
       }).then(() => {
       setIsPersisted(true)
       enqueueSnackbar('Lesson persisted', { variant: "success" });
@@ -171,8 +170,4 @@ export default function LessonItemManager({ slug }) {
 
 
   </div>
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
