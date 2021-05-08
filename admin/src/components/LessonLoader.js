@@ -83,7 +83,7 @@ export default function LessonLoader() {
   ];
 
   return <>
-    {isPending && "Loading data"}
+    {/*{isPending && "Loading data"}*/}
     {error}
 
     <Button color={"primary"}

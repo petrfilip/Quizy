@@ -145,7 +145,7 @@ export default function LessonItemManager({ slug }) {
   const [selectedTab, setSelectedTab] = useState(tabs[0].index)
 
   return <div>
-    {isPending && "Loading data..."}
+    {/*{isPending && "Loading data..."}*/}
     {error && <div>{error}</div>}
 
     <Prompt
