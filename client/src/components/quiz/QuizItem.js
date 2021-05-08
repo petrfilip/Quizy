@@ -4,11 +4,16 @@ import SimpleSequence from "./quizItem/SimpleSequence";
 import PickMultiple from "./quizItem/PickMultiple";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import FillTextExactly from "./quizItem/FillTextExactly";
-import { Badge, Button, Container } from "@material-ui/core";
+import { Badge, Box, Button, Container, makeStyles } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
+const useStyles = makeStyles((theme) => ({
+  info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
+}));
+
 export default function QuizItem({ question, answer, onAnswerSubmit }) {
+  const classes = useStyles();
 
   const [selected, setSelected] = useState(answer)
   const [customView, setCustomView] = useState()
@@ -24,38 +29,51 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
   }
 
   return (
-    <Container maxWidth="md" style={{ minHeight: '580px' }}>
-      {selected && question.comment}
+    <>
+      <div className={classes.info}>
+        {question.questionType === 'pickOne' && "Select one option"}
+        {question.questionType === 'pickMultiple' && "Select correct answer/s"}
+        {question.questionType === 'fillTextExactly' && "Fill fields exactly"}
+      </div>
 
-      <Container style={{
-        paddingTop: '30px',
-        paddingBottom: '30px', borderBottom: '1px solid gray',
-        marginBottom: '30px'
-      }}>
-        <Badge
-          badgeContent={customView && showCustomView && <VisibilityOffIcon /> || customView && !showCustomView && <VisibilityIcon />  } color="secondary" onClick={() => customView && setShowCustomView(!showCustomView)}>
-        <MarkdownPreview source={showCustomView && customView || question.question}/>
-        </Badge>
+      <Container maxWidth="md" style={{ minHeight: '580px' }}>
+        {selected && question.comment}
+
+        <Container style={{
+          paddingTop: '30px',
+          paddingBottom: '30px', borderBottom: '1px solid gray',
+          marginBottom: '30px'
+        }}>
+          <Badge
+            style={{ display: "block" }}
+            badgeContent={customView && showCustomView && <VisibilityOffIcon/> || customView && !showCustomView && <VisibilityIcon/>} color="secondary"
+            onClick={() => customView && setShowCustomView(!showCustomView)}>
+            <MarkdownPreview style={{ width: "100%" }} source={showCustomView && customView || question.question}/>
+          </Badge>
+        </Container>
+        {question.questionType === "pickOne" && <PickOne
+          questionItem={question}
+          selectedItem={answer}
+          onSubmit={onSubmitHandler}/>}
+
+        {question.questionType === "sequence" && <SimpleSequence
+          questionItem={question}
+          selectedItem={answer}
+          onSubmit={onSubmitHandler}/>}
+
+        {question.questionType === "pickMultiple" && <PickMultiple
+          questionItem={question}
+          selectedItem={answer}
+          onSubmit={onSubmitHandler}/>}
+
+        {question.questionType === "fillTextExactly" && <FillTextExactly
+          setCustomView={setCustomView}
+          questionItem={question}
+          selectedItem={answer}
+          onSubmit={onSubmitHandler}/>}
+
+
+
       </Container>
-      {question.questionType === "pickOne" && <PickOne
-        questionItem={question}
-        selectedItem={answer}
-        onSubmit={onSubmitHandler}/>}
-
-      {question.questionType === "sequence" && <SimpleSequence
-        questionItem={question}
-        selectedItem={answer}
-        onSubmit={onSubmitHandler}/>}
-
-      {question.questionType === "pickMultiple" && <PickMultiple
-        questionItem={question}
-        selectedItem={answer}
-        onSubmit={onSubmitHandler}/>}
-
-      {question.questionType === "fillTextExactly" && <FillTextExactly
-        setCustomView={setCustomView}
-        questionItem={question}
-        selectedItem={answer}
-        onSubmit={onSubmitHandler}/>}
-    </Container>)
+    </>)
 }

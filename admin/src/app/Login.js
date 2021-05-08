@@ -59,7 +59,7 @@ export default function Login() {
   const [isPending, setIsPending] = useState(true)
   const { enqueueSnackbar } = useSnackbar();
 
-  const { setAuthTokens } = useAuth();
+  const { setTokens } = useAuth();
 
   function postLogin(e) {
     e.preventDefault()
@@ -79,7 +79,7 @@ export default function Login() {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
-        setAuthTokens(json.token);
+        setTokens(json.token);
         setLoggedIn(true);
         enqueueSnackbar('Login successful', { variant: "success" });
       })

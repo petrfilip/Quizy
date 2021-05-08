@@ -3,7 +3,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link, useParams
+  Link, useParams, Redirect
 } from "react-router-dom";
 import LessonLoader from "../components/LessonLoader";
 import LessonItemManager from "../components/LessonItemManager";
@@ -17,9 +17,15 @@ import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Login from "./Login";
 import AddUser from "../components/user/AddUser";
+import { useAuth } from "./AuthContext";
+import Profile from "./table/Profile";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 export default function Main() {
-  const nav = [
+  const { user } = useAuth()
+
+
+  const nav = user && [
     {
       title: "Dashboard",
       to: "/",
@@ -36,26 +42,32 @@ export default function Main() {
       icon: <ViewComfyIcon/>
     },
     {
-      title: "",
+      title: "Users",
       to: "/users",
       icon: <PeopleIcon/>
     },
     {
-      title: "",
+      title: user.user_mail,
       to: "/profile",
       icon: <AccountCircleIcon/>
+    },
+    {
+      title: "",
+      to: "/logout",
+      icon: <ExitToAppIcon/>
     }
   ]
 
-  return (
+
+  const authenticatedRoutes = (
     <Router>
       <div>
         <Navbar items={nav}/>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
         <div className={"page-content"}>
           <Switch>
+            <Route path="/login">
+              <Login/>
+            </Route>
             <Route path="/lessons/:slug">
               <QuizItemManagerPage/>
             </Route>
@@ -68,8 +80,8 @@ export default function Main() {
             <Route path="/users">
               <UsersLoader/>
             </Route>
-            <Route path="/login">
-              <Login/>
+            <Route path="/logout">
+              <Logout/>
             </Route>
             <Route path="/profile">
               <Profile/>
@@ -82,6 +94,10 @@ export default function Main() {
       </div>
     </Router>
   );
+
+  const nonAuthenticatedRoutes = (<Router><Login/></Router>)
+
+  return user ? authenticatedRoutes : nonAuthenticatedRoutes
 
 }
 
@@ -98,7 +114,11 @@ function QuizItemManagerPage() {
   return <><LessonItemManager slug={slug}/></>;
 }
 
-function Profile() {
-  return <h2>Profile</h2>;
+function Logout() {
+  const { removeTokens } = useAuth()
+  removeTokens()
+  return <Redirect to="/"/>;
+
 }
+
 
