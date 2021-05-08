@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from "react";
+import React, { useState, useLayoutEffect, useReducer } from "react";
 import { Tabs } from "react-simple-tabs-component";
 import QuizQuestionEditor from "./quiz/QuizQuestionEditor";
 import QuizItemMain from "./QuizItemMain";
@@ -23,6 +23,7 @@ export default function LessonItemManager({ slug }) {
   const [error, setError] = useState()
   let history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
+  const [_, forceUpdate] = useReducer((x) => x + 1, 0);
 
   useLayoutEffect(() => {
 
@@ -80,6 +81,7 @@ export default function LessonItemManager({ slug }) {
       })
       .finally(() => {
       });
+    forceUpdate()
   }
 
   const onMainChange = (changed) => {
