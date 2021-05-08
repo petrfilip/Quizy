@@ -24,7 +24,6 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 export default function Main() {
   const { user } = useAuth()
 
-
   const nav = user && [
     {
       title: "Dashboard",
@@ -58,44 +57,32 @@ export default function Main() {
     }
   ]
 
-
   const authenticatedRoutes = (
     <Router>
       <div>
         <Navbar items={nav}/>
         <div className={"page-content"}>
           <Switch>
-            <Route path="/login">
-              <Login/>
-            </Route>
-            <Route path="/lessons/:slug">
-              <QuizItemManagerPage/>
-            </Route>
-            <Route path="/lessons">
-              <QuizManagerPage/>
-            </Route>
-            <Route path="/users/new">
-              <AddUser/>
-            </Route>
-            <Route path="/users">
-              <UsersLoader/>
-            </Route>
-            <Route path="/logout">
-              <Logout/>
-            </Route>
-            <Route path="/profile">
-              <Profile/>
-            </Route>
-            <Route path="/">
-              <Home/>
-            </Route>
+            <Route path="/lessons/:slug"><QuizItemManagerPage/></Route>
+            <Route path="/lessons"><QuizManagerPage/></Route>
+            <Route path="/users/new"><AddUser/></Route>
+            <Route path="/users"><UsersLoader/></Route>
+            <Route path="/logout"><Logout/></Route>
+            <Route path="/profile"><Profile/></Route>
+            <Route render={() => <Redirect to="/"/>}/>
+            <Route path="/"><Home/></Route>
           </Switch>
         </div>
       </div>
     </Router>
   );
 
-  const nonAuthenticatedRoutes = (<Router><Login/></Router>)
+  const nonAuthenticatedRoutes = (<Router>
+    <Switch>
+      <Route path="/login"><Login/></Route>
+      <Route render={() => <Redirect to="/login"/>}/>
+    </Switch>
+  </Router>)
 
   return user ? authenticatedRoutes : nonAuthenticatedRoutes
 
