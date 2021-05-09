@@ -92,26 +92,28 @@ Whole application is composed of the following objects:
   "mail": "user@mail.cz", // user mail
   "password": "...", //bcrypted password
   "achievementList": { // list of questions
+    "lessonList": [
+      {
+        "lessonId": "...",
+        "score": "",
+        "doneInTime": "...",
+        "completionDate": "...",
+        "trying": "..." // how many times it was done
+      },...
+    ],
     "courseList": [
       {
-        "courseId": "..." // reference to course
+        "courseId": "...", // reference to course
         "enrolledAt": "...",
-        "lessonList": [
-          {
-            "lessonId": "...",
-            "score": "",
-            "doneInTime": "...",
-            "completionDate": "..."
-          }
-        ],
-        "finalExam": {
-          "grade": "",
-          "score": "",
-          "doneInTime": "...",
-          "finishedAt": "..."
-        }
-      }
-    ],
+        "grade": "",
+        "score": "",
+        "doneInTime": "...",
+        "finishedAt": "...",
+        "trying": "..." // how many times it was done
+      },...
+    ]
+  }
+    
     ...
   }
 }

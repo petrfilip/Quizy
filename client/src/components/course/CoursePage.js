@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import List from "../layout/List";
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 
-export default function LessonPage() {
+export default function CoursePage() {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
@@ -36,7 +36,7 @@ export default function LessonPage() {
   ];
 
   return <Container maxWidth={"lg"}>
-    <Typography variant="h2">All lessons</Typography>
+    <Typography variant="h2">All courses</Typography>
     {/*{isPending && "Loading data"}*/}
     {error}
     <List columns={columns} data={data} component={(item) => OutlinedCard(item, ()=>{})}/>

@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-import { useTable, useFilters, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { useAsyncDebounce, useFilters, useGlobalFilter, useTable } from 'react-table'
 import { Grid, TextField } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
 // A great library for fuzzy filtering/sorting items
 
 const Styles = styled.div`
@@ -274,6 +273,12 @@ function Table({ columns, data, component }) {
             {component(original)}
           </Grid>
         ))}
+
+        {state.globalFilter && rows.length === 0 &&
+        <Grid key={`not-found-item`} item xs={12} sm={12} md={13} lg={12} xl={12}>
+          No item correspond to search criteria
+        </Grid>}
+
 
       </Grid>
 

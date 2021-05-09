@@ -5,7 +5,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import { Badge, Chip, Link } from "@material-ui/core";
+import { Badge, Container } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
@@ -82,7 +82,7 @@ export default function LessonLoader() {
     }
   ];
 
-  return <>
+  return <Container maxWidth={"lg"}>
     {/*{isPending && "Loading data"}*/}
     {error}
 
@@ -95,8 +95,7 @@ export default function LessonLoader() {
     <List columns={columns} data={data} component={(item) => {
       return OutlinedCard(item, deleteItemDialog)
     }}/>
-
-  </>
+    </Container>
 
 }
 

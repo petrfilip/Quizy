@@ -10,6 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
 import List from "../../app/table/List";
+import { Container } from "@material-ui/core";
 
 export default function UserLoader() {
 
@@ -77,7 +78,7 @@ export default function UserLoader() {
     }
   ];
 
-  return <>
+  return <Container maxWidth={"lg"}>
     {error}
     <Button color={"primary"}
             startIcon={<AddIcon/>}
@@ -86,7 +87,7 @@ export default function UserLoader() {
             component={RouterLink}
     >Add new user</Button>
     <List columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
-  </>
+  </Container>
 
 }
 

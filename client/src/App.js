@@ -1,15 +1,15 @@
 import './App.css';
-import Quiz from "./components/quiz/Quiz";
 import LessonPage from "./components/lesson/LessonPage";
-import { BrowserRouter as Router, Link, Route, Switch, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useParams } from "react-router-dom";
 import LessonItem from "./components/lesson/LessonItem";
 import Navbar from "./components/layout/Navbar";
 import HomeIcon from "@material-ui/icons/Home";
 import MenuBookIcon from "@material-ui/icons/MenuBook";
 import ViewComfyIcon from "@material-ui/icons/ViewComfy";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import { useAuth } from "./components/layout/AuthContext";
+import CoursePage from "./components/course/CoursePage";
+import Profile from "./components/user/Profile";
+import Dashboard from "./components/layout/Dashboard";
 
 function App() {
 
@@ -29,11 +29,11 @@ function App() {
     },
     {
       title: "Courses",
-      to: "/course",
+      to: "/courses",
       icon: <ViewComfyIcon/>
     },
     // {
-    //   title: user.user_mail,
+    //   title: "user.user_mail",
     //   to: "/profile",
     //   icon: <AccountCircleIcon/>
     // },
@@ -58,14 +58,20 @@ function App() {
             renders the first one that matches the current URL. */}
             <div className={"page-content"}>
               <Switch>
-                <Route path="/course/:slug">
+                <Route path="/lessons/:slug">
                   <CourseItemPage />
                 </Route>
-                <Route path="/course">
+                <Route path="/lessons">
                   <LessonPage/>
                 </Route>
+                <Route path="/courses">
+                  <CoursePage/>
+                </Route>
+                <Route path="/profile">
+                  <Profile/>
+                </Route>
                 <Route path="/">
-                  <Home/>
+                  <Dashboard/>
                 </Route>
               </Switch>
             </div>
@@ -82,8 +88,5 @@ function CourseItemPage() {
   return <><LessonItem slug={slug}/></>;
 }
 
-function Home() {
-  return <h2>Dashboard</h2>;
-}
 
 export default App;
