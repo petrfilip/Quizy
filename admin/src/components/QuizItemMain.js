@@ -45,6 +45,7 @@ export default function QuizItemMain({ data }) {
     <MDEditor
       value={componentData.description || ""}
       onChange={(src) => {
+        console.log(src)
         handleInputChange({
             target: {
               value: src,

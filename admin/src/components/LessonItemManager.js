@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect, useReducer } from "react";
+import React, { useState, useLayoutEffect, useReducer, useEffect } from "react";
 import { Tabs } from "react-simple-tabs-component";
 import QuizQuestionEditor from "./quiz/QuizQuestionEditor";
 import QuizItemMain from "./QuizItemMain";
@@ -24,6 +24,12 @@ export default function LessonItemManager({ slug }) {
   let history = useHistory();
   const { enqueueSnackbar } = useSnackbar();
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
+  const [selectedTab, setSelectedTab] = useState(0)
+
+
+  useEffect(() => {
+    setIsPersisted(false)
+  }, [JSON.stringify(data)])
 
   useLayoutEffect(() => {
 
@@ -143,7 +149,6 @@ export default function LessonItemManager({ slug }) {
     setSelectedTab(selectedTab - 1)
   }
 
-  const [selectedTab, setSelectedTab] = useState(tabs[0].index)
 
   return <div>
     {/*{isPending && "Loading data..."}*/}

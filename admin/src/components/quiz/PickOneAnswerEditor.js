@@ -52,7 +52,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
 
 
         <AnswerFields key={`answer-${index}`}
-                      id={index}
+                      id={`${index}`}
                       answer={item}
                       onInputChange={onInputChange}
                       answerType={answerType}

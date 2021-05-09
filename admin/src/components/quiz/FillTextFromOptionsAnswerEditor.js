@@ -32,7 +32,7 @@ export default function FillTextFromOptionsAnswerEditor({ answers, onAnswerChang
   return <>
     {answers && answers.map((item, index) =>
       <div key={`pickOne-${index}`}>
-        <input type="radio" id={index} name={"question"}
+        <input type="radio" id={`${index}`} name={"question"}
                checked={index == correct}
                value={index}
                onChange={onCorrectAnswerChangeHandler}
@@ -40,7 +40,7 @@ export default function FillTextFromOptionsAnswerEditor({ answers, onAnswerChang
 
 
         <AnswerFields key={`answer-${index}`}
-                      id={index}
+                      id={`${index}`}
                       answer={item}
                       onInputChange={onInputChange}
                       answerType={answerType}

@@ -37,7 +37,7 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
   return <>
     {}
     { question && question.match(/\${([^}]+)}/g) && answers && answers.map((item, index) =>
-      <div key={`fillExact-${index}`}>
+      <div key={`fillExact-${index || "0"}`}>
         <TextField
           style={{marginBottom: '10px'}}
           variant="outlined"
@@ -45,8 +45,8 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
           error={isSubmitted && !isItemCorrect(index, selected[index])}
           fullWidth
           label={question.match(/\${([^}]+)}/g)[index]}
-          id={index}
-          value={selected[index]}
+          id={`${index}`}
+          value={selected[index] || ""}
           onChange={onInputChange} autoComplete={"off"} disabled={isSubmitted}/>
       </div>
     )}
