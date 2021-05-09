@@ -1,7 +1,13 @@
 import FlashCards from "../flashcards/FlashCards";
-import { useHistory, useLocation } from "react-router-dom";
+import { Link as RouterLink, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import Quiz from "../quiz/Quiz";
+import { Card, CardActions, Container, Grid, Paper } from "@material-ui/core";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
+import Skeleton from '@material-ui/lab/Skeleton';
 
 export default function LessonItem({ slug }) {
 
@@ -48,11 +54,66 @@ export default function LessonItem({ slug }) {
     setCurrentAction("flashcards")
   }}>Flashcards</div>
 
-  return <div>
-    <h3>{data.title}</h3>
-    {currentAction === "flashcards" && data.flashcards && <FlashCards flashcards={data.flashcards}/>}
-    {currentAction === "quiz" && data.questions && <Quiz quizData={data.questions}/>}
-    {currentAction === "choice" && <>{choiceQuiz} {choiceFlashcards}</>}
-  </div>
+  let { path, url } = useRouteMatch();
 
+  const choicer = <Container maxWidth="md" style={{ minHeight: '500px' }}>
+    <Paper style={{ padding: "10px" }}>
+
+      <Grid container spacing={2}>
+        {data.flashcards && <Grid item xs={6}>
+          <OutlinedCard
+            content={<Typography>FlashCards</Typography>}
+            action={<Button component={RouterLink}
+                            to={`${url}/flashcards`}
+                            color={"secondary"}
+                            startIcon={<DoubleArrowIcon/>}
+            />}
+          />
+        </Grid>}
+        <Grid item xs={6}>
+          <OutlinedCard
+            content={<Typography>Quiz</Typography>}
+            action={<Button component={RouterLink}
+                            to={`${url}/quiz`}
+                            color={"secondary"}
+                            startIcon={<DoubleArrowIcon/>}
+            />}
+          />
+        </Grid>
+      </Grid>
+
+    </Paper>
+  </Container>
+
+  return <>
+    <Container maxWidth="md">
+      <Typography variant={"h4"}>{data.title || <Skeleton/>}</Typography>
+    </Container>
+
+    <Switch>
+      <Route exact path={path}>
+        {choicer}
+      </Route>
+      <Route path={`${path}/flashcards`}>
+        {data.flashcards && <FlashCards flashcards={data.flashcards}/>}
+      </Route>
+      <Route path={`${path}/quiz`}>
+        {data.questions && <Quiz quizData={data.questions}/>}
+      </Route>
+    </Switch>
+  </>
+
+}
+
+function OutlinedCard({ content, action }) {
+  return (
+    <Card variant="outlined">
+      <CardContent>
+        {content}
+      </CardContent>
+      <CardActions>
+        {action}
+      </CardActions>
+    </Card>
+  );
 }

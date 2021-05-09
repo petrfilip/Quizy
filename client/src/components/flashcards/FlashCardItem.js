@@ -1,24 +1,63 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
 import "./FlashCardItem.css"
+import { Avatar, Container, Fab, makeStyles, Paper, Typography } from "@material-ui/core";
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
+import AddIcon from "@material-ui/icons/Add";
+import ReactCardFlip from 'react-card-flip';
 
-export default function FlashCardItem({ flashcard }) {
+const useStyles = makeStyles((theme) => ({
+  info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
+  avatar: {
+    margin: theme.spacing(1),
+    backgroundColor: theme.palette.secondary.main,
+  },
+}));
+
+export default function FlashCardItem({ flashcard, index }) {
+  const classes = useStyles();
+
   const [isTurned, setIsTurned] = useState(false)
 
   useLayoutEffect(() => {
     setIsTurned(false)
   }, [flashcard])
 
-  return <div onClick={() => setIsTurned(!isTurned)} className={"card"}>
-    {!isTurned ?
-    <div className={"card-not-flipped"}>
-      <h3>{flashcard.title}</h3>
-      <div className={"card-flip-area"}>Flip the card</div>
-    </div> :
-    <div>
-      <h3>{flashcard.title}</h3>
+  const frontSide = (<Paper>
+
+    <Container className={classes.info}>
+      <Typography>Do you know... </Typography>
+    </Container>
+    <Container maxWidth="md" style={{
+      alignItems: 'center', minHeight: '580px', textAlign: "center", paddingTop: "25%", display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <Avatar className={classes.avatar}>
+        <SwapHorizIcon/>
+      </Avatar>
+      <Typography variant="h4">{flashcard.title}</Typography>
+
+      {/*{index === 0 && <div className={"card-flip-area"}>Flip the card</div>}*/}
+    </Container>
+  </Paper>)
+
+  const backSide = (<Paper>
+    <Container className={classes.info}>
+      <Typography>{flashcard.title}</Typography>
+    </Container>
+
+    <Container maxWidth="md" style={{ minHeight: '580px' }}>
       <MarkdownPreview source={flashcard.description}/>
-    </div>
-  }</div>
+    </Container>
+
+  </Paper>)
+
+  return <div onClick={() => setIsTurned(!isTurned)}>
+    <ReactCardFlip isFlipped={isTurned} flipDirection="horizontal">
+      {frontSide}
+      {backSide}
+    </ReactCardFlip>
+  </div>
 
 }

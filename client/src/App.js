@@ -3,8 +3,47 @@ import Quiz from "./components/quiz/Quiz";
 import LessonPage from "./components/lesson/LessonPage";
 import { BrowserRouter as Router, Link, Route, Switch, useParams } from "react-router-dom";
 import LessonItem from "./components/lesson/LessonItem";
+import Navbar from "./components/layout/Navbar";
+import HomeIcon from "@material-ui/icons/Home";
+import MenuBookIcon from "@material-ui/icons/MenuBook";
+import ViewComfyIcon from "@material-ui/icons/ViewComfy";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import { useAuth } from "./components/layout/AuthContext";
 
 function App() {
+
+  // const { user } = useAuth()
+
+
+  const nav = [
+    {
+      title: "Dashboard",
+      to: "/",
+      icon: <HomeIcon/>
+    },
+    {
+      title: "Lessons",
+      to: "/lessons",
+      icon: <MenuBookIcon/>
+    },
+    {
+      title: "Courses",
+      to: "/course",
+      icon: <ViewComfyIcon/>
+    },
+    // {
+    //   title: user.user_mail,
+    //   to: "/profile",
+    //   icon: <AccountCircleIcon/>
+    // },
+    {
+      title: "",
+      to: "/logout",
+      icon: <ExitToAppIcon/>
+    }
+  ]
+
 
   return (
     <div className="App">
@@ -12,10 +51,8 @@ function App() {
 
         <Router>
           <div>
-            <nav>
-              <Link to="/">Dashboard</Link>
-              <Link to="/course">Quizzes</Link>
-            </nav>
+            <Navbar items={nav}/>
+
 
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
