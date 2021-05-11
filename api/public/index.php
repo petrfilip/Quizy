@@ -19,8 +19,8 @@ require __DIR__ . '/../app/ErrorUtils.php';
 require __DIR__ . '/../app/Utils.php';
 
 define("DATABASE_ROOT", __DIR__ . "/../database");
-
-define("JWT_KEY", "TODO");
+define("CONFIG_FILE", __DIR__ . './../config.php');
+require CONFIG_FILE;
 
 $app = AppFactory::create();
 
@@ -37,8 +37,8 @@ $app->get('/', function (Request $request, Response $response, $args) {
     return $response;
 });
 
-$loginRoute = require __DIR__ . '/../app/login-routes.php';
-$loginRoute($app);
+$appRoutes = require __DIR__ . '/../app/app-routes.php';
+$appRoutes($app);
 
 $usersRoutes = require __DIR__ . '/../app/users-routes.php';
 $usersRoutes($app);

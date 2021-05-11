@@ -9,7 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
-import List from "../../app/table/List";
+import List from "../../app/List";
 import { Container } from "@material-ui/core";
 
 export default function UserLoader() {
@@ -35,7 +35,6 @@ export default function UserLoader() {
   }, [])
 
   const deleteItem = (user) => {
-    console.log(data)
     setIsPending(true)
     fetch(`${process.env.REACT_APP_BASE_URI}/users/${user._id}`,
       {

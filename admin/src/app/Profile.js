@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAuth } from "../AuthContext";
+import { useAuth } from "./AuthContext";
 import { Paper, Typography } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";

@@ -18,8 +18,9 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Login from "./Login";
 import AddUser from "../components/user/AddUser";
 import { useAuth } from "./AuthContext";
-import Profile from "./table/Profile";
+import Profile from "./Profile";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import Init from "./Init";
 
 export default function Main() {
   const { user } = useAuth()
@@ -80,6 +81,7 @@ export default function Main() {
   const nonAuthenticatedRoutes = (<Router>
     <Switch>
       <Route path="/login"><Login/></Route>
+      <Route exact path="/init"><Init/></Route>
       <Route render={() => <Redirect to="/login"/>}/>
     </Switch>
   </Router>)

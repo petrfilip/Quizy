@@ -29,7 +29,7 @@ export default function Navbar({ items }) {
         <Toolbar>
 
           <Typography variant="h6" className={classes.title}>
-            Quizy app
+            Quizy app - ADMIN
           </Typography>
           {items.map((item, i) => {
             return <Button key={`navbar-item-${i}`} startIcon={item.icon} color="inherit" component={RouterLink} to={item.to}>{item.title}</Button>

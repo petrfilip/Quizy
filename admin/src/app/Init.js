@@ -3,8 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -12,9 +10,13 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { useAuth } from "./AuthContext";
 import { Redirect } from "react-router-dom";
 import { useSnackbar } from "notistack";
+import List from "./List";
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import { Accordion, AccordionDetails, AccordionSummary } from "@material-ui/core";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function Copyright() {
   return (
@@ -28,6 +30,15 @@ function Copyright() {
     </Typography>
   );
 }
+
+const gridItemSizes = {
+  xs: 12,
+  sm: 12,
+  md: 12,
+  lg: 12,
+  xl: 12
+}
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,45 +60,34 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+export default function Init() {
   const classes = useStyles();
 
-  const [isLoggedIn, setLoggedIn] = useState(false);
-  const [isInitialized, setIsInitialized] = useState(true);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [userName, setUserName] = useState("");
-  const [password, setPassword] = useState("");
+  const [data, setData] = useState({});
   const [isPending, setIsPending] = useState(true)
+  const [requirements, setRequirements] = useState([]);
   const { enqueueSnackbar } = useSnackbar();
 
-  const { setTokens } = useAuth();
+  const handleInputChange = (event) => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    data[name] = value
+    setData({ ...data })
+  }
 
-  useLayoutEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/app/init`)
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        }
-        throw new Error(`Unable to get data: ${response.statusText}`)
-      })
-      .then(json => {
-        setIsInitialized(json.status === "running")
-      })
-      .catch((err) => setIsError(err.message))
-      .finally(() => setIsPending(false))
-
-  }, [])
-
-  function postLogin(e) {
+  function initApp(e) {
     e.preventDefault()
 
-    fetch(`${process.env.REACT_APP_BASE_URI}/login`,
+    fetch(`${process.env.REACT_APP_BASE_URI}/app/init`,
       {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ mail: userName, password: password }) // body data type must match "Content-Type" header
+        body: JSON.stringify(data)
       })
       .then(response => {
         if (response.ok) {
@@ -96,23 +96,34 @@ export default function Login() {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
-        setTokens(json.token);
-        setLoggedIn(true);
-        enqueueSnackbar('Login successful', { variant: "success" });
+        setIsInitialized(true);
+        enqueueSnackbar('Init application successful', { variant: "success" });
       })
       .catch((err) => {
-        enqueueSnackbar('Login failed', { variant: "error" });
+        enqueueSnackbar('Init application failed', { variant: "error" });
         setIsError(err.message)
       })
       .finally(() => setIsPending(false))
 
   }
 
-  if (!isInitialized) {
-    return <Redirect to="/init"/>;
-  }
+  useLayoutEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_URI}/app/init/requirements`)
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error(`Unable to get data: ${response.statusText}`)
+      })
+      .then(json => setRequirements(json))
+      .catch((err) => setIsError(err.message))
+      .finally(() => setIsPending(false))
 
-  if (isLoggedIn) {
+  }, [])
+
+
+
+  if (isInitialized) {
     return <Redirect to="/"/>;
   }
 
@@ -124,14 +135,13 @@ export default function Login() {
           <LockOutlinedIcon/>
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Init application
         </Typography>
-        <form className={classes.form} noValidate onSubmit={postLogin}>
+        <form className={classes.form} noValidate onSubmit={initApp}>
           <TextField
+            disabled={isInitialized}
             error={isError}
-            onChange={e => {
-              setUserName(e.target.value)
-            }}
+            onChange={handleInputChange}
             variant="outlined"
             margin="normal"
             required
@@ -143,10 +153,9 @@ export default function Login() {
             autoFocus
           />
           <TextField
+            disabled={isInitialized}
             error={isError}
-            onChange={e => {
-              setPassword(e.target.value)
-            }}
+            onChange={handleInputChange}
             variant="outlined"
             margin="normal"
             required
@@ -157,10 +166,22 @@ export default function Login() {
             id="password"
             autoComplete="current-password"
           />
-          {/*<FormControlLabel*/}
-          {/*  control={<Checkbox value="remember" color="primary"/>}*/}
-          {/*  label="Remember me"*/}
-          {/*/>*/}
+
+          <Accordion>
+            <AccordionSummary
+              expandIcon={<ExpandMoreIcon />}
+              aria-controls="panel1a-content"
+              id="panel1a-header"
+            >
+              <Typography className={classes.heading}>Application requirements</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <List data={requirements} component={(item) => (<OutlinedCard item={item}/>)} gridSizes={gridItemSizes}/>
+            </AccordionDetails>
+          </Accordion>
+
+
+
           <Button
             type="submit"
             fullWidth
@@ -168,20 +189,8 @@ export default function Login() {
             color="primary"
             className={classes.submit}
           >
-            Sign In
+            Init
           </Button>
-          <Grid container>
-            {/*<Grid item xs>*/}
-            {/*  <Link href="#" variant="body2">*/}
-            {/*    Forgot password?*/}
-            {/*  </Link>*/}
-            {/*</Grid>*/}
-            {/*<Grid item>*/}
-            {/*  <Link href="#" variant="body2">*/}
-            {/*    {"Don't have an account? Sign Up"}*/}
-            {/*  </Link>*/}
-            {/*</Grid>*/}
-          </Grid>
         </form>
       </div>
       <Box mt={8}>
@@ -190,3 +199,40 @@ export default function Login() {
     </Container>
   );
 }
+
+function OutlinedCard({ item }) {
+
+  return (
+    <Card variant="outlined">
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {item.key}
+        </Typography>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <Typography>
+              {item.current}
+            </Typography>
+          </Grid>
+          <Grid item xs={6}>
+            <Typography>
+              {item.required}
+            </Typography>
+          </Grid>
+        </Grid>
+
+
+        <Typography>
+          {item.status}
+        </Typography>
+        <Typography variant="body2" color="textSecondary" component="p">
+          {item.description}
+        </Typography>
+
+
+      </CardContent>
+    </Card>
+  );
+}
+
+

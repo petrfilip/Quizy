@@ -48,7 +48,6 @@ return function (App $app) {
             }
 
 
-
             $user = new stdClass();
             $user->mail = $inputJson["mail"];
             $user->name = $inputJson["name"];
