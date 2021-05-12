@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\LessonRepository;
+use App\CourseRepository;
 use App\Middleware\JwtMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -10,10 +10,10 @@ use Slim\Interfaces\RouteCollectorProxyInterface as Group;
 
 return function (App $app) {
 
-    $app->group('/lessons', function (Group $group) {
+    $app->group('/courses', function (Group $group) {
 
         $group->get('', function (Request $request, Response $response, $args) {
-            $data = LessonRepository::findAll();
+            $data = CourseRepository::findAll();
             $payload = json_encode($data);
 
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -22,7 +22,7 @@ return function (App $app) {
         });
 
         $group->get('/{slug}', function (Request $request, Response $response, $args) {
-            $data = LessonRepository::getBySlug($args["slug"]);
+            $data = CourseRepository::getBySlug($args["slug"]);
             $payload = json_encode($data);
 
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -31,7 +31,7 @@ return function (App $app) {
         });
 
         $group->delete('/{id}', function (Request $request, Response $response, $args) {
-            $data = LessonRepository::deleteById($args["id"]); // add deleteAt
+            $data = CourseRepository::deleteById($args["id"]); // add deleteAt
             $payload = json_encode($data);
 
             $response = $response->withHeader('Content-Type', 'application/json');
@@ -41,7 +41,7 @@ return function (App $app) {
 
         $group->post('', function (Request $request, Response $response, $args) {
             $dataToInsert = $request->getParsedBody();
-            $inserted = LessonRepository::insertOrUpdate($dataToInsert);
+            $inserted = CourseRepository::insertOrUpdate($dataToInsert);
             $payload = json_encode($inserted);
 
             $response = $response->withHeader('Content-Type', 'application/json');

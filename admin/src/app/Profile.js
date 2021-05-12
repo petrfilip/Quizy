@@ -34,7 +34,7 @@ function Profile(props) {
   const classes = useStyles();
 
 
-  const { user } = useAuth()
+  const { user, token } = useAuth()
 
   return (
     <Container maxWidth="xs">
@@ -59,6 +59,8 @@ function Profile(props) {
             </Grid>
           </Grid>
         })}
+
+        {token}
       </Paper>
 
     </Container>

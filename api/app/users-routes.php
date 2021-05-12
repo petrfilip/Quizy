@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\ErrorUtils;
+use App\Middleware\JwtMiddleware;
 use App\UserRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -24,7 +25,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        });
+        })->addMiddleware(new JwtMiddleware());;
 
         /**
          * Get user by id
@@ -69,7 +70,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        });
+        })->addMiddleware(new JwtMiddleware());;
     });
 
 

@@ -64,12 +64,14 @@ export default function Main() {
         <Navbar items={nav}/>
         <div className={"page-content"}>
           <Switch>
+            {/*<Route path="/courses/:slug"><CourseItemManagerPage/></Route>*/}
+            {/*<Route path="/courses"><CourseManagerPage/></Route>*/}
             <Route path="/lessons/:slug"><QuizItemManagerPage/></Route>
             <Route path="/lessons"><QuizManagerPage/></Route>
             <Route path="/users/new"><AddUser/></Route>
             <Route path="/users"><UsersLoader/></Route>
-            <Route path="/logout"><Logout/></Route>
             <Route path="/profile"><Profile/></Route>
+            <Route path="/logout"><Logout/></Route>
             <Route render={() => <Redirect to="/"/>}/>
             <Route path="/"><Home/></Route>
           </Switch>

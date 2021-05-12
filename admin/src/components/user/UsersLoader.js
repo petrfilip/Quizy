@@ -18,10 +18,14 @@ export default function UserLoader() {
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState();
   const { enqueueSnackbar } = useSnackbar();
-  const { authTokens } = useAuth();
+  const { token } = useAuth();
 
   useLayoutEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/users`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/users`,{
+      headers: new Headers({
+        'Authorization': 'Bearer ' + token,
+      }),
+    })
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -40,7 +44,7 @@ export default function UserLoader() {
       {
         method: 'DELETE',
         headers: new Headers({
-          'Authorization': 'Bearer ' + authTokens,
+          'Authorization': 'Bearer ' + token,
         }),
       })
       .then(response => {

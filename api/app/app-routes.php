@@ -15,7 +15,9 @@ require_once "ApplicationRequirementsDto.php";
 
 return function (App $app) {
 
-
+    /**
+     * Provide information about application requirements
+     */
     $app->get('/app/init/requirements', function (Request $request, Response $response, $args) {
 
         //$loadedModules = phpinfo();
@@ -46,23 +48,26 @@ return function (App $app) {
         return $response;
     });
 
-
+    /**
+     * Get state of the application
+     */
     $app->get('/app/init', function (Request $request, Response $response, $args) {
         $status = array(
-            "status" => \App\Utils::isApplicationInitialized() ? "running" : "notInitialized", //todo suspended
+            "status" => \App\Utils::isApplicationInitialized() ? "running" : "notInitialized", //todo add another state such as suspended
         );
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($status));
         return $response;
     });
 
-
-
-
+    /**
+     * Init application
+     * - creates first user and password for JWT tokens
+     */
     $app->post('/app/init', function (Request $request, Response $response, $args) {
 
         if (\App\Utils::isApplicationInitialized()) {
-            return $response->withStatus(204);
+            return $response->withStatus(400);
         }
 
         $inputJson = $request->getParsedBody();
@@ -112,6 +117,10 @@ return function (App $app) {
         return $response;
     });
 
+    /**
+     * Login user by mail and password
+     * The method provides new JET token
+     */
     $app->group('/login', function (Group $group) {
 
         $group->options('', function (Request $request, Response $response, $args) {
@@ -142,7 +151,7 @@ return function (App $app) {
                 "iat" => $issuedAt,
                 "exp" => $expire
             );
-            $jwt = JWT::encode($payload, JWT_KEY);
+            $jwt = JWT::encode($payload, JWT_KEY, 'HS256');
 
 
             // create output for user
