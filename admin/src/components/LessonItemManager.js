@@ -13,6 +13,7 @@ import SaveIcon from "@material-ui/icons/Save";
 import {  useSnackbar } from 'notistack';
 import VerticalTabs from "../app/TabPanel";
 import {  Prompt } from "react-router-dom";
+import { useAuth } from "../app/AuthContext";
 
 
 export default function LessonItemManager({ slug }) {
@@ -25,6 +26,7 @@ export default function LessonItemManager({ slug }) {
   const { enqueueSnackbar } = useSnackbar();
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
   const [selectedTab, setSelectedTab] = useState(0)
+  const { token } = useAuth();
 
 
   useEffect(() => {
@@ -67,7 +69,8 @@ export default function LessonItemManager({ slug }) {
     fetch(`${process.env.REACT_APP_BASE_URI}/lessons`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify(data) // body data type must match "Content-Type" header
     }).then(r => r.json())

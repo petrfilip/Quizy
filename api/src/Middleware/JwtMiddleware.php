@@ -26,7 +26,7 @@ final class JwtMiddleware implements MiddlewareInterface
         }
 
         $jwt = $request->getHeaders();
-        $jwt = str_replace('Bearer ', '', $jwt['authorization'][0]);
+        $jwt = str_replace('Bearer ', '', $jwt['Authorization'][0]);
         $tokenData = null;
         try {
             $tokenData = JWT::decode($jwt, JWT_KEY, ['HS256']);

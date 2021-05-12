@@ -13,6 +13,7 @@ require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . './../src/Middleware/CorsMiddleware.php';
 require __DIR__ . './../src/Middleware/JwtMiddleware.php';
 
+require __DIR__ . '/../repository/course-repository.php';
 require __DIR__ . '/../repository/lesson-repository.php';
 require __DIR__ . '/../repository/user-repository.php';
 require __DIR__ . '/../app/ErrorUtils.php';
@@ -45,6 +46,9 @@ $usersRoutes($app);
 
 $lessonsRoutes = require __DIR__ . '/../app/lessons-routes.php';
 $lessonsRoutes($app);
+
+$coursesRoutes = require __DIR__ . '/../app/courses-routes.php';
+$coursesRoutes($app);
 
 $app->options('/{routes:.+}', function (Request $request, Response $response, $args) {
     $response = $response->withHeader('Content-Type', 'application/json');

@@ -60,7 +60,6 @@ function Profile(props) {
           </Grid>
         })}
 
-        {token}
       </Paper>
 
     </Container>

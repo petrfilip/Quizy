@@ -21,6 +21,8 @@ import { useAuth } from "./AuthContext";
 import Profile from "./Profile";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Init from "./Init";
+import CourseManagerPage from "../components/course/CourseManagerPage";
+import CourseItemManager from "../components/course/CourseItemManager";
 
 export default function Main() {
   const { user } = useAuth()
@@ -64,10 +66,10 @@ export default function Main() {
         <Navbar items={nav}/>
         <div className={"page-content"}>
           <Switch>
-            {/*<Route path="/courses/:slug"><CourseItemManagerPage/></Route>*/}
-            {/*<Route path="/courses"><CourseManagerPage/></Route>*/}
-            <Route path="/lessons/:slug"><QuizItemManagerPage/></Route>
-            <Route path="/lessons"><QuizManagerPage/></Route>
+            <Route path="/courses/:slug"><CourseItemManagerPage/></Route>
+            <Route path="/courses"><CourseManagerPage/></Route>
+            <Route path="/lessons/:slug"><LessonItemManagerPage/></Route>
+            <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUser/></Route>
             <Route path="/users"><UsersLoader/></Route>
             <Route path="/profile"><Profile/></Route>
@@ -96,13 +98,18 @@ function Home() {
   return <h2>Dashboard</h2>;
 }
 
-function QuizManagerPage() {
-  return <><LessonLoader/></>;
+function LessonManagerPage() {
+  return <LessonLoader/>;
 }
 
-function QuizItemManagerPage() {
+function LessonItemManagerPage() {
   let { slug } = useParams();
   return <><LessonItemManager slug={slug}/></>;
+}
+
+function CourseItemManagerPage() {
+  let { slug } = useParams();
+  return <><CourseItemManager slug={slug}/></>;
 }
 
 function Logout() {

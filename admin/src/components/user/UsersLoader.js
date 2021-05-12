@@ -22,9 +22,9 @@ export default function UserLoader() {
 
   useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/users`,{
-      headers: new Headers({
+      headers: {
         'Authorization': 'Bearer ' + token,
-      }),
+      },
     })
       .then(response => {
         if (response.ok) {
@@ -43,9 +43,9 @@ export default function UserLoader() {
     fetch(`${process.env.REACT_APP_BASE_URI}/users/${user._id}`,
       {
         method: 'DELETE',
-        headers: new Headers({
+        headers: {
           'Authorization': 'Bearer ' + token,
-        }),
+        },
       })
       .then(response => {
         if (response.ok) {
@@ -82,6 +82,8 @@ export default function UserLoader() {
   ];
 
   return <Container maxWidth={"lg"}>
+    <Typography variant="h4">Users</Typography>
+
     {error}
     <Button color={"primary"}
             startIcon={<AddIcon/>}
