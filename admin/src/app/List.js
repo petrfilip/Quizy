@@ -224,11 +224,12 @@ function Table({ columns, data, component, gridSizes }) {
   return (
     <>
 
-      <GlobalFilter
+
+      {defaultEmptyColumns[0].accessor !== columns[0].accessor && <GlobalFilter
         preGlobalFilteredRows={preGlobalFilteredRows}
         globalFilter={state.globalFilter}
         setGlobalFilter={setGlobalFilter}
-      />
+      />}
 
 
       <Grid
