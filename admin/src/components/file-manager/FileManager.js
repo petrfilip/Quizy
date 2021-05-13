@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import List from "../../app/List";
 import Typography from "@material-ui/core/Typography";
-import { Container, createStyles, makeStyles } from "@material-ui/core";
+import { Container, createStyles, makeStyles, Paper } from "@material-ui/core";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
 import FileCard from "./FileCard";
@@ -126,21 +126,22 @@ export default function FileManager(props) {
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
+
   return (
     <Container>
       <Typography variant="h4">File manager</Typography>
       <Typography>Current location: {mediaList.location}</Typography>
       <DirectoryCreate onSubmit={doCreateDirectory}/>
 
-      <div {...getRootProps()} className={isDragActive && classes.isDragActive}>
-        {/*{isDragActive ? <Typography>drop</Typography> : <Typography>Drop image here</Typography>}*/}
-
+      <Paper variant={"outlined"} {...getRootProps()} className={isDragActive && classes.isDragActive}>
+        {isDragActive ? <Typography>drop</Typography> : <Typography>Drop File here</Typography>}
+      </Paper>
         <List
           data={mediaData}
           component={item => item.type === "directory" ?
             <DirectoryCard directory={item}/> :
             <FileCard file={item}/>}/>
-      </div>
+
     </Container>
   );
 }
