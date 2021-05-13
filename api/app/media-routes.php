@@ -78,6 +78,8 @@ return function (App $app) {
             $publicPath = MEDIA_STORAGE . $path . DIRECTORY_SEPARATOR . $slugName;
             $realPathToSave = MEDIA_STORAGE_ROOT . $path . DIRECTORY_SEPARATOR . $slugName;
 
+            //todo check if directory exists
+
             if (mkdir($realPathToSave)) {
                 $media = new stdClass();
                 $media->type = "directory";

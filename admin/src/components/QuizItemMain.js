@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import FlashCardItemEditor from "./flashcard/FlashCardItemEditor";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
 import { Button, TextField, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
-import UploadImageArea from "./file-manager/FileButton";
+import UploadImageArea from "./file-manager/UploadImageArea";
 import Grid from "@material-ui/core/Grid";
 
 export default function QuizItemMain({ data }) {
@@ -47,7 +47,6 @@ export default function QuizItemMain({ data }) {
     <MDEditor
       value={componentData.description || ""}
       onChange={(src) => {
-        console.log(src)
         handleInputChange({
             target: {
               value: src,

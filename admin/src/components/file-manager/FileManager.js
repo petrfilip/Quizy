@@ -1,13 +1,13 @@
-import React, { useLayoutEffect, useReducer, useState } from 'react';
-import { DropzoneArea } from "material-ui-dropzone";
+import React, { useCallback, useLayoutEffect, useState } from 'react';
 import List from "../../app/List";
 import Typography from "@material-ui/core/Typography";
-import { Button, createStyles, makeStyles } from "@material-ui/core";
+import { Container, createStyles, makeStyles } from "@material-ui/core";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
 import FileCard from "./FileCard";
 import DirectoryCreate from "./DirectoryCreate";
 import DirectoryCard from "./DirectoryCard";
+import { useDropzone } from "react-dropzone";
 
 export default function FileManager(props) {
 
@@ -16,6 +16,10 @@ export default function FileManager(props) {
       minWidth: 160,
       maxWidth: 210
     },
+    isDragActive: {
+      backgroundColor: theme.palette.secondary.main,
+      transition: "1s"
+    }
   }));
   const classes = useStyles();
   const { token } = useAuth();
@@ -23,9 +27,7 @@ export default function FileManager(props) {
   const [mediaList, setMediaList] = useState({});
   const { enqueueSnackbar } = useSnackbar();
   const [isPending, setIsPending] = useState(false)
-  const [filesToUpload, setFilesToUpload] = useState([])
   const [timestamp, setTimestamp] = useState(new Date());
-
 
   const doCreateDirectory = (newDirectoryName) => {
     setIsPending(true)
@@ -36,7 +38,7 @@ export default function FileManager(props) {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token,
         },
-        body: JSON.stringify({location: mediaList.location, directory: newDirectoryName}) // body data type must match "Content-Type" header
+        body: JSON.stringify({ location: mediaList.location, directory: newDirectoryName }) // body data type must match "Content-Type" header
       })
       .then(response => {
         if (response.ok) {
@@ -45,16 +47,17 @@ export default function FileManager(props) {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
+        mediaList.directories.push(json)
+        setMediaList({...mediaList})
         setIsError(false)
-        enqueueSnackbar(`Files uploaded`, { variant: "success" });
+        enqueueSnackbar(`Directory "${newDirectoryName}" create`, { variant: "success" });
       })
       .catch((err) => {
-        enqueueSnackbar(`Files cannot be uploaded. ${err}`, { variant: "error" });
+        enqueueSnackbar(`Directory "${newDirectoryName}" creation failed. ${err}`, { variant: "error" });
         setIsError(err.message)
       })
       .finally(() => {
         setIsPending(false)
-        setTimestamp(new Date())
 
       })
   }
@@ -77,7 +80,7 @@ export default function FileManager(props) {
 
   }, [timestamp])
 
-  const doUpload = () => {
+  const doUpload = (filesToUpload) => {
     if (filesToUpload) {
       const formData = new FormData()
       formData.append('location', "/")
@@ -85,8 +88,6 @@ export default function FileManager(props) {
       for (const file of filesToUpload) {
         formData.append('files[]', file, file.name)
       }
-
-      // DataManager.saveOrUpdate(api.fetchMediaFile(), 'data', data, callback)
 
       fetch(`${process.env.REACT_APP_BASE_URI}/media/file`,
         {
@@ -104,8 +105,7 @@ export default function FileManager(props) {
         })
         .then(json => {
           setIsError(false)
-          enqueueSnackbar(`Files uploaded`, { variant: "success" });
-          setFilesToUpload([])
+          enqueueSnackbar(`${filesToUpload.length} files has been uploaded`, { variant: "success" });
         })
         .catch((err) => {
           enqueueSnackbar(`Files cannot be uploaded. ${err}`, { variant: "error" });
@@ -119,33 +119,29 @@ export default function FileManager(props) {
     }
   }
 
-  const mediaData = mediaList.files !== undefined ? [...mediaList.directories,...mediaList.files] : [];
+  const mediaData = mediaList.files !== undefined ? [...mediaList.directories, ...mediaList.files] : [];
+
+  const onDrop = useCallback(acceptedFiles => {
+    doUpload(acceptedFiles)
+  }, [])
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
-    <>
+    <Container>
       <Typography variant="h4">File manager</Typography>
-      <DropzoneArea
-        initialFiles={filesToUpload}
-        onChange={(item) => setFilesToUpload(item)}
-        showPreviews={true}
-        showPreviewsInDropzone={false}
-        useChipsForPreview
-        previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
-        previewChipProps={{ classes: { root: classes.previewChip } }}
-        previewText="Selected files"
-        maxFileSize={5000000}
-      />
-      <Button onClick={doUpload} color={"primary"} variant={"contained"} disabled={filesToUpload.length === 0}>Upload </Button>
-
-
       <Typography>Current location: {mediaList.location}</Typography>
       <DirectoryCreate onSubmit={doCreateDirectory}/>
 
-      <List data={mediaData}
-            component={item => item.type === "directory" ?
-              <DirectoryCard directory={item}/> :
-              <FileCard file={item}/>}/>
-    </>
+      <div {...getRootProps()} className={isDragActive && classes.isDragActive}>
+        {/*{isDragActive ? <Typography>drop</Typography> : <Typography>Drop image here</Typography>}*/}
+
+        <List
+          data={mediaData}
+          component={item => item.type === "directory" ?
+            <DirectoryCard directory={item}/> :
+            <FileCard file={item}/>}/>
+      </div>
+    </Container>
   );
 }
 

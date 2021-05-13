@@ -1,12 +1,8 @@
 import React, { useCallback, useState } from 'react';
-import Button from "@material-ui/core/Button";
-import { DropzoneDialog } from "material-ui-dropzone";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
-import { Backdrop, CardMedia, CircularProgress, createStyles, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, makeStyles, Paper, TextField } from "@material-ui/core";
+import { createStyles, makeStyles, Paper } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
-import Avatar from "@material-ui/core/Avatar";
-import Image from 'material-ui-image'
 import Typography from "@material-ui/core/Typography";
 
 const UploadImageArea = ({ initialFile, location }) => {
@@ -44,14 +40,6 @@ const UploadImageArea = ({ initialFile, location }) => {
   }));
 
   const classes = useStyles();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const { token } = useAuth();
   const [isError, setIsError] = useState(false);

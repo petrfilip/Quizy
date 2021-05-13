@@ -36,6 +36,8 @@ export default function FileCard({ file }) {
   return (
     <Card variant="outlined" className={classes.root}>
       <CardMedia
+        loading="lazy"
+        component="img"
         className={classes.media}
         image={`${process.env.REACT_APP_BASE_URI}${file.publicPath}`}
         title={file.originName}
