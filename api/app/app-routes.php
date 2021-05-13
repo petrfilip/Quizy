@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\ApplicationRequirementsDto;
 use App\ErrorUtils;
 use App\UserRepository;
+use App\Utils;
 use Firebase\JWT\JWT;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -27,7 +28,7 @@ return function (App $app) {
 //        chmod(CONFIG_FILE, 0777);
         // PHP | CURRENT VERSION | REQUIRED VERSION | STATUS
         $requirements = [
-            new ApplicationRequirementsDto("Quizy", strval(\App\Utils::isApplicationInitialized() ? "TRUE" : "FALSE"), "FALSE", "The application can be initialized only once"),
+            new ApplicationRequirementsDto("Quizy", strval(Utils::isApplicationInitialized() ? "TRUE" : "FALSE"), "FALSE", "The application can be initialized only once"),
             new ApplicationRequirementsDto("PHP", phpversion(), "7.2", "todo description"),
             new ApplicationRequirementsDto("mod rewrite", "isModRewriteLoaded", "TRUE", "todo description"),
             new ApplicationRequirementsDto("gd library", extension_loaded('gd') ? "true" : "false", "true", "todo description"),
@@ -53,7 +54,7 @@ return function (App $app) {
      */
     $app->get('/app/init', function (Request $request, Response $response, $args) {
         $status = array(
-            "status" => \App\Utils::isApplicationInitialized() ? "running" : "notInitialized", //todo add another state such as suspended
+            "status" => Utils::isApplicationInitialized() ? "running" : "notInitialized", //todo add another state such as suspended
         );
         $response = $response->withHeader('Content-Type', 'application/json');
         $response->getBody()->write(json_encode($status));
@@ -66,7 +67,7 @@ return function (App $app) {
      */
     $app->post('/app/init', function (Request $request, Response $response, $args) {
 
-        if (\App\Utils::isApplicationInitialized()) {
+        if (Utils::isApplicationInitialized()) {
             return $response->withStatus(400);
         }
 
@@ -76,13 +77,13 @@ return function (App $app) {
         }
 
         /* init required directories */
-//        if (!folder_exist(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_THUMBNAIL_DIRECTORY)) {
-//            mkdir(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_THUMBNAIL_DIRECTORY);
-//        }
-//
-//        if (!folder_exist(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_TRASH)) {
-//            mkdir(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_TRASH);
-//        }
+        if (!Utils::folderExists(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_THUMBNAIL_DIRECTORY)) {
+            mkdir(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_THUMBNAIL_DIRECTORY);
+        }
+
+        if (!Utils::folderExists(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_TRASH)) {
+            mkdir(MEDIA_STORAGE_ROOT . MEDIA_STORAGE_TRASH);
+        }
 
 
         /* create config file with configuration*/
@@ -93,7 +94,7 @@ return function (App $app) {
             return $response;
         }
 
-        if (!\App\Utils::isPasswordValid($inputJson["password"])) {
+        if (!Utils::isPasswordValid($inputJson["password"])) {
             $response->getBody()->write("INVALID PASSWORD");
             return $response;
         }
@@ -102,7 +103,7 @@ return function (App $app) {
         $configFile = fopen(CONFIG_FILE, "w") or die("Unable to open file!");
         $txt = '<?php ';
         fwrite($configFile, $txt);
-        $txt = 'define("JWT_KEY", "' . \App\Utils::randomPassword() . '");';
+        $txt = 'define("JWT_KEY", "' . Utils::randomPassword() . '");';
         fwrite($configFile, $txt);
         fclose($configFile);
 

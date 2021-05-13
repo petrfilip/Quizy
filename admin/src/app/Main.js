@@ -23,6 +23,9 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Init from "./Init";
 import CourseManagerPage from "../components/course/CourseManagerPage";
 import CourseItemManager from "../components/course/CourseItemManager";
+import FileManager from "../components/file-manager/FileManager";
+import { Container } from "@material-ui/core";
+import PermMediaIcon from '@material-ui/icons/PermMedia';
 
 export default function Main() {
   const { user } = useAuth()
@@ -49,6 +52,11 @@ export default function Main() {
       icon: <PeopleIcon/>
     },
     {
+      title: "File manager",
+      to: "/file-manager",
+      icon: <PermMediaIcon/>
+    },
+    {
       title: user.user_mail,
       to: "/profile",
       icon: <AccountCircleIcon/>
@@ -72,6 +80,7 @@ export default function Main() {
             <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUser/></Route>
             <Route path="/users"><UsersLoader/></Route>
+            <Route path="/file-manager"> <FileManager/></Route>
             <Route path="/profile"><Profile/></Route>
             <Route path="/logout"><Logout/></Route>
             <Route render={() => <Redirect to="/"/>}/>
@@ -99,7 +108,8 @@ function Home() {
 }
 
 function LessonManagerPage() {
-  return <LessonLoader/>;
+  return <>
+    <LessonLoader/></>;
 }
 
 function LessonItemManagerPage() {

@@ -7,6 +7,7 @@ use SleekDB\Store;
 final class CourseRepository
 {
     const REPOSITORY_NAME = 'course';
+
     static private function getDataStore($storeName): Store
     {
         return new Store($storeName, DATABASE_ROOT);
@@ -14,23 +15,23 @@ final class CourseRepository
 
     static public function findAll(): array
     {
-        return CourseRepository::getDataStore(self::REPOSITORY_NAME)->findAll();
+        return self::getDataStore(self::REPOSITORY_NAME)->findAll();
     }
 
     static public function getBySlug($slug): array
     {
         $condition = ["slug", "===", $slug];
-        return CourseRepository::getDataStore(self::REPOSITORY_NAME)->findOneBy($condition);
+        return self::getDataStore(self::REPOSITORY_NAME)->findOneBy($condition);
     }
 
     static public function deleteById($id)
     {
-        return CourseRepository::getDataStore(self::REPOSITORY_NAME)->deleteById($id);
+        return self::getDataStore(self::REPOSITORY_NAME)->deleteById($id);
     }
 
     static public function insertOrUpdate($data): array
     {
         $data = (array)$data;
-        return CourseRepository::getDataStore(self::REPOSITORY_NAME)->updateOrInsert($data);
+        return self::getDataStore(self::REPOSITORY_NAME)->updateOrInsert($data);
     }
 }

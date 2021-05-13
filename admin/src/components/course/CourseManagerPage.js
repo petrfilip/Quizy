@@ -14,6 +14,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
 import List from "../../app/List";
+import FileManager from "../file-manager/FileManager";
 
 export default function CourseManagerPage() {
 

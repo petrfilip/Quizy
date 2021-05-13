@@ -9,6 +9,7 @@ final class ErrorUtils
     public const BAD_LOGIN = ["code" => "BAD_LOGIN", "description" => "Bad login credentials"];
     public const USER_ALREADY_EXISTS = ["code" => "USER_ALREADY_EXISTS", "description" => "User with same mail is already registered"];
     public const NO_CONTENT_TO_UPLOAD = ["code" => "NO_CONTENT_TO_UPLOAD", "description" => "No file to upload"];
+    public const UNABLE_TO_UPLOAD_FILE = ["code" => "UNABLE_TO_UPLOAD_FILE", "description" => "Unable to upload file"];
 
     static public function error(array $error)
     {
