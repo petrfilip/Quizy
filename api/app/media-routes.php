@@ -50,6 +50,7 @@ return function (App $app) {
             $out->directories = array_values($directories);
 
             $payload = json_encode($out);
+            $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
         });
@@ -76,7 +77,6 @@ return function (App $app) {
             }
             $publicPath = MEDIA_STORAGE . $path . DIRECTORY_SEPARATOR . $slugName;
             $realPathToSave = MEDIA_STORAGE_ROOT . $path . DIRECTORY_SEPARATOR . $slugName;
-
 
             if (mkdir($realPathToSave)) {
                 $media = new stdClass();
@@ -128,6 +128,7 @@ return function (App $app) {
 
             $userId = $request->getAttribute("userId");
             $inserted = MediaRepository::insertNewVersionedRecords($uploaded, $userId);
+            $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($inserted));
             return $response;
         });//->addMiddleware(new JwtMiddleware());
@@ -137,6 +138,7 @@ return function (App $app) {
             $inputJson = $request->getParsedBody();
             $userId = $request->getAttribute("userId");
             $inserted = MediaRepository::updateVersionedRecord($inputJson, $userId);
+            $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($inserted));
             return $response;
         })->addMiddleware(new JwtMiddleware());
@@ -161,6 +163,7 @@ return function (App $app) {
             unset($loaded["_id"]);
 
             $inserted = MediaRepository::insertNewVersionedRecord($loaded, $userId);
+            $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($inserted));
             return $response;
         })->addMiddleware(new JwtMiddleware());

@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { DropzoneArea, DropzoneDialog } from "material-ui-dropzone";
+import React, { useLayoutEffect, useReducer, useState } from 'react';
+import { DropzoneArea } from "material-ui-dropzone";
 import List from "../../app/List";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
 import { Button, createStyles, makeStyles } from "@material-ui/core";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
+import FileCard from "./FileCard";
+import DirectoryCreate from "./DirectoryCreate";
+import DirectoryCard from "./DirectoryCard";
 
 export default function FileManager(props) {
 
@@ -20,20 +20,71 @@ export default function FileManager(props) {
   const classes = useStyles();
   const { token } = useAuth();
   const [isError, setIsError] = useState(false);
+  const [mediaList, setMediaList] = useState({});
   const { enqueueSnackbar } = useSnackbar();
   const [isPending, setIsPending] = useState(false)
+  const [filesToUpload, setFilesToUpload] = useState([])
+  const [timestamp, setTimestamp] = useState(new Date());
 
-  const [files, setFiles] = useState([])
 
-  const doUpload = ()=> {
-    if (files) {
+  const doCreateDirectory = (newDirectoryName) => {
+    setIsPending(true)
+    fetch(`${process.env.REACT_APP_BASE_URI}/media/directory`,
+      {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token,
+        },
+        body: JSON.stringify({location: mediaList.location, directory: newDirectoryName}) // body data type must match "Content-Type" header
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error(`Unable to get data: ${response.statusText}`)
+      })
+      .then(json => {
+        setIsError(false)
+        enqueueSnackbar(`Files uploaded`, { variant: "success" });
+      })
+      .catch((err) => {
+        enqueueSnackbar(`Files cannot be uploaded. ${err}`, { variant: "error" });
+        setIsError(err.message)
+      })
+      .finally(() => {
+        setIsPending(false)
+        setTimestamp(new Date())
+
+      })
+  }
+
+  useLayoutEffect(() => {
+    fetch(`${process.env.REACT_APP_BASE_URI}/media/list`, {
+      headers: {
+        'Authorization': 'Bearer ' + token,
+      },
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw new Error(`Unable to get data: ${response.statusText}`)
+      })
+      .then(json => setMediaList(json))
+      .catch((err) => setIsError(err.message))
+      .finally(() => setIsPending(false))
+
+  }, [timestamp])
+
+  const doUpload = () => {
+    if (filesToUpload) {
       const formData = new FormData()
       formData.append('location', "/")
 
-      for (const file of files) {
+      for (const file of filesToUpload) {
         formData.append('files[]', file, file.name)
       }
-
 
       // DataManager.saveOrUpdate(api.fetchMediaFile(), 'data', data, callback)
 
@@ -54,84 +105,48 @@ export default function FileManager(props) {
         .then(json => {
           setIsError(false)
           enqueueSnackbar(`Files uploaded`, { variant: "success" });
+          setFilesToUpload([])
         })
         .catch((err) => {
           enqueueSnackbar(`Files cannot be uploaded. ${err}`, { variant: "error" });
           setIsError(err.message)
         })
-        .finally(() => setIsPending(false))
+        .finally(() => {
+          setTimestamp(new Date())
+          setIsPending(false)
+        })
 
     }
   }
+
+  const mediaData = mediaList.files !== undefined ? [...mediaList.directories,...mediaList.files] : [];
 
   return (
     <>
       <Typography variant="h4">File manager</Typography>
       <DropzoneArea
-        onChange={(item) => setFiles(item)}
+        initialFiles={filesToUpload}
+        onChange={(item) => setFilesToUpload(item)}
         showPreviews={true}
         showPreviewsInDropzone={false}
         useChipsForPreview
-        previewGridProps={{container: { spacing: 1, direction: 'row' }}}
-        previewChipProps={{classes: { root: classes.previewChip } }}
+        previewGridProps={{ container: { spacing: 1, direction: 'row' } }}
+        previewChipProps={{ classes: { root: classes.previewChip } }}
         previewText="Selected files"
         maxFileSize={5000000}
       />
-      <Button onClick={doUpload} color={"primary"} variant={"contained"}>Upload </Button>
+      <Button onClick={doUpload} color={"primary"} variant={"contained"} disabled={filesToUpload.length === 0}>Upload </Button>
 
-      <List data={[]} component={item => item.type === "directory" ? <DirectoryCard directory={item}/> : <FileCard file={item}/>}/>
+
+      <Typography>Current location: {mediaList.location}</Typography>
+      <DirectoryCreate onSubmit={doCreateDirectory}/>
+
+      <List data={mediaData}
+            component={item => item.type === "directory" ?
+              <DirectoryCard directory={item}/> :
+              <FileCard file={item}/>}/>
     </>
   );
 }
 
-function DirectoryCard({ directory }) {
 
-  return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {directory.slugName}
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-}
-
-function FileCard({ file }) {
-
-  return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          {file.originName}
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <Typography>
-              {file.attributes.type}
-            </Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography>
-              {formatBytes(file.attributes.size, 2)}
-            </Typography>
-          </Grid>
-        </Grid>
-      </CardContent>
-    </Card>
-  );
-}
-
-export const formatBytes = (bytes, decimals = 2) => {
-  if (bytes === 0) {
-    return '0 Bytes'
-  }
-
-  const k = 1024
-  const dm = decimals < 0 ? 0 : decimals
-  const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
-
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
-}

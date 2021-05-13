@@ -4,6 +4,8 @@ import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
 import { Button, TextField, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import UploadImageArea from "./file-manager/FileButton";
+import Grid from "@material-ui/core/Grid";
 
 export default function QuizItemMain({ data }) {
 
@@ -58,11 +60,19 @@ export default function QuizItemMain({ data }) {
     />
 
 
-    <TextField fullWidth type={"text"} placeholder={"heroImage"} name={"heroImage"} value={componentData.heroImage} onChange={handleInputChange}/>
 
-    <hr/>
+    <Grid container spacing={3}>
+      <Grid item xs={6}>
+          <Typography variant="h5">Hero image</Typography>
+          <UploadImageArea location={`/`}/>
+      </Grid>
+      <Grid item xs={6}>
+        <Typography variant="h5">Hero image</Typography>
+
+      </Grid>
+    </Grid>
+
     <h2>Flash Cards</h2>
-
     {data?.flashcards?.map((item, index) =>
 
       <div key={`fc-${index}`}>

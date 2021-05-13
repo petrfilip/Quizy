@@ -56,6 +56,7 @@ return function (App $app) {
 
             $savedUser = UserRepository::insertOrUpdate($user);
             unset($savedUser["password"]);
+            $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($savedUser));
             return $response;
         });
