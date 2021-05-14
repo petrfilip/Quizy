@@ -81,6 +81,7 @@ export default function Main() {
             <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUser/></Route>
             <Route path="/users"><UsersLoader/></Route>
+            <Route path="/file-manager/:location"> <FileManagerPage/></Route>
             <Route path="/file-manager"> <FileManagerPage/></Route>
             <Route path="/profile"><Profile/></Route>
             <Route path="/logout"><Logout/></Route>
@@ -124,11 +125,11 @@ function CourseItemManagerPage() {
 }
 
 function FileManagerPage() {
-  let { slug } = useParams();
+  let { location } = useParams();
   return <>
     <Container>
       <Typography variant="h4">File manager</Typography>
-      <FileManager />
+      <FileManager location={location} />
     </Container>
   </>;
 }

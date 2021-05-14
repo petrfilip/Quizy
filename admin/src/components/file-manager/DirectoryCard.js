@@ -1,16 +1,13 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
 
 import { Card, CardHeader, Menu, MenuItem } from "@material-ui/core";
-import CardContent from "@material-ui/core/CardContent";
-import Typography from "@material-ui/core/Typography";
-import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import FolderIcon from '@material-ui/icons/Folder';
 
-export default function DirectoryCard({ directory }) {
+export default function DirectoryCard({ directory, onDirectoryClick }) {
 
   const [isOpen, setIsOpen] = React.useState(null);
 
@@ -23,14 +20,8 @@ export default function DirectoryCard({ directory }) {
   };
 
   return (
-    <Card variant="outlined">
-
-      {/*<CardActions>*/}
-      {/*  <Button color={"secondary"} startIcon={<DeleteIcon/>} />*/}
-
-      {/*</CardActions>*/}
+    <Card variant="outlined" onClick={() => onDirectoryClick && onDirectoryClick(directory)}>
       <CardHeader
-
         avatar={<FolderIcon/>}
         // disableTypography={true}
         action={
@@ -52,7 +43,6 @@ export default function DirectoryCard({ directory }) {
               </MenuItem>
             </Menu>
           </div>
-
         }
         title={directory.originName || ` `}
         subheader={directory.sys.updated}

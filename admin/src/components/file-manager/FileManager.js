@@ -9,6 +9,7 @@ import DirectoryCreate from "./DirectoryCreate";
 import DirectoryCard from "./DirectoryCard";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import { useHistory } from 'react-router-dom';
 
 const gridItemSizes = {
   xs: 6,
@@ -18,7 +19,8 @@ const gridItemSizes = {
   xl: 2
 }
 
-export default function FileManager({ onFileClick, showUploadForm = true, gridSizes = gridItemSizes }) {
+export default function FileManager({ location = "/", onFileClick, showUploadForm = true, gridSizes = gridItemSizes }) {
+  // const history = useHistory();
 
   const useStyles = makeStyles(theme => createStyles({
     previewChip: {
@@ -33,6 +35,7 @@ export default function FileManager({ onFileClick, showUploadForm = true, gridSi
   const classes = useStyles();
   const { token } = useAuth();
   const [isError, setIsError] = useState(false);
+  const [currentLocation, setCurrentLocation] = useState(location);
   const [mediaList, setMediaList] = useState({});
   const { enqueueSnackbar } = useSnackbar();
   const [isPending, setIsPending] = useState(false)
@@ -47,7 +50,7 @@ export default function FileManager({ onFileClick, showUploadForm = true, gridSi
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token,
         },
-        body: JSON.stringify({ location: mediaList.location, directory: newDirectoryName }) // body data type must match "Content-Type" header
+        body: JSON.stringify({ location: currentLocation, directory: newDirectoryName }) // body data type must match "Content-Type" header
       })
       .then(response => {
         if (response.ok) {
@@ -72,7 +75,7 @@ export default function FileManager({ onFileClick, showUploadForm = true, gridSi
   }
 
   useLayoutEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/media/list`, {
+    fetch(`${process.env.REACT_APP_BASE_URI}/media/list${currentLocation}`, {
       headers: {
         'Authorization': 'Bearer ' + token,
       },
@@ -87,12 +90,12 @@ export default function FileManager({ onFileClick, showUploadForm = true, gridSi
       .catch((err) => setIsError(err.message))
       .finally(() => setIsPending(false))
 
-  }, [timestamp])
+  }, [timestamp, currentLocation, location])
 
   const doUpload = (filesToUpload) => {
     if (filesToUpload) {
       const formData = new FormData()
-      formData.append('location', "/")
+      formData.append('location', currentLocation)
 
       for (const file of filesToUpload) {
         formData.append('files[]', file, file.name)
@@ -128,16 +131,22 @@ export default function FileManager({ onFileClick, showUploadForm = true, gridSi
     }
   }
 
+  const onDirectoryClick = (directory) => {
+    console.log(directory)
+    setCurrentLocation((directory.path.endsWith("/") ? directory.path : directory.path + "/" || "/")  + directory.slugName)
+    // history.push("/file-manager" + directory.path + "/" + directory.slugName);
+  }
+
   const mediaData = mediaList.files !== undefined ? [...mediaList.directories, ...mediaList.files] : [];
 
   const onDrop = useCallback(acceptedFiles => {
     doUpload(acceptedFiles)
-  }, [])
+  }, [currentLocation, location])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
     <>
-      <Typography>Current location: {mediaList.location}</Typography>
+      <Typography>Current location: {currentLocation}</Typography>
       <DirectoryCreate onSubmit={doCreateDirectory}/>
 
       {showUploadForm && <Paper variant={"outlined"} {...getRootProps()} style={{ textAlign: "center" }} className={isDragActive && classes.isDragActive}>
@@ -148,8 +157,8 @@ export default function FileManager({ onFileClick, showUploadForm = true, gridSi
         gridSizes={gridSizes}
         data={mediaData}
         component={item => item.type === "directory" ?
-          <DirectoryCard directory={item}/> :
-          <FileCard file={item} onFileClick={onFileClick} />}/>
+          <DirectoryCard directory={item} onDirectoryClick={onDirectoryClick}/> :
+          <FileCard file={item} onFileClick={onFileClick}/>}/>
     </>
   );
 }
