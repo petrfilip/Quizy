@@ -26,6 +26,7 @@ import CourseItemManager from "../components/course/CourseItemManager";
 import FileManager from "../components/file-manager/FileManager";
 import { Container } from "@material-ui/core";
 import PermMediaIcon from '@material-ui/icons/PermMedia';
+import Typography from "@material-ui/core/Typography";
 
 export default function Main() {
   const { user } = useAuth()
@@ -80,7 +81,7 @@ export default function Main() {
             <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUser/></Route>
             <Route path="/users"><UsersLoader/></Route>
-            <Route path="/file-manager"> <FileManager/></Route>
+            <Route path="/file-manager"> <FileManagerPage/></Route>
             <Route path="/profile"><Profile/></Route>
             <Route path="/logout"><Logout/></Route>
             <Route render={() => <Redirect to="/"/>}/>
@@ -120,6 +121,16 @@ function LessonItemManagerPage() {
 function CourseItemManagerPage() {
   let { slug } = useParams();
   return <><CourseItemManager slug={slug}/></>;
+}
+
+function FileManagerPage() {
+  let { slug } = useParams();
+  return <>
+    <Container>
+      <Typography variant="h4">File manager</Typography>
+      <FileManager />
+    </Container>
+  </>;
 }
 
 function Logout() {

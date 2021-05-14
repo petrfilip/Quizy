@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import List from "../../app/List";
 import Typography from "@material-ui/core/Typography";
-import { Container, createStyles, makeStyles, Paper } from "@material-ui/core";
+import { createStyles, makeStyles, Paper } from "@material-ui/core";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
 import FileCard from "./FileCard";
@@ -10,7 +10,15 @@ import DirectoryCard from "./DirectoryCard";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
-export default function FileManager(props) {
+const gridItemSizes = {
+  xs: 6,
+  sm: 6,
+  md: 4,
+  lg: 6,
+  xl: 2
+}
+
+export default function FileManager({ onFileClick, showUploadForm = true, gridSizes = gridItemSizes }) {
 
   const useStyles = makeStyles(theme => createStyles({
     previewChip: {
@@ -49,7 +57,7 @@ export default function FileManager(props) {
       })
       .then(json => {
         mediaList.directories.push(json)
-        setMediaList({...mediaList})
+        setMediaList({ ...mediaList })
         setIsError(false)
         enqueueSnackbar(`Directory "${newDirectoryName}" create`, { variant: "success" });
       })
@@ -127,24 +135,22 @@ export default function FileManager(props) {
   }, [])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
-
   return (
-    <Container>
-      <Typography variant="h4">File manager</Typography>
+    <>
       <Typography>Current location: {mediaList.location}</Typography>
       <DirectoryCreate onSubmit={doCreateDirectory}/>
 
-      <Paper variant={"outlined"} {...getRootProps()} style={{textAlign: "center"}} className={isDragActive && classes.isDragActive}>
-        <CloudUploadIcon />
+      {showUploadForm && <Paper variant={"outlined"} {...getRootProps()} style={{ textAlign: "center" }} className={isDragActive && classes.isDragActive}>
+        <CloudUploadIcon/>
         {isDragActive ? <Typography>drop</Typography> : <Typography>Drop File here</Typography>}
-      </Paper>
-        <List
-          data={mediaData}
-          component={item => item.type === "directory" ?
-            <DirectoryCard directory={item}/> :
-            <FileCard file={item}/>}/>
-
-    </Container>
+      </Paper>}
+      <List
+        gridSizes={gridSizes}
+        data={mediaData}
+        component={item => item.type === "directory" ?
+          <DirectoryCard directory={item}/> :
+          <FileCard file={item} onFileClick={onFileClick} />}/>
+    </>
   );
 }
 
