@@ -1,15 +1,11 @@
 import React, { useLayoutEffect, useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { Link as RouterLink, useHistory } from "react-router-dom";
 import { useSnackbar } from "notistack";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import { Backdrop, Badge, CircularProgress } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import urlSlug from "url-slug";
 import { useAuth } from "../../app/AuthContext";
@@ -18,12 +14,8 @@ import List from "../../app/List";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import MenuBookIcon from "@material-ui/icons/MenuBook";
-import QuestionAnswerIcon from "@material-ui/icons/QuestionAnswer";
-import EditIcon from "@material-ui/icons/Edit";
-import DeleteIcon from "@material-ui/icons/Delete";
-import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import UploadImageArea from "../file-manager/UploadImageArea";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -111,14 +103,14 @@ export default function CourseItemManager({ slug }) {
       .catch((err) => setIsError(err.message))
       .finally(() => setIsPending(false))
 
-  }, [])
+  }, [slug])
 
   function saveData(e) {
     e.preventDefault()
     setIsPending(true)
 
     data.slug = urlSlug(data?.title)
-    data.lessonList = data.lessonList.filter(item => item != null)
+    data.lessonList = data.lessonList && data.lessonList.filter(item => item != null) || []
 
     fetch(`${process.env.REACT_APP_BASE_URI}/courses`,
       {
@@ -162,10 +154,18 @@ export default function CourseItemManager({ slug }) {
   }
 
   const isSelected = (item) => {
-    return data.lessonList.some(lessonId => {
+    return data && data.lessonList && data.lessonList.some(lessonId => {
       return lessonId === item._id
     })
   }
+
+  const onSaveCallbackHandler = (file) => {
+    setData((current) => ({...current, "heroImage": {
+        mediaId: file._id,
+        path: file.publicPath
+      }}))
+  }
+
 
   return (<Container maxWidth={"lg"}>
       <Button color={"primary"}
@@ -229,8 +229,10 @@ export default function CourseItemManager({ slug }) {
                   type="text"
                   autoComplete="current-password"
                 />
+                <UploadImageArea location={`/`} initialFile={data?.heroImage?.path} onSaveCallback={onSaveCallbackHandler}/>
 
                 <Button
+                  disabled={!data.title}
                   type="submit"
                   fullWidth
                   variant="contained"

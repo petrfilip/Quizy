@@ -5,8 +5,8 @@ import {
   Route,
   Link, useParams, Redirect
 } from "react-router-dom";
-import LessonLoader from "../components/LessonLoader";
-import LessonItemManager from "../components/LessonItemManager";
+import LessonManager from "../components/lesson/LessonManager";
+import LessonItemManager from "../components/lesson/LessonItemManager";
 import UsersLoader from "../components/user/UsersLoader";
 import "./Main.css"
 import Navbar from "./Navbar";
@@ -21,7 +21,7 @@ import { useAuth } from "./AuthContext";
 import Profile from "./Profile";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import Init from "./Init";
-import CourseManagerPage from "../components/course/CourseManagerPage";
+import CourseManager from "../components/course/CourseManager";
 import CourseItemManager from "../components/course/CourseItemManager";
 import FileManager from "../components/file-manager/FileManager";
 import { Container } from "@material-ui/core";
@@ -75,7 +75,7 @@ export default function Main() {
         <div className={"page-content"}>
           <Switch>
             <Route path="/courses/:slug"><CourseItemManagerPage/></Route>
-            <Route path="/courses"><CourseManagerPage/></Route>
+            <Route path="/courses"><CourseManager/></Route>
             <Route path="/lessons/:slug"><LessonItemManagerPage/></Route>
             <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUser/></Route>
@@ -109,7 +109,7 @@ function Home() {
 
 function LessonManagerPage() {
   return <>
-    <LessonLoader/></>;
+    <LessonManager/></>;
 }
 
 function LessonItemManagerPage() {

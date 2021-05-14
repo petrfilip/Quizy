@@ -1,13 +1,14 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
 import { createStyles, makeStyles, Paper } from "@material-ui/core";
 import { useDropzone } from "react-dropzone";
 import Typography from "@material-ui/core/Typography";
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-const UploadImageArea = ({ initialFile, location }) => {
+const UploadImageArea = ({ initialFile, location, onSaveCallback }) => {
   const [open, setOpen] = useState(false);
-  const [file, setFile] = useState(initialFile);
+  const [file, setFile] = useState();
 
   const useStyles = makeStyles(theme => createStyles({
     image: {
@@ -40,11 +41,14 @@ const UploadImageArea = ({ initialFile, location }) => {
   }));
 
   const classes = useStyles();
-
   const { token } = useAuth();
   const [isError, setIsError] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
   const [isPending, setIsPending] = useState(false)
+
+  useEffect(()=> {
+    initialFile && setFile(`${process.env.REACT_APP_BASE_URI}${initialFile}`);
+  }, [initialFile])
 
   const doUpload = (fileToUpload) => {
     if (fileToUpload) {
@@ -70,6 +74,7 @@ const UploadImageArea = ({ initialFile, location }) => {
           throw new Error(`Unable to get data: ${response.statusText}`)
         })
         .then(json => {
+          onSaveCallback && onSaveCallback(json[0])
           setFile(`${process.env.REACT_APP_BASE_URI}${json[0].publicPath}`)
           setIsError(false)
           enqueueSnackbar(`Files uploaded`, { variant: "success" });
@@ -92,12 +97,15 @@ const UploadImageArea = ({ initialFile, location }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
-      <Paper {...getRootProps()} variant={"outlined"} className={isDragActive && classes.paperOverlay || classes.paper}>
+      <Paper {...getRootProps()}  variant={"outlined"} className={isDragActive && classes.paperOverlay || classes.paper}>
+
+        <input {...getInputProps()} />
         {file && <img
           className={isDragActive && classes.imageOverlay || classes.image}
           src={file}
         />}
         <div/>
+        <CloudUploadIcon />
         {isDragActive ? <Typography>drop</Typography> : <Typography>Drop image here</Typography>}
       </Paper>
   );

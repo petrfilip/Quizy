@@ -8,6 +8,7 @@ import FileCard from "./FileCard";
 import DirectoryCreate from "./DirectoryCreate";
 import DirectoryCard from "./DirectoryCard";
 import { useDropzone } from "react-dropzone";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 export default function FileManager(props) {
 
@@ -133,7 +134,8 @@ export default function FileManager(props) {
       <Typography>Current location: {mediaList.location}</Typography>
       <DirectoryCreate onSubmit={doCreateDirectory}/>
 
-      <Paper variant={"outlined"} {...getRootProps()} className={isDragActive && classes.isDragActive}>
+      <Paper variant={"outlined"} {...getRootProps()} style={{textAlign: "center"}} className={isDragActive && classes.isDragActive}>
+        <CloudUploadIcon />
         {isDragActive ? <Typography>drop</Typography> : <Typography>Drop File here</Typography>}
       </Paper>
         <List

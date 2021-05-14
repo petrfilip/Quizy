@@ -1,25 +1,24 @@
 import React, { useState, useLayoutEffect, useReducer, useEffect } from "react";
-import { Tabs } from "react-simple-tabs-component";
-import QuizQuestionEditor from "./quiz/QuizQuestionEditor";
-import QuizItemMain from "./QuizItemMain";
+import QuizQuestionEditor from "../quiz/QuizQuestionEditor";
+import QuizItemMain from "../QuizItemMain";
 import 'react-simple-tabs-component/dist/index.css'
 import urlSlug from "url-slug"; // (Optional) Provide some basic style
 import { useHistory } from "react-router-dom";
-import "./LessonItemManager.css"
 import { Button, ButtonGroup } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
 import SaveIcon from "@material-ui/icons/Save";
 import {  useSnackbar } from 'notistack';
-import VerticalTabs from "../app/TabPanel";
+import VerticalTabs from "../../app/TabPanel";
 import {  Prompt } from "react-router-dom";
-import { useAuth } from "../app/AuthContext";
+import { useAuth } from "../../app/AuthContext";
+import FlashCardManager from "../flashcard/FlashCardManager";
 
 
 export default function LessonItemManager({ slug }) {
 
   const [isPersisted, setIsPersisted] = useState(true)
-  const [data, setData] = useState([])
+  const [data, setData] = useState(null)
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
   let history = useHistory();
@@ -93,13 +92,17 @@ export default function LessonItemManager({ slug }) {
     forceUpdate()
   }
 
-  const onMainChange = (changed) => {
+  const onDataChangeHandler = (changed) => {
     setData({ ...changed })
   }
 
-  const Main = () => <div>
-    <QuizItemMain data={data} onChange={onMainChange}/>
-  </div>
+  const Main = () => (<>
+    {data && <QuizItemMain data={data} onChangeCallback={onDataChangeHandler}/>}
+  </>)
+
+  const FlashCards = () =>( <>
+    {data && <FlashCardManager data={data} onChangeCallback={onDataChangeHandler} />}
+  </>)
 
   const tabs = [
     {
@@ -107,11 +110,16 @@ export default function LessonItemManager({ slug }) {
       index: 0,         // Tab index
       Component: Main // Tab Component
     },
+    {
+      label: 'FlashCards',
+      index: 1,
+      Component: FlashCards
+    }
   ]
 
-  const Item = () => <div>
+  const Item = () => (<div>
     <QuizQuestionEditor question={tabs[selectedTab].question}/>
-  </div>
+  </div>)
 
   data?.questions?.map(item => tabs.push(
     {
@@ -137,8 +145,9 @@ export default function LessonItemManager({ slug }) {
         { text: "" }
       ]
     }
-    data.questions.push(defaultQuestion)
-    setData({ ...data })
+    const questions = [...data.questions];
+    questions.push(defaultQuestion)
+    setData({ ...data, questions })
     setSelectedTab(tabs.length)
   }
 
@@ -146,14 +155,14 @@ export default function LessonItemManager({ slug }) {
 
     isPersisted && setIsPersisted(false)
 
-
-    data.questions.splice(selectedTab - 1, 1)
-    setData({ ...data })
+    const questions = [...data.questions];
+    questions.splice(selectedTab - 2, 1)
+    setData({ ...data, questions })
     setSelectedTab(selectedTab - 1)
   }
 
 
-  return <div>
+  return data != null ? (<div>
     {/*{isPending && "Loading data..."}*/}
     {error && <div>{error}</div>}
 
@@ -167,17 +176,9 @@ export default function LessonItemManager({ slug }) {
     <ButtonGroup color="primary" aria-label="outlined primary button group">
       <Button variant={isPersisted && "outlined" || "contained"} startIcon={<SaveIcon/>} color={"primary"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</Button>
       <Button startIcon={<AddIcon/>} onClick={addNewQuestionHandler}>Add question</Button>
-      <Button startIcon={<DeleteIcon/>} color={"secondary"} onClick={removeQuestionHandler} disabled={selectedTab === 0}>Delete question</Button>
+      <Button startIcon={<DeleteIcon/>} color={"secondary"} onClick={removeQuestionHandler} disabled={selectedTab <= 1}>Delete question</Button>
     </ButtonGroup>
     <VerticalTabs tabs={tabs} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
-    {/*<VerticalTabs tabs={tabs} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>*/}
-    {/*<Tabs orientation={"vertical"}*/}
-    {/*      tabs={tabs} onClick={setSelectedTab}*/}
-    {/*      selectedTab={selectedTab}*/}
 
-    {/*/>*/}
-    {/*<pre>{JSON.stringify(data, null, 2)}</pre>*/}
-
-
-  </div>
+  </div>) : null
 }
