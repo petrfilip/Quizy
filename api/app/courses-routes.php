@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\CourseRepository;
+use App\LessonRepository;
 use App\Middleware\JwtMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -22,9 +23,19 @@ return function (App $app) {
         });
 
         $group->get('/{slug}', function (Request $request, Response $response, $args) {
-            $data = CourseRepository::getBySlug($args["slug"]);
-            $payload = json_encode($data);
+            $course = CourseRepository::getBySlug($args["slug"]);
+            $lessonList = LessonRepository::getByIdList($course["lessonList"]);
 
+            $trimmedLessonList = array(); //todo improve
+            for ($i = 0; $i <= sizeof($lessonList)-1; $i++) {
+                $trimmedLessonList[$i]["slug"] = $lessonList[$i]["slug"];
+                $trimmedLessonList[$i]["title"] = $lessonList[$i]["title"];
+                $trimmedLessonList[$i]["_id"] = $lessonList[$i]["_id"];
+                $trimmedLessonList[$i]["heroImage"] = $lessonList[$i]["heroImage"];
+            }
+            $course["lessonList"] = $trimmedLessonList;
+
+            $payload = json_encode($course);
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;

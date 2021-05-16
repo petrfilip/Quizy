@@ -10,11 +10,11 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import CoursePage from "./components/course/CoursePage";
 import Profile from "./components/user/Profile";
 import Dashboard from "./components/layout/Dashboard";
+import CourseItem from "./components/course/CourseItem";
 
 function App() {
 
   // const { user } = useAuth()
-
 
   const nav = [
     {
@@ -44,49 +44,55 @@ function App() {
     }
   ]
 
-
   return (
     <div className="App">
 
 
-        <Router>
-          <div>
-            <Navbar items={nav}/>
+      <Router>
+        <div>
+          <Navbar items={nav}/>
 
 
-            {/* A <Switch> looks through its children <Route>s and
+          {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-            <div className={"page-content"}>
-              <Switch>
-                <Route path="/lessons/:slug">
-                  <CourseItemPage />
-                </Route>
-                <Route path="/lessons">
-                  <LessonPage/>
-                </Route>
-                <Route path="/courses">
-                  <CoursePage/>
-                </Route>
-                <Route path="/profile">
-                  <Profile/>
-                </Route>
-                <Route path="/">
-                  <Dashboard/>
-                </Route>
-              </Switch>
-            </div>
+          <div className={"page-content"}>
+            <Switch>
+              <Route path="/lessons/:slug">
+                <LessonItemPage/>
+              </Route>
+              <Route path="/lessons">
+                <LessonPage/>
+              </Route>
+              <Route path="/courses/:slug">
+                <CourseItemPage/>
+              </Route>
+              <Route path="/courses">
+                <CoursePage/>
+              </Route>
+              <Route path="/profile">
+                <Profile/>
+              </Route>
+              <Route path="/">
+                <Dashboard/>
+              </Route>
+            </Switch>
           </div>
-        </Router>
+        </div>
+      </Router>
 
 
     </div>
   );
 }
 
-function CourseItemPage() {
+function LessonItemPage() {
   let { slug } = useParams();
   return <><LessonItem slug={slug}/></>;
 }
 
+function CourseItemPage() {
+  let { slug } = useParams();
+  return <><CourseItem slug={slug}/></>;
+}
 
 export default App;

@@ -8,30 +8,30 @@ final class CourseRepository
 {
     const REPOSITORY_NAME = 'course';
 
-    static private function getDataStore($storeName): Store
+    static public function getDataStore(): Store
     {
-        return new Store($storeName, DATABASE_ROOT);
+        return new Store(self::REPOSITORY_NAME, DATABASE_ROOT);
     }
 
     static public function findAll(): array
     {
-        return self::getDataStore(self::REPOSITORY_NAME)->findAll();
+        return self::getDataStore()->findAll();
     }
 
     static public function getBySlug($slug): array
     {
         $condition = ["slug", "===", $slug];
-        return self::getDataStore(self::REPOSITORY_NAME)->findOneBy($condition);
+        return self::getDataStore()->findOneBy($condition);
     }
 
     static public function deleteById($id)
     {
-        return self::getDataStore(self::REPOSITORY_NAME)->deleteById($id);
+        return self::getDataStore()->deleteById($id);
     }
 
     static public function insertOrUpdate($data): array
     {
         $data = (array)$data;
-        return self::getDataStore(self::REPOSITORY_NAME)->updateOrInsert($data);
+        return self::getDataStore()->updateOrInsert($data);
     }
 }

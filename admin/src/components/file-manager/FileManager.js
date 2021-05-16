@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import List from "../../app/List";
 import Typography from "@material-ui/core/Typography";
-import { createStyles, makeStyles, Paper } from "@material-ui/core";
+import { createStyles, Grid, makeStyles, Paper } from "@material-ui/core";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
 import FileCard from "./FileCard";
@@ -9,7 +9,9 @@ import DirectoryCreate from "./DirectoryCreate";
 import DirectoryCard from "./DirectoryCard";
 import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import { useHistory } from 'react-router-dom';
+import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
+import Button from "@material-ui/core/Button";
+import Skeleton from "@material-ui/lab/Skeleton";
 
 const gridItemSizes = {
   xs: 6,
@@ -75,6 +77,7 @@ export default function FileManager({ location = "/", onFileClick, showUploadFor
   }
 
   useLayoutEffect(() => {
+    setIsPending(true)
     fetch(`${process.env.REACT_APP_BASE_URI}/media/list${currentLocation}`, {
       headers: {
         'Authorization': 'Bearer ' + token,
@@ -132,9 +135,7 @@ export default function FileManager({ location = "/", onFileClick, showUploadFor
   }
 
   const onDirectoryClick = (directory) => {
-    console.log(directory)
-    setCurrentLocation((directory.path.endsWith("/") ? directory.path : directory.path + "/" || "/")  + directory.slugName)
-    // history.push("/file-manager" + directory.path + "/" + directory.slugName);
+    setCurrentLocation((directory.path.endsWith("/") ? directory.path : directory.path + "/" || "/") + directory.slugName)
   }
 
   const mediaData = mediaList.files !== undefined ? [...mediaList.directories, ...mediaList.files] : [];
@@ -144,23 +145,63 @@ export default function FileManager({ location = "/", onFileClick, showUploadFor
   }, [currentLocation, location])
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
+  const locationItems = () => currentLocation.substr(1)
+    .split("/")
+    .filter(i => i !== "");
+
+  const getAllPreviousLocationItems = (index) => {
+    return locationItems().splice(0, index).join("/")
+  }
+
+  const navigator = <div>
+    <KeyboardArrowRightIcon/><Button onClick={() => setCurrentLocation("/")}>Root</Button>
+    {locationItems()
+      .map((item, index) => <span key={`fm-item-${item}`}>
+        <KeyboardArrowRightIcon/>
+        <Button onClick={() => {
+          setCurrentLocation("/" + getAllPreviousLocationItems(index + 1))
+        }
+        }>{item}</Button>
+      </span>)}
+  </div>
+
   return (
     <>
-      <Typography>Current location: {currentLocation}</Typography>
       <DirectoryCreate onSubmit={doCreateDirectory}/>
-
+      {navigator}
       {showUploadForm && <Paper variant={"outlined"} {...getRootProps()} style={{ textAlign: "center" }} className={isDragActive && classes.isDragActive}>
         <CloudUploadIcon/>
         {isDragActive ? <Typography>drop</Typography> : <Typography>Drop File here</Typography>}
       </Paper>}
-      <List
+      {isPending ?
+        <FilesSkeleton/> :
+        <List
         gridSizes={gridSizes}
         data={mediaData}
         component={item => item.type === "directory" ?
           <DirectoryCard directory={item} onDirectoryClick={onDirectoryClick}/> :
           <FileCard file={item} onFileClick={onFileClick}/>}/>
+      }
     </>
   );
 }
+
+const FilesSkeleton = () => {
+  return (
+    <Grid
+      style={{ marginTop: "10px" }}
+      container
+      spacing={4}
+      // className={classes.gridContainer}
+      justify="center"
+    >
+      {Array.from(new Array(9))
+        .map((item, i) => <Grid key={`listItem-${i}`} item {...gridItemSizes}>
+          <Skeleton animation="wave" variant="rect" height={80}/>
+        </Grid>)}
+
+    </Grid>
+  );
+};
 
 

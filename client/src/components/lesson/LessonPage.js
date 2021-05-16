@@ -1,11 +1,12 @@
 import { Link as RouterLink } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
-import { Card, CardActions, Container } from "@material-ui/core";
+import { Card, CardActions, CardMedia, Container } from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import List from "../layout/List";
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import LessonItemCard from "./LessonItemCard";
 
 export default function LessonPage() {
 
@@ -39,41 +40,11 @@ export default function LessonPage() {
     <Typography variant="h2">All lessons</Typography>
     {/*{isPending && "Loading data"}*/}
     {error}
-    <List columns={columns} data={data} component={(item) => OutlinedCard(item, ()=>{})}/>
-
-    {/*{data.map(item => <div key={`quizLink-${item.slug}`}><Link to={`/course/${item.slug}`}>{item.title}</Link></div>)}*/}
+    <List columns={columns} data={data} component={(item) => LessonItemCard(item, ()=>{})}/>
   </Container>
 
 }
 
-
-function OutlinedCard(lessonItem, onClick) {
-
-  return (
-    <Card variant="outlined">
-      {/*<CardMedia*/}
-      {/*  style={{*/}
-      {/*    width: "auto",*/}
-      {/*    maxHeight: "200px",*/}
-      {/*  }}*/}
-      {/*  component="img"*/}
-      {/*  alt="Contemplative Reptile"*/}
-      {/*  image="https://via.placeholder.com/500"*/}
-      {/*  title="Contemplative Reptile"*/}
-      {/*/>*/}
-      <CardContent>
-        <Typography>
-          {lessonItem.title}
-        </Typography>
-
-
-      </CardContent>
-      <CardActions>
-        <Button color={"secondary"} component={RouterLink} startIcon={<DoubleArrowIcon/>} to={`/lessons/${lessonItem.slug}`} >Learn</Button>
-      </CardActions>
-    </Card>
-  );
-}
 
 
 

@@ -4,36 +4,6 @@ import { useAsyncDebounce, useFilters, useGlobalFilter, useTable } from 'react-t
 import { Grid, TextField } from "@material-ui/core";
 // A great library for fuzzy filtering/sorting items
 
-const Styles = styled.div`
-  padding: 1rem;
-
-  table {
-    width: 100%; 
-    border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
-    }
-
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-
-      :last-child {
-        border-right: 0;
-      }
-    }
-  }
-`
-
 // Define a default UI for filtering
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -85,7 +55,7 @@ function fuzzyTextFilterFn(rows, id, filterValue) {
 fuzzyTextFilterFn.autoRemove = val => !val
 
 // Our table component
-function ListComponent({ columns, data, component }) {
+function Table({ columns, data, component, gridSizes }) {
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -133,11 +103,12 @@ function ListComponent({ columns, data, component }) {
   return (
     <>
 
-      <GlobalFilter
+
+      {defaultEmptyColumns[0].accessor !== columns[0].accessor && <GlobalFilter
         preGlobalFilteredRows={preGlobalFilteredRows}
         globalFilter={state.globalFilter}
         setGlobalFilter={setGlobalFilter}
-      />
+      />}
 
 
       <Grid
@@ -148,7 +119,7 @@ function ListComponent({ columns, data, component }) {
         justify="center"
       >
         {rows.map(({ original }, i) => (
-          <Grid key={`listItem-${i}`} item xs={12} sm={6} md={3} lg={3} xl={3}>
+          <Grid key={`listItem-${i}`} item {...gridSizes}>
             {component(original)}
           </Grid>
         ))}
@@ -157,7 +128,6 @@ function ListComponent({ columns, data, component }) {
         <Grid key={`not-found-item`} item xs={12} sm={12} md={13} lg={12} xl={12}>
           No item correspond to search criteria
         </Grid>}
-
 
 
       </Grid>
@@ -181,7 +151,23 @@ function filterGreaterThan(rows, id, filterValue) {
 // check, but here, we want to remove the filter if it's not a number
 filterGreaterThan.autoRemove = val => typeof val !== 'number'
 
-export default function List({ columns, data, component }) {
-  return (<ListComponent columns={columns} data={data} component={component}/>)
+const defaultEmptyColumns = [
+  {
+    Header: 'a',
+    accessor: 'b'
+  }
+];
+
+const defaultGridItemSizes = {
+  xs: 12,
+  sm: 6,
+  md: 3,
+  lg: 2,
+  xl: 2
+}
+
+export default function List({ columns = defaultEmptyColumns, data, component, gridSizes = defaultGridItemSizes }) {
+  return (<Table columns={columns} data={data} component={component} gridSizes={gridSizes}/>
+  )
 }
 

@@ -12,6 +12,7 @@ export default function DirectoryCard({ directory, onDirectoryClick }) {
   const [isOpen, setIsOpen] = React.useState(null);
 
   const handleClick = (event) => {
+    event.stopPropagation()
     setIsOpen(event.currentTarget);
   };
 
@@ -20,7 +21,7 @@ export default function DirectoryCard({ directory, onDirectoryClick }) {
   };
 
   return (
-    <Card variant="outlined" onClick={() => onDirectoryClick && onDirectoryClick(directory)}>
+    <Card variant="outlined" onDoubleClick={() => onDirectoryClick && onDirectoryClick(directory)}>
       <CardHeader
         avatar={<FolderIcon/>}
         // disableTypography={true}

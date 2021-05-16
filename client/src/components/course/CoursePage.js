@@ -1,6 +1,6 @@
 import { Link as RouterLink } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
-import { Card, CardActions, Container } from "@material-ui/core";
+import { Card, CardActions, CardMedia, Container } from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -14,7 +14,7 @@ export default function CoursePage() {
   const [error, setError] = useState()
 
   useLayoutEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/lessons`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/courses`)
       .then(response => {
         if (response.ok) {
           return response.json()
@@ -51,16 +51,17 @@ function OutlinedCard(lessonItem, onClick) {
 
   return (
     <Card variant="outlined">
-      {/*<CardMedia*/}
-      {/*  style={{*/}
-      {/*    width: "auto",*/}
-      {/*    maxHeight: "200px",*/}
-      {/*  }}*/}
-      {/*  component="img"*/}
-      {/*  alt="Contemplative Reptile"*/}
-      {/*  image="https://via.placeholder.com/500"*/}
-      {/*  title="Contemplative Reptile"*/}
-      {/*/>*/}
+
+      {lessonItem.heroImage && <CardMedia
+          style={{
+            width: "auto",
+            maxHeight: "200px",
+          }}
+        loading="lazy"
+        component="img"
+        image={`${process.env.REACT_APP_BASE_URI}${lessonItem?.heroImage?.path}`}
+        alt={lessonItem.title}
+      />}
       <CardContent>
         <Typography>
           {lessonItem.title}
@@ -69,7 +70,7 @@ function OutlinedCard(lessonItem, onClick) {
 
       </CardContent>
       <CardActions>
-        <Button color={"secondary"} component={RouterLink} startIcon={<DoubleArrowIcon/>} to={`/lessons/${lessonItem.slug}`} >Learn</Button>
+        <Button color={"secondary"} component={RouterLink} startIcon={<DoubleArrowIcon/>} to={`/courses/${lessonItem.slug}`} >Learn</Button>
       </CardActions>
     </Card>
   );
