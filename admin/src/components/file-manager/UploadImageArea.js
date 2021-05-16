@@ -6,7 +6,7 @@ import { useDropzone } from "react-dropzone";
 import Typography from "@material-ui/core/Typography";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-const UploadImageArea = ({ initialFile, location, onSaveCallback }) => {
+const UploadImageArea = ({ initialFile, location, onSaveCallback, onDropFiles }) => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState();
 
@@ -91,6 +91,7 @@ const UploadImageArea = ({ initialFile, location, onSaveCallback }) => {
   }
 
   const onDrop = useCallback(acceptedFiles => {
+    onDropFiles(acceptedFiles)
     // Do something with the files
     doUpload(acceptedFiles[0])
   }, [])

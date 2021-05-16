@@ -27,6 +27,7 @@ import FileManager from "../components/file-manager/FileManager";
 import { Container } from "@material-ui/core";
 import PermMediaIcon from '@material-ui/icons/PermMedia';
 import Typography from "@material-ui/core/Typography";
+import AddUsers from "../components/user/AddUsers";
 
 export default function Main() {
   const { user } = useAuth()
@@ -79,7 +80,7 @@ export default function Main() {
             <Route path="/courses"><CourseManager/></Route>
             <Route path="/lessons/:slug"><LessonItemManagerPage/></Route>
             <Route path="/lessons"><LessonManagerPage/></Route>
-            <Route path="/users/new"><AddUser/></Route>
+            <Route path="/users/new"><AddUsers/></Route>
             <Route path="/users"><UsersLoader/></Route>
             <Route path="/file-manager/:location"> <FileManagerPage/></Route>
             <Route path="/file-manager"> <FileManagerPage/></Route>

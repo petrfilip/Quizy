@@ -25,7 +25,20 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());;
+        })->addMiddleware(new JwtMiddleware());
+
+        /**
+         * Get all user's labels
+         */
+        $group->get('/labels', function (Request $request, Response $response) {
+
+            $data = UserRepository::getAllLabels();
+            $payload = json_encode($data);
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write($payload);
+            return $response;
+        });//->addMiddleware(new JwtMiddleware());;
 
         /**
          * Get user by id
@@ -42,22 +55,43 @@ return function (App $app) {
         $group->post('', function (Request $request, Response $response) {
             $inputJson = $request->getParsedBody();
 
-            $loadedUser = UserRepository::getByMail($inputJson["mail"]);
-            if (!empty($loadedUser)) {
-                $response->getBody()->write(json_encode(ErrorUtils::error(ErrorUtils::USER_ALREADY_EXISTS)));
-                return $response->withStatus(403);
+            //convert to array
+            if (!is_array($inputJson)) {
+                $mail = $inputJson["mail"];
+                $name = $inputJson["name"];
+                $inputJson = array();
+                $inputJson[0]["mail"] = $mail;
+                $inputJson[0]["name"] = $name;
             }
 
 
-            $user = new stdClass();
-            $user->mail = $inputJson["mail"];
-            $user->name = $inputJson["name"];
-            $user->password = password_hash($inputJson["password"], PASSWORD_BCRYPT);
+            $results = array();
+            foreach ($inputJson as $value) {
+//                $loadedUser = UserRepository::getByMail($value["mail"]);
+//                if (!empty($loadedUser)) {
+//                    $response->getBody()->write(json_encode(ErrorUtils::error(ErrorUtils::USER_ALREADY_EXISTS)));
+//                    return $response->withStatus(403);
+//                }
 
-            $savedUser = UserRepository::insertOrUpdate($user);
-            unset($savedUser["password"]);
+
+                $user = new stdClass();
+                $user->mail = $value["mail"];
+                $user->name = $value["name"];
+                $user->labels = $value["labels"];
+
+                if (!empty($value["password"])) {
+                    $user->password = password_hash($value["password"], PASSWORD_BCRYPT);
+                } else {
+                    //todo mail token
+                }
+
+                $savedUser = UserRepository::insertOrUpdate($user);
+                unset($savedUser["password"]);
+                array_push($results, $savedUser);
+            }
+
             $response = $response->withHeader('Content-Type', 'application/json');
-            $response->getBody()->write(json_encode($savedUser));
+            $response->getBody()->write(json_encode($results));
             return $response;
         });
 
