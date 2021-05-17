@@ -56,7 +56,6 @@ export default function CourseItemManager({ slug }) {
   const { token } = useAuth();
   let history = useHistory();
 
-
   const handleInputChange = (event) => {
     const target = event.target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -84,6 +83,7 @@ export default function CourseItemManager({ slug }) {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
+        json.lessonList = json.lessonList.map(lessonItem => lessonItem._id)
         setData(json)
       })
       .catch((err) => setIsError(err.message))
@@ -160,12 +160,13 @@ export default function CourseItemManager({ slug }) {
   }
 
   const onSaveCallbackHandler = (file) => {
-    setData((current) => ({...current, "heroImage": {
+    setData((current) => ({
+      ...current, "heroImage": {
         mediaId: file._id,
         path: file.publicPath
-      }}))
+      }
+    }))
   }
-
 
   return (<Container maxWidth={"lg"}>
       <Button color={"primary"}
@@ -239,7 +240,7 @@ export default function CourseItemManager({ slug }) {
                   color="primary"
                   className={classes.submit}
                 >
-                  {data._id ? "Update" : "Create"}  course
+                  {data._id ? "Update" : "Create"} course
                 </Button>
               </form>
 
@@ -279,15 +280,15 @@ function OutlinedCard(lessonItem, onSelect) {
 
   return (
     <Card variant="outlined">
-          <CardContent>
-            <Typography>
-              {lessonItem.title}
-            </Typography>
-          </CardContent>
+      <CardContent>
+        <Typography>
+          {lessonItem.title}
+        </Typography>
+      </CardContent>
 
-          <CardActions>
-            <Button color={"primary"} startIcon={<DoubleArrowIcon/>} onClick={() => onSelect(lessonItem)}/>
-          </CardActions>
+      <CardActions>
+        <Button color={"primary"} startIcon={<DoubleArrowIcon/>} onClick={() => onSelect(lessonItem)}/>
+      </CardActions>
     </Card>
-);
+  );
 }
