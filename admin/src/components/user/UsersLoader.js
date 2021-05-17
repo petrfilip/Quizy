@@ -1,16 +1,13 @@
 import React, { useLayoutEffect, useState } from "react";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useHistory } from 'react-router-dom';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
 import List from "../../app/List";
-import { Chip, Container } from "@material-ui/core";
+import { Container } from "@material-ui/core";
+import UserCard from "./UserCard";
 
 export default function UserLoader() {
 
@@ -71,6 +68,10 @@ export default function UserLoader() {
       deleteItem(item)
     }
   }
+  const history = useHistory();
+  const showUserDetail = (item) => {
+    history.push(`/users/${item._id}`);
+  }
 
   const columns = [
     {
@@ -91,26 +92,11 @@ export default function UserLoader() {
             to={`/users/new`}
             component={RouterLink}
     >Add new user</Button>
-    <List isPending={isPending} columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
+    <List isPending={isPending} columns={columns} data={data} component={(item) => <UserCard
+      userItem={item}
+      onClick={showUserDetail}
+      onDelete={deleteItemDialog}/> }/>
   </Container>
 
-}
-
-function OutlinedCard(userItem, onDelete) {
-
-  return (
-    <Card variant="outlined">
-      <CardContent>
-        <Typography>
-          {userItem.mail}
-        </Typography>
-        {userItem.labels?.map(label => <Chip label={label} />)}
-
-      </CardContent>
-      <CardActions>
-        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(userItem)}/>
-      </CardActions>
-    </Card>
-  );
 }
 

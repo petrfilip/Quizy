@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link, useParams, Redirect
-} from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch, useParams } from "react-router-dom";
 import LessonManager from "../components/lesson/LessonManager";
 import LessonItemManager from "../components/lesson/LessonItemManager";
 import UsersLoader from "../components/user/UsersLoader";
@@ -16,7 +11,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import ViewComfyIcon from '@material-ui/icons/ViewComfy';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import Login from "./Login";
-import AddUser from "../components/user/AddUser";
 import { useAuth } from "./AuthContext";
 import Profile from "./Profile";
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -28,6 +22,8 @@ import { Container } from "@material-ui/core";
 import PermMediaIcon from '@material-ui/icons/PermMedia';
 import Typography from "@material-ui/core/Typography";
 import AddUsers from "../components/user/AddUsers";
+import UserDetails from "../components/user/UserDetails";
+import UsersLabelsOverview from "../components/user/UsersLabelsOverview";
 
 export default function Main() {
   const { user } = useAuth()
@@ -81,6 +77,8 @@ export default function Main() {
             <Route path="/lessons/:slug"><LessonItemManagerPage/></Route>
             <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUsers/></Route>
+            <Route path="/users/labels/:labels"><UsersLabelsPage /></Route>
+            <Route path="/users/:id"><UserDetailsPage /></Route>
             <Route path="/users"><UsersLoader/></Route>
             <Route path="/file-manager/:location"> <FileManagerPage/></Route>
             <Route path="/file-manager"> <FileManagerPage/></Route>
@@ -123,6 +121,15 @@ function LessonItemManagerPage() {
 function CourseItemManagerPage() {
   let { slug } = useParams();
   return <><CourseItemManager slug={slug}/></>;
+}
+
+function UserDetailsPage() {
+  let { id } = useParams();
+  return <UserDetails userId={id}/>;
+}
+function UsersLabelsPage() {
+  let { labels } = useParams();
+  return <UsersLabelsOverview labels={labels}/>;
 }
 
 function FileManagerPage() {
