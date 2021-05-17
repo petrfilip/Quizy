@@ -73,6 +73,10 @@ export default function UserLoader() {
     history.push(`/users/${item._id}`);
   }
 
+  const showUsersByTag = (label) => {
+    history.push(`/users/labels/${label}`);
+  }
+
   const columns = [
     {
       accessor: 'mail'
@@ -93,6 +97,7 @@ export default function UserLoader() {
             component={RouterLink}
     >Add new user</Button>
     <List isPending={isPending} columns={columns} data={data} component={(item) => <UserCard
+      onTagClick={showUsersByTag}
       userItem={item}
       onClick={showUserDetail}
       onDelete={deleteItemDialog}/> }/>

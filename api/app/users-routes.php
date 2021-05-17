@@ -44,7 +44,27 @@ return function (App $app) {
          * Get user by id
          */
         $group->get('/{id}', function (Request $request, Response $response) {
-            $response->getBody()->write('Hello world! - id');
+
+            $inputJson = $request->getAttributes();
+            $data = UserRepository::getById($inputJson["id"]);
+            $payload = json_encode($data);
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write($payload);
+            return $response;
+        });
+
+        /**
+         * Get users by any conditions
+         */
+        $group->post('/find', function (Request $request, Response $response) {
+
+            $inputJson = $request->getParsedBody();
+            $data = UserRepository::findBy($inputJson["filterMap"], $inputJson["sorterMap"]);
+            $payload = json_encode($data);
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write($payload);
             return $response;
         });
 

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useReducer, useState } from 'react';
+import React, { useReducer, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -14,8 +14,7 @@ import AddIcon from "@material-ui/icons/Add";
 import Grid from "@material-ui/core/Grid";
 import UploadImageArea from "../file-manager/UploadImageArea";
 import * as XLSX from "xlsx";
-import CreatableSelect from 'react-select/creatable';
-import { Autocomplete, createFilterOptions } from "@material-ui/lab";
+import UserLabelInput from "./UserLabelInput";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -44,28 +43,11 @@ export default function AddUsers() {
   const [users, setUsers] = useState([{}]);
   const [isPending, setIsPending] = useState(false)
   const [userLabels, setUserLabels] = useState([]);
-  const [availableLabels, setAvailableLabels] = useState([]);
   const [updatedValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  useLayoutEffect(() => {
 
-    fetch(`${process.env.REACT_APP_BASE_URI}/users/labels`)
-      .then(response => {
-        if (response.ok) {
-          return response.json()
-        }
-        throw new Error(`Unable to get data: ${response.statusText}`)
-      })
-      .then(json => {
-        console.log(json)
-        setAvailableLabels(json)
-      })
-      .catch((err) => setIsError(err.message))
-      .finally(() => setIsPending(false))
-
-  }, [])
 
   function createUsers(e) {
     e.preventDefault()
@@ -104,7 +86,6 @@ export default function AddUsers() {
 
   }
 
-  const filter = createFilterOptions();
 
   return (<Container maxWidth={"lg"}>
       <Button color={"primary"}
@@ -129,59 +110,7 @@ export default function AddUsers() {
           </Typography>
           <form className={classes.form} noValidate={true} onSubmit={createUsers}>
 
-            <Autocomplete
-              multiple
-              id="tags-outlined"
-              options={availableLabels}
-              selectOnFocus
-              clearOnBlur
-              handleHomeEndKeys
-              getOptionLabel={(option) => {
-                // Value selected with enter, right from the input
-                if (typeof option === 'string') {
-                  return option;
-                }
-                // // Add "xxx" option created dynamically
-                if (option.inputValue) {
-                  return  option.inputValue;
-                }
-                // Regular option
-                return option;
-              }}
-              defaultValue={userLabels}
-              filterOptions={(options, params) => {
-                const filtered = filter(options, params);
-
-                // Suggest the creation of a new value
-                if (params.inputValue !== '') {
-                  filtered.push(params.inputValue);
-                }
-
-                return filtered;
-              }}
-              onChange={(event, newValue) => {
-                if (typeof newValue === 'string') {
-                  setUserLabels(newValue);
-                } else if (newValue && newValue.inputValue) {
-                  // Create a new value from the user input
-                  setUserLabels(newValue.inputValue);
-                } else {
-                  setUserLabels(newValue);
-                }
-              }}
-
-              filterSelectedOptions
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  onKeyPress={(e) => {
-                    e.key === 'Enter' && e.preventDefault();
-                  }}
-                  variant="outlined"
-                  label="User labels"
-                />
-              )}
-            />
+            <UserLabelInput defaultValues={userLabels} onChange={setUserLabels} />
 
             {users.map((user, index) => <Grid key={`user-${updatedValue}-${index}`} container spacing={4}>
               <Grid item xs={6}>

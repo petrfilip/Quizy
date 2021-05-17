@@ -78,6 +78,7 @@ export default function Main() {
             <Route path="/lessons"><LessonManagerPage/></Route>
             <Route path="/users/new"><AddUsers/></Route>
             <Route path="/users/labels/:labels"><UsersLabelsPage /></Route>
+            <Route path="/users/labels/"><UsersLabelsPage /></Route>
             <Route path="/users/:id"><UserDetailsPage /></Route>
             <Route path="/users"><UsersLoader/></Route>
             <Route path="/file-manager/:location"> <FileManagerPage/></Route>
@@ -129,7 +130,7 @@ function UserDetailsPage() {
 }
 function UsersLabelsPage() {
   let { labels } = useParams();
-  return <UsersLabelsOverview labels={labels}/>;
+  return <Container maxWidth={"md"}><UsersLabelsOverview labels={labels || null}/></Container>;
 }
 
 function FileManagerPage() {

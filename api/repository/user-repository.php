@@ -7,6 +7,7 @@ use SleekDB\Store;
 final class UserRepository
 {
     const REPOSITORY_NAME = 'user';
+
     static private function getDataStore(): Store
     {
         return new Store(self::REPOSITORY_NAME, DATABASE_ROOT);
@@ -23,6 +24,20 @@ final class UserRepository
         return self::getDataStore()->findOneBy($condition);
     }
 
+    static public function getById($id)
+    {
+        return self::getDataStore()->findById($id);
+    }
+
+    static public function findBy($filters = [], $sorters = []): array
+    {
+        if (sizeof($filters) == 0) {
+            return self::findAll();
+        }
+
+        return self::getDataStore()->findBy($filters, $sorters);
+    }
+
     static public function deleteById($id)
     {
         return self::getDataStore()->deleteById($id);
@@ -34,10 +49,10 @@ final class UserRepository
         return self::getDataStore()->updateOrInsert($data);
     }
 
-    public static function getAllLabels() : array
+    public static function getAllLabels(): array
     {
         $userQueryBuilder = self::getDataStore()->createQueryBuilder();
-        $result =  $userQueryBuilder
+        $result = $userQueryBuilder
             ->select(["labels"])
             ->except(["_id"])
             ->distinct("labels")
@@ -45,7 +60,7 @@ final class UserRepository
             ->fetch();
 
         $allLabels = array();
-        for ($i = 0; $i <= sizeof($result)-1; $i++) {
+        for ($i = 0; $i <= sizeof($result) - 1; $i++) {
             if (is_array($result[$i]["labels"])) {
                 $allLabels = array_merge($allLabels, $result[$i]["labels"]);
             }

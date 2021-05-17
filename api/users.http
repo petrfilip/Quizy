@@ -1,0 +1,29 @@
+### Send POST request with json body
+POST http://localhost:8888/users/find
+Content-Type: application/json
+
+{
+  "filterMap": [
+    [
+      "labels",
+      "CONTAINS",
+      "2010"
+    ],
+    "AND",
+    [
+      "labels",
+      "CONTAINS",
+      "asdfasYxcv"
+    ]
+  ]
+}
+
+
+### Send POST request with json body
+POST http://localhost:8888/users/find
+Content-Type: application/json
+
+{
+  "filterMap": []
+}
+
