@@ -50,6 +50,6 @@ final class UserRepository
                 $allLabels = array_merge($allLabels, $result[$i]["labels"]);
             }
         }
-        return array_unique($allLabels);
+        return array_values(array_unique($allLabels));
     }
 }

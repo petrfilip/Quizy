@@ -43,8 +43,8 @@ export default function AddUsers() {
   const [isError, setIsError] = useState(false);
   const [users, setUsers] = useState([{}]);
   const [isPending, setIsPending] = useState(false)
-  const [userLabels, setUserLabels] = React.useState([]);
-  const [availableLabels, setAvailableLabels] = React.useState([]);
+  const [userLabels, setUserLabels] = useState([]);
+  const [availableLabels, setAvailableLabels] = useState([]);
   const [updatedValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const { enqueueSnackbar } = useSnackbar();
@@ -59,6 +59,7 @@ export default function AddUsers() {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
+        console.log(json)
         setAvailableLabels(json)
       })
       .catch((err) => setIsError(err.message))
@@ -66,13 +67,15 @@ export default function AddUsers() {
 
   }, [])
 
-  function postLogin(e) {
+  function createUsers(e) {
     e.preventDefault()
     setIsPending(true)
-    const usersToCreate = users.map(user => {
+    let usersToCreate = users.map(user => {
       user.labels = userLabels
       return user
     })
+
+    usersToCreate = usersToCreate.filter(item => !!item.mail)
 
     fetch(`${process.env.REACT_APP_BASE_URI}/users`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
@@ -89,8 +92,8 @@ export default function AddUsers() {
       })
       .then(json => {
         setIsError(false)
-        enqueueSnackbar(`User "${json.mail}" created with id ${json._id}`, { variant: "success" });
-        setUsers([{name:"", mail:""}])
+        enqueueSnackbar(`${usersToCreate.length} users has been created`, { variant: "success" });
+        setUsers([{ name: "", mail: "" }])
         forceUpdate()
       })
       .catch((err) => {
@@ -100,6 +103,8 @@ export default function AddUsers() {
       .finally(() => setIsPending(false))
 
   }
+
+  const filter = createFilterOptions();
 
   return (<Container maxWidth={"lg"}>
       <Button color={"primary"}
@@ -122,7 +127,7 @@ export default function AddUsers() {
           <Typography component="h1" variant="h5">
             Create new users
           </Typography>
-          <form className={classes.form} noValidate onSubmit={postLogin}>
+          <form className={classes.form} noValidate={true} onSubmit={createUsers}>
 
             <Autocomplete
               multiple
@@ -138,7 +143,7 @@ export default function AddUsers() {
                 }
                 // // Add "xxx" option created dynamically
                 if (option.inputValue) {
-                  return option.inputValue;
+                  return  option.inputValue;
                 }
                 // Regular option
                 return option;
@@ -181,9 +186,9 @@ export default function AddUsers() {
             {users.map((user, index) => <Grid key={`user-${updatedValue}-${index}`} container spacing={4}>
               <Grid item xs={6}>
                 <TextField
-                  type={"email"}
-                  value={user.name || null}
-                  error={isError}
+                  type={"text"}
+                  value={user.name || ""}
+                  error={isError || !user.name && users.length - 1 > index}
                   onChange={e => {
 
                     const editedUser = { ...users[index] };
@@ -210,8 +215,9 @@ export default function AddUsers() {
               </Grid>
               <Grid item xs={6}>
                 <TextField
-                  value={user.mail || null}
-                  error={isError}
+                  type={"email"}
+                  value={user.mail || ""}
+                  error={isError || !user.mail && users.length - 1 > index}
                   onChange={e => { //todo improve
 
                     const editedUser = { ...users[index] };
@@ -274,8 +280,3 @@ export default function AddUsers() {
   );
 }
 
-const filter = createFilterOptions();
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const top100Films = [
-  "test1", "abcd"
-];

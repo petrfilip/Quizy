@@ -10,7 +10,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
 import List from "../../app/List";
-import { Container } from "@material-ui/core";
+import { Chip, Container } from "@material-ui/core";
 
 export default function UserLoader() {
 
@@ -21,7 +21,7 @@ export default function UserLoader() {
   const { token } = useAuth();
 
   useLayoutEffect(() => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/users`,{
+    fetch(`${process.env.REACT_APP_BASE_URI}/users`, {
       headers: {
         'Authorization': 'Bearer ' + token,
       },
@@ -63,13 +63,10 @@ export default function UserLoader() {
   }
 
   const removeFromCollection = (lessonId) => {
-    console.log(data)
     return data.filter((item) => item._id !== lessonId)
   }
 
   const deleteItemDialog = (item) => {
-    console.log(data)
-
     if (window.confirm(`Are you sure to delete "${item.name}" record?`)) {
       deleteItem(item)
     }
@@ -78,6 +75,9 @@ export default function UserLoader() {
   const columns = [
     {
       accessor: 'mail'
+    },
+    {
+      accessor: 'labels'
     }
   ];
 
@@ -100,21 +100,11 @@ function OutlinedCard(userItem, onDelete) {
 
   return (
     <Card variant="outlined">
-      {/*<CardMedia*/}
-      {/*  style={{*/}
-      {/*    width: "auto",*/}
-      {/*    maxHeight: "200px",*/}
-      {/*  }}*/}
-      {/*  component="img"*/}
-      {/*  alt="Contemplative Reptile"*/}
-      {/*  image="https://via.placeholder.com/500"*/}
-      {/*  title="Contemplative Reptile"*/}
-      {/*/>*/}
       <CardContent>
         <Typography>
           {userItem.mail}
         </Typography>
-
+        {userItem.labels?.map(label => <Chip label={label} />)}
 
       </CardContent>
       <CardActions>
