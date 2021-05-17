@@ -91,7 +91,7 @@ const UploadImageArea = ({ initialFile, location, onSaveCallback, onDropFiles })
   }
 
   const onDrop = useCallback(acceptedFiles => {
-    onDropFiles(acceptedFiles)
+    onDropFiles && onDropFiles(acceptedFiles)
     // Do something with the files
     doUpload(acceptedFiles[0])
   }, [])

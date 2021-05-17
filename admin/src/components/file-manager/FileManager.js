@@ -1,7 +1,7 @@
 import React, { useCallback, useLayoutEffect, useState } from 'react';
 import List from "../../app/List";
 import Typography from "@material-ui/core/Typography";
-import { createStyles, Grid, makeStyles, Paper } from "@material-ui/core";
+import { createStyles, makeStyles, Paper } from "@material-ui/core";
 import { useAuth } from "../../app/AuthContext";
 import { useSnackbar } from "notistack";
 import FileCard from "./FileCard";
@@ -11,7 +11,6 @@ import { useDropzone } from "react-dropzone";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import KeyboardArrowRightIcon from "@material-ui/icons/KeyboardArrowRight";
 import Button from "@material-ui/core/Button";
-import Skeleton from "@material-ui/lab/Skeleton";
 
 const gridItemSizes = {
   xs: 6,
@@ -173,35 +172,18 @@ export default function FileManager({ location = "/", onFileClick, showUploadFor
         <CloudUploadIcon/>
         {isDragActive ? <Typography>drop</Typography> : <Typography>Drop File here</Typography>}
       </Paper>}
-      {isPending ?
-        <FilesSkeleton/> :
-        <List
+
+      <List
+        isPending={isPending}
         gridSizes={gridSizes}
         data={mediaData}
         component={item => item.type === "directory" ?
           <DirectoryCard directory={item} onDirectoryClick={onDirectoryClick}/> :
           <FileCard file={item} onFileClick={onFileClick}/>}/>
-      }
+
     </>
   );
 }
 
-const FilesSkeleton = () => {
-  return (
-    <Grid
-      style={{ marginTop: "10px" }}
-      container
-      spacing={4}
-      // className={classes.gridContainer}
-      justify="center"
-    >
-      {Array.from(new Array(9))
-        .map((item, i) => <Grid key={`listItem-${i}`} item {...gridItemSizes}>
-          <Skeleton animation="wave" variant="rect" height={80}/>
-        </Grid>)}
-
-    </Grid>
-  );
-};
 
 

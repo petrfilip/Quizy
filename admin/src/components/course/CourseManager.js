@@ -92,7 +92,7 @@ export default function CourseManager() {
             to={`/courses/newCourse`}
             component={RouterLink}
     >Add new course</Button>
-    <List columns={columns} data={data} component={(item) => {
+    <List isPending={isPending} columns={columns} data={data} component={(item) => {
       return OutlinedCard(item, deleteItemDialog)
     }}/>
   </Container>

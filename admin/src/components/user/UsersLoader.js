@@ -91,7 +91,7 @@ export default function UserLoader() {
             to={`/users/new`}
             component={RouterLink}
     >Add new user</Button>
-    <List columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
+    <List isPending={isPending} columns={columns} data={data} component={(item) => OutlinedCard(item, deleteItemDialog)}/>
   </Container>
 
 }
