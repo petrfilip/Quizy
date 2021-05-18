@@ -20,6 +20,10 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
   }
 
   const isCorrect = () => {
+    if (!correct) {
+      return undefined
+    }
+
     return selected.filter((item, i) => !isItemCorrect(i, item)).length === 0
   }
 

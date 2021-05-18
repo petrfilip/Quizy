@@ -15,6 +15,9 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   }, [questionItem.index])
 
   const isCorrect = () => {
+    if (!correct) {
+      return undefined
+    }
     return selected.index == correct
   }
 

@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import Skeleton from '@material-ui/lab/Skeleton';
+import ExamQuiz from "../quiz/ExamQuiz";
 
 export default function LessonItem({ slug }) {
 
@@ -80,6 +81,26 @@ export default function LessonItem({ slug }) {
             />}
           />
         </Grid>
+        <Grid item xs={6}>
+          <OutlinedCard
+            content={<Typography>Exam</Typography>}
+            action={<Button component={RouterLink}
+                            to={`${url}/exam`}
+                            color={"secondary"}
+                            startIcon={<DoubleArrowIcon/>}
+            />}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <OutlinedCard
+            content={<Typography>Feedback</Typography>}
+            action={<Button component={RouterLink}
+                            to={`${url}/feedback`}
+                            color={"secondary"}
+                            startIcon={<DoubleArrowIcon/>}
+            />}
+          />
+        </Grid>
       </Grid>
 
     </Paper>
@@ -99,6 +120,9 @@ export default function LessonItem({ slug }) {
       </Route>
       <Route path={`${path}/quiz`}>
         {data.questions && <Quiz quizData={data.questions}/>}
+      </Route>
+      <Route path={`${path}/exam`}>
+        {data.questions && <ExamQuiz quizData={data.questions}/>}
       </Route>
     </Switch>
   </>

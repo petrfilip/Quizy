@@ -30,6 +30,26 @@ return function (App $app) {
             return $response;
         });
 
+        $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
+            $data = LessonRepository::getBySlug($args["slug"]);
+            $payload = json_encode($data);
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write($payload); //todo return randomly generated questions
+            return $response;
+        });
+
+        $group->post('/{slug}/exam', function (Request $request, Response $response, $args) {
+            $data = LessonRepository::getBySlug($args["slug"]);
+            $payload = json_encode($data);
+
+            $response = $response->withHeader('Content-Type', 'application/json');
+            $response->getBody()->write("todo evaluate and result");
+            return $response;
+        });
+
+        //todo exam routes
+
         $group->delete('/{id}', function (Request $request, Response $response, $args) {
             $data = LessonRepository::deleteById($args["id"]); // add deleteAt
             $payload = json_encode($data);

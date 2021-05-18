@@ -4,13 +4,16 @@ import QuizScore from "./QuizScore";
 import { Timer } from "../Timer";
 import QuizProgress from "./QuizProgress";
 import Paging from "../Paging";
-import { Container, Paper } from "@material-ui/core";
+import { Container, Paper, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
-export default function Quiz({ quizData }) {
+export default function ExamQuiz({ quizData }) {
+
+  const [examResult, setExamResult] = useState();
 
   useEffect(() => {
     const quiz = quizData.map((item, index) => {
+      item.correct = undefined
       item.index = index;
       return item;
     })
@@ -24,7 +27,6 @@ export default function Quiz({ quizData }) {
 
   const onAnswerSubmitHandler = (question, answer, isCorrect) => {
     const answerQuestion = {
-      isCorrect: isCorrect,
       questionIndex: currentQuestionIndex,
       answer: answer
     }
@@ -32,25 +34,21 @@ export default function Quiz({ quizData }) {
     const newAnswer = [...answers];
     newAnswer.push(answerQuestion)
     setAnswers(newAnswer);
+    setCurrentQuestionIndex(currentQuestionIndex + 1)
+    if (quizItems.length === currentQuestionIndex + 1) {
+      submitResults(newAnswer)
+    }
   }
 
-  const paging = {
-    currentIndex: currentQuestionIndex,
-    total: quizItems.length,
-    onChange: (index) => {
-      setCurrentQuestionIndex(index)
-    }
+  const submitResults = (newAnswer) => {
+    console.log(newAnswer)
   }
 
   const getAnswerByQuestionIndex = (qIdx) => {
     return answers.find(item => item.questionIndex === qIdx)?.answer
   }
 
-  const getScore = () => {
-    return answers.filter(item => item.isCorrect).length
-  }
-
-  return (
+  const questionPage = (
     <Container maxWidth="md" style={{ minHeight: '500px' }}>
 
       <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
@@ -72,15 +70,21 @@ export default function Quiz({ quizData }) {
       }}>
         <Timer/>
         <QuizProgress current={answers.length} total={quizItems.length}/>
-        <QuizScore score={getScore()} total={answers.length}/>
-        <QuizScore score={getScore()} total={quizItems.length}/>
-      </Container><Container maxWidth="md" style={{ textAlign: "center", margin: "10px" }}>
-      <Paper>
-        <Paging paging={paging}/>
-        {/*<Button color={"primary"} fullWidth={true}>Odeslat hotový formulář</Button>*/}
-      </Paper>
-    </Container>
+      </Container>
     </Container>
   )
+
+  const resultPage = (
+    <Container maxWidth="md" style={{ minHeight: '500px' }}>
+      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
+        <Paper>
+          <Typography variant={"h2"}>Your results: {examResult}</Typography>
+          <Button>Go to profile</Button>
+        </Paper>
+      </Container>
+    </Container>
+  )
+
+  return quizItems.length === currentQuestionIndex ? resultPage : questionPage
 }
 

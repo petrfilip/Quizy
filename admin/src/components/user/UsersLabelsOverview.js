@@ -116,7 +116,7 @@ const UsersLabelsOverview = ({ labels }) => {
                 {params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.trying}
               </Button>
 
-              <Button size="small" startIcon={<EventAvailableIcon/>} color="primary" title={"Completation date"}>
+              <Button size="small" startIcon={<EventAvailableIcon/>} color="primary" title={`Completion date: ${params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.completionDate}`}>
                 {moment(params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.completionDate).format("YYYY-MM-DD")}
               </Button>
             </CardActions>
