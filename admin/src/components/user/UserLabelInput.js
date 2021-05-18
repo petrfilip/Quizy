@@ -21,7 +21,6 @@ const UserLabelInput = ({defaultValues = [], onChange}) => {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
-        console.log(json)
         setAvailableLabels(json)
       })
       .catch((err) => setIsError(err.message))
@@ -31,6 +30,7 @@ const UserLabelInput = ({defaultValues = [], onChange}) => {
 
   return (
     <Autocomplete
+      style={{width:"100%"}}
       multiple
       id="tags-outlined"
       options={availableLabels}

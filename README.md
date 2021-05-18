@@ -110,7 +110,7 @@ Whole application is composed of the following objects:
   "role": "",
   "mail": "user@mail.cz", // user mail
   "password": "...", //bcrypted password
-  "achievementList": { // list of questions
+  "achievements": { // list of questions
     "lessonList": [
       {
         "lessonId": "...",

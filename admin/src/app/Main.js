@@ -130,7 +130,7 @@ function UserDetailsPage() {
 }
 function UsersLabelsPage() {
   let { labels } = useParams();
-  return <Container maxWidth={"md"}><UsersLabelsOverview labels={labels || null}/></Container>;
+  return <Container maxWidth={"md"}><UsersLabelsOverview labels={labels }/></Container>;
 }
 
 function FileManagerPage() {
