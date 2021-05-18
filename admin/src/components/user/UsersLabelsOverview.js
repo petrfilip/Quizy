@@ -14,7 +14,7 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import TimerIcon from '@material-ui/icons/Timer';
 import ReplayIcon from '@material-ui/icons/Replay';
 import GradeIcon from '@material-ui/icons/Grade';
-import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
 
 const UsersLabelsOverview = ({ labels }) => {
 
@@ -69,15 +69,21 @@ const UsersLabelsOverview = ({ labels }) => {
 
   const columns = [
     {
-      field: 'name', headerName: 'Labels', width: 230,
+      field: 'name', headerName: 'Users', width: 250,
+      hide: false,
+      resizable: true,
       renderCell: (params) => (
-        <Card>
-          <CardContent>
+        <div>
+          <Typography>
             {params.getValue("name")}
+          </Typography>
+          <Typography color="textSecondary">
             {params.getValue("mail")}
+          </Typography>
+          <Typography>
             {params.getValue("labels")?.map(label => <Chip key={`${label}`} label={label}/>)}
-          </CardContent>
-        </Card>
+          </Typography>
+        </div>
       )
     },
 
@@ -87,6 +93,12 @@ const UsersLabelsOverview = ({ labels }) => {
     const columnsWithLessons = [...columns];
     selectedLessons.forEach(lesson => columnsWithLessons.push({
       field: lesson.slug, headerName: lesson.title, width: 220,
+      sortable: true,
+      filterable: false,
+      resizable: false,
+      sortComparator: (v1, v2, cellParams1, cellParams2) => {
+        return cellParams1.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === v1._id)?.score || -1 < cellParams2.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === v2._id)?.score || -1
+      },
       renderCell: (params) => {
         const lessonCard = (
           <Card>
@@ -127,7 +139,7 @@ const UsersLabelsOverview = ({ labels }) => {
   }
 
   return (
-    <div>
+    <>
 
       <Grid container spacing={4} style={{ marginTop: "15px", marginBottom: "15px" }}>
         <Grid item xs={6} style={{ textAlign: "right", paddingRight: "10px" }}>
@@ -139,18 +151,19 @@ const UsersLabelsOverview = ({ labels }) => {
           {isCourseView ? <CourseInput onChange={onCourseInputChangedHandler}/> : <LessonInput onChange={onLessonInputChangedHandler}/>}
           <Switch
             checked={isCourseView}
-            onChange={(e) => setIsCourseView(e.target.checked)}
-            name="checkedA"
-            inputProps={{ 'aria-label': 'secondary checkbox' }}
+            onChange={(e) => {
+              setIsCourseView(e.target.checked)
+            }}
+            name="lessonOrCourse"
           />
         </Grid>
       </Grid>
 
       <div style={{ height: '1100px', width: '100%' }}>
-        <DataGrid density={"compact"} rowHeight={100} rows={dataGridData()} columns={columnsWithLessons()} pageSize={50}/>
+        <DataGrid density={"compact"} rowHeight={150} rows={dataGridData()} columns={columnsWithLessons()} pageSize={50} columnBuffer={50}   headerHeight={50} />
       </div>
 
-    </div>
+    </>
   );
 };
 
