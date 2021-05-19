@@ -97,33 +97,48 @@ const UsersLabelsOverview = ({ labels }) => {
       filterable: false,
       resizable: false,
       sortComparator: (v1, v2, cellParams1, cellParams2) => {
-        return cellParams1.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === v1._id)?.score || -1 < cellParams2.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === v2._id)?.score || -1
+        return cellParams1.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.examId === v1._id)?.score || -1 < cellParams2.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.examId === v2._id)?.score || -1
       },
       renderCell: (params) => {
+        function getFind() {
+          return params.getValue("achievements")?.lessonList.sort((a,b) => new Date(a.finishedAt) > new Date(b.finishedAt) ? -1 : 1).find(finishedLesson => finishedLesson.examId === params.value._id);
+        }
+
+        function getTries() {
+          return params.getValue("achievements")?.lessonList.filter(value => value.examId === params.value._id).length
+        }
+
+        function getExamDuration() {
+          const now = moment(getFind()?.finishedAt); //todays date
+          const end = moment(getFind()?.startedAt); // another date
+          const duration = moment.duration(now.diff(end));
+          return duration.asSeconds();
+        }
+
         const lessonCard = (
           <Card>
             <CardActions>
               <Button size="small" startIcon={<GradeIcon/>} color="primary">
-                {params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.score}
+                {getFind()?.score}
               </Button>
               <Button size="small" startIcon={<TimerIcon/>} color="primary">
-                {moment.utc(params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.doneInTime * 1000).format('H:mm:ss')}
+                {moment.utc(getExamDuration() * 1000).format('H:mm:ss')}
               </Button>
             </CardActions>
             <CardActions>
 
               <Button size="small" startIcon={<ReplayIcon/>} color="primary">
-                {params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.trying}
+                {getTries()}
               </Button>
 
-              <Button size="small" startIcon={<EventAvailableIcon/>} color="primary" title={`Completion date: ${params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.completionDate}`}>
-                {moment(params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id)?.completionDate).format("YYYY-MM-DD")}
+              <Button size="small" startIcon={<EventAvailableIcon/>} color="primary" title={`Completion date: ${getFind()?.finishedAt}`}>
+                {moment(getFind()?.finishedAt).format("YYYY-MM-DD")}
               </Button>
             </CardActions>
           </Card>
         )
 
-        return params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.lessonId === params.value._id) != undefined ? lessonCard : <>-</>
+        return params.getValue("achievements")?.lessonList.find(finishedLesson => finishedLesson.examId === params.value._id) != undefined ? lessonCard : <>-</>
       }
     }));
     return columnsWithLessons;

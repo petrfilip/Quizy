@@ -11,11 +11,11 @@ import { useSnackbar } from "notistack";
 
 export default function ExamQuiz({ lesson }) {
 
-
   const [examResult, setExamResult] = useState();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([])
   const [quizItems, setQuizItems] = useState([])
+  const [metadata, setMetadata] = useState({})
   const { enqueueSnackbar } = useSnackbar()
   const { token } = useAuth();
 
@@ -36,6 +36,24 @@ export default function ExamQuiz({ lesson }) {
 
   const submitResults = (newAnswer) => {
     console.log(newAnswer)
+
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${lesson.slug}/exam`, {
+      method: 'post', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({metadata, answers: newAnswer})
+    }).then(r => r.json())
+      .then(json => {
+        setMetadata(json)
+      })
+      .catch(() => {
+        enqueueSnackbar('Error when getting data', { variant: "error" });
+      })
+      .finally(() => {
+      });
+
   }
 
   const getAnswerByQuestionIndex = (qIdx) => {
@@ -72,13 +90,12 @@ export default function ExamQuiz({ lesson }) {
     <Container maxWidth="md" style={{ minHeight: '500px' }}>
       <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
         <Paper>
-          <Typography variant={"h2"}>Your results: {examResult}</Typography>
+          <Typography variant={"h2"}>Your results: {examResult} {metadata.score}</Typography>
           <Button>Go to profile</Button>
         </Paper>
       </Container>
     </Container>
   )
-
 
   const getExamData = () => {
     fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${lesson.slug}/exam`, {
@@ -88,7 +105,8 @@ export default function ExamQuiz({ lesson }) {
       },
     }).then(r => r.json())
       .then(json => {
-        setQuizItems(json)
+        setQuizItems(json.questions)
+        setMetadata(json.metadata)
       })
       .catch(() => {
         enqueueSnackbar('Error when getting data', { variant: "error" });
@@ -107,6 +125,6 @@ export default function ExamQuiz({ lesson }) {
     </Container>
   )
 
-  return quizItems.length ===0 ? confirmStartPage : (quizItems.length === currentQuestionIndex ? resultPage : questionPage)
+  return quizItems.length === 0 ? confirmStartPage : (quizItems.length === currentQuestionIndex ? resultPage : questionPage)
 }
 

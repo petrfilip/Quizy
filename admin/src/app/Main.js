@@ -147,7 +147,6 @@ function Logout() {
   const { removeTokens } = useAuth()
   removeTokens()
   return <Redirect to="/"/>;
-
 }
 
 

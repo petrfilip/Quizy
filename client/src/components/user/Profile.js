@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { Paper, Typography } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,6 +7,16 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { useAuth } from "../layout/AuthContext";
+import { useSnackbar } from "notistack";
+import List from "../layout/List";
+
+const defaultGridItemSizes = {
+  xs: 12,
+  sm: 12,
+  md: 12,
+  lg: 12,
+  xl: 12
+}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -31,8 +41,30 @@ const useStyles = makeStyles((theme) => ({
 function Profile(props) {
   const classes = useStyles();
 
-
+  const { enqueueSnackbar } = useSnackbar()
+  const { token } = useAuth();
+  const [data, setData] = useState([])
   const { user } = useAuth()
+
+
+  useLayoutEffect(()=>{
+    fetch(`${process.env.REACT_APP_BASE_URI}/users/${user.user_id}`, {
+      method: 'get', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+    }).then(r => r.json())
+      .then(json => {
+        setData(json)
+      })
+      .catch(() => {
+        enqueueSnackbar('Error when getting data', { variant: "error" });
+      })
+      .finally(() => {
+      });
+  }, [])
+
+
 
   return (
     <Container maxWidth="xs">
@@ -57,7 +89,13 @@ function Profile(props) {
             </Grid>
           </Grid>
         })}
+
+
       </Paper>
+
+      {data?.achievements?.lessonList.length && <List gridSizes={defaultGridItemSizes} data={data.achievements.lessonList || []} component={(item) => {
+        return <div>{JSON.stringify(item)}</div>
+      }}/>}
 
     </Container>
   );

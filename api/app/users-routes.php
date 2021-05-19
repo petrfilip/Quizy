@@ -105,6 +105,8 @@ return function (App $app) {
                     //todo mail token
                 }
 
+                $user->password = password_hash($value["mail"], PASSWORD_BCRYPT); //todo remove - only for debug
+
                 $savedUser = UserRepository::insertOrUpdate($user);
                 unset($savedUser["password"]);
                 array_push($results, $savedUser);

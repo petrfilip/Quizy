@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\ExamRepository;
 use App\LessonRepository;
 use App\Middleware\JwtMiddleware;
+use App\UserRepository;
 use App\Utils;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -32,44 +33,63 @@ return function (App $app) {
             return $response;
         });
 
-        //todo /{slug}/exam/inProgress
+        //todo /exam/inProgress -> will cause force test render
 
         $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
             $data = LessonRepository::getBySlug($args["slug"]);
-            $payload = json_encode($data["questions"]);
 
-
-            $unfinished = ExamRepository::findUnfinishedByUser("LESSON", $payload["_id"], $request->getAttribute("userId"));
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSON", intval($data["_id"]), intval($request->getAttribute("userId")));
 
             if (sizeof($unfinished) === 0) {
-                $out = new stdClass();
-                $out->startedAt = Utils::getCurrentDateTime();
-                $out->finishedAt = null;
-                $out->userId = $request->getAttribute("userId");
-                $out->type = "LESSON";
-                $out->examId = $data["_id"];
-                $out->examTitle = $data["title"];
-                ExamRepository::insertOrUpdate($out);
+                $exam = new stdClass();
+                $exam->startedAt = Utils::getCurrentDateTime();
+                $exam->finishedAt = null;
+                $exam->userId = $request->getAttribute("userId");
+                $exam->type = "LESSON";
+                $exam->examId = $data["_id"];
+                $exam->examTitle = $data["title"];
+                $unfinished = ExamRepository::insertOrUpdate($exam);
+
+
             }
 
+            $out = array();
+            $out["questions"] = $data["questions"];
+            $out["metadata"] = $unfinished;
+
             $response = $response->withHeader('Content-Type', 'application/json');
-            $response->getBody()->write($payload); //todo return randomly generated questions
+            $response->getBody()->write(json_encode($out)); //todo return randomly generated questions
             return $response;
         })->addMiddleware(new JwtMiddleware());
 
         $group->post('/{slug}/exam', function (Request $request, Response $response, $args) {
             $data = LessonRepository::getBySlug($args["slug"]);
-            $payload = json_encode($data);
 
-            $unfinished = ExamRepository::findUnfinishedByUser("LESSON", intval($payload["_id"]), $request->getAttribute("userId"));
 
-            $unfinished->finshedAt = Utils::getCurrentDateTime();
-            $unfinished->score = 0;
-            ExamRepository::insertOrUpdate($unfinished);
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSON", intval($data["_id"]), intval($request->getAttribute("userId")));
+            $unfinished["score"] = 0;
+            $unfinished["finishedAt"] = Utils::getCurrentDateTime();
+            $unfinished = ExamRepository::insertOrUpdate($unfinished);
+
+
+            $user = UserRepository::getById($request->getAttribute("userId"));
+
+
+            if (!array_key_exists("achievements", $user)) {
+                $user["achievements"] = array();
+            }
+
+            if (!array_key_exists("lessonList", $user["achievements"])) {
+                $user["achievements"]["lessonList"] = array();
+            }
+
+
+            array_push($user["achievements"]["lessonList"], $unfinished);
+            UserRepository::insertOrUpdate($user);
 
 
             $response = $response->withHeader('Content-Type', 'application/json');
-            $response->getBody()->write("todo evaluate and result");
+            $response->getBody()->write(json_encode($unfinished));
             return $response;
         })->addMiddleware(new JwtMiddleware());
 

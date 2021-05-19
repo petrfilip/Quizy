@@ -24,13 +24,14 @@ final class ExamRepository
         return self::getDataStore()->updateOrInsert($data);
     }
 
-    public static function findUnfinishedByUser($type, $examId, $userId)
+    public static function findUnfinishedExamByUser($type, $examId, $userId): array
     {
-        $typeCondition = ["type", "=", $type];
-        $userCondition = ["userId", "=", $userId];
-        $examCondition = ["examId", "=", $examId];
-        $allConditions = [$userCondition, "AND", $examCondition, "AND", $typeCondition];
-//        print_r(json_encode($allConditions));
-        return self::getDataStore()->findBy($allConditions);
+        return  self::getDataStore()->createQueryBuilder()
+            ->where(["type", "=", $type])
+            ->where(["userId", "=", $userId])
+            ->where(["examId", "=", $examId])
+            ->where(["finishedAt", "=", null])
+            ->getQuery()
+            ->first();
     }
 }

@@ -1,6 +1,6 @@
 import './App.css';
 import LessonPage from "./components/lesson/LessonPage";
-import { BrowserRouter as Router, Route, Switch, useParams } from "react-router-dom";
+import { BrowserRouter as Router, Redirect, Route, Switch, useParams } from "react-router-dom";
 import LessonItem from "./components/lesson/LessonItem";
 import Navbar from "./components/layout/Navbar";
 import HomeIcon from "@material-ui/icons/Home";
@@ -97,6 +97,9 @@ function App() {
               <Route path="/login">
                 <Login/>
               </Route>
+              <Route path="/logout">
+                <Logout/>
+              </Route>
               <Route path="/">
                 <Dashboard/>
               </Route>
@@ -118,6 +121,12 @@ function LessonItemPage() {
 function CourseItemPage() {
   let { slug } = useParams();
   return <><CourseItem slug={slug}/></>;
+}
+
+function Logout() {
+  const { removeTokens } = useAuth()
+  removeTokens()
+  return <Redirect to="/"/>;
 }
 
 export default App;
