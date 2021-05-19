@@ -6,24 +6,18 @@ import QuizProgress from "./QuizProgress";
 import Paging from "../Paging";
 import { Container, Paper, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
+import { useAuth } from "../layout/AuthContext";
+import { useSnackbar } from "notistack";
 
-export default function ExamQuiz({ quizData }) {
+export default function ExamQuiz({ lesson }) {
+
 
   const [examResult, setExamResult] = useState();
-
-  useEffect(() => {
-    const quiz = quizData.map((item, index) => {
-      item.correct = undefined
-      item.index = index;
-      return item;
-    })
-
-    setQuizItems([...quiz])
-  }, [])
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState([])
   const [quizItems, setQuizItems] = useState([])
+  const { enqueueSnackbar } = useSnackbar()
+  const { token } = useAuth();
 
   const onAnswerSubmitHandler = (question, answer, isCorrect) => {
     const answerQuestion = {
@@ -85,6 +79,34 @@ export default function ExamQuiz({ quizData }) {
     </Container>
   )
 
-  return quizItems.length === currentQuestionIndex ? resultPage : questionPage
+
+  const getExamData = () => {
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${lesson.slug}/exam`, {
+      method: 'get', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Authorization': 'Bearer ' + token
+      },
+    }).then(r => r.json())
+      .then(json => {
+        setQuizItems(json)
+      })
+      .catch(() => {
+        enqueueSnackbar('Error when getting data', { variant: "error" });
+      })
+      .finally(() => {
+      });
+  }
+
+  const confirmStartPage = (
+    <Container maxWidth="md" style={{ minHeight: '500px' }}>
+      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
+        <Paper>
+          <Typography variant={"h2"} component={"button"} onClick={getExamData}>Start you exam</Typography>
+        </Paper>
+      </Container>
+    </Container>
+  )
+
+  return quizItems.length ===0 ? confirmStartPage : (quizItems.length === currentQuestionIndex ? resultPage : questionPage)
 }
 

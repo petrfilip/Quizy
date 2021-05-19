@@ -11,12 +11,15 @@ import CoursePage from "./components/course/CoursePage";
 import Profile from "./components/user/Profile";
 import Dashboard from "./components/layout/Dashboard";
 import CourseItem from "./components/course/CourseItem";
+import { useAuth } from "./components/layout/AuthContext";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import Login from "./components/layout/Login";
 
 function App() {
 
-  // const { user } = useAuth()
+  const { user } = useAuth()
 
-  const nav = [
+  const nav = user ? [
     {
       title: "Dashboard",
       to: "/",
@@ -32,17 +35,40 @@ function App() {
       to: "/courses",
       icon: <ViewComfyIcon/>
     },
-    // {
-    //   title: "user.user_mail",
-    //   to: "/profile",
-    //   icon: <AccountCircleIcon/>
-    // },
+    {
+      title: user.user_mail,
+      to: "/profile",
+      icon: <AccountCircleIcon/>
+    },
     {
       title: "",
       to: "/logout",
       icon: <ExitToAppIcon/>
     }
+  ] : [
+    {
+      title: "Dashboard",
+      to: "/",
+      icon: <HomeIcon/>
+    },
+    {
+      title: "Lessons",
+      to: "/lessons",
+      icon: <MenuBookIcon/>
+    },
+    {
+      title: "Courses",
+      to: "/courses",
+      icon: <ViewComfyIcon/>
+    },
+    {
+      title: "Log in",
+      to: "/login",
+      icon: <AccountCircleIcon/>
+    },
   ]
+
+
 
   return (
     <div className="App">
@@ -51,10 +77,6 @@ function App() {
       <Router>
         <div>
           <Navbar items={nav}/>
-
-
-          {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
           <div className={"page-content"}>
             <Switch>
               <Route path="/lessons/:slug">
@@ -71,6 +93,9 @@ function App() {
               </Route>
               <Route path="/profile">
                 <Profile/>
+              </Route>
+              <Route path="/login">
+                <Login/>
               </Route>
               <Route path="/">
                 <Dashboard/>

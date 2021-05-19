@@ -13,6 +13,7 @@ require __DIR__ . './../src/Middleware/CorsMiddleware.php';
 require __DIR__ . './../src/Middleware/JwtMiddleware.php';
 
 require __DIR__ . '/../repository/DatabaseManager.php';
+require __DIR__ . '/../repository/exam-repository.php';
 require __DIR__ . '/../repository/course-repository.php';
 require __DIR__ . '/../repository/media-repository.php';
 require __DIR__ . '/../repository/lesson-repository.php';

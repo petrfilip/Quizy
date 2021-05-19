@@ -20,7 +20,7 @@ function AuthProvider({ children }) {
     })
   }
 
-  const [authTokens, setAuthTokens] = useState();
+  const [authTokens, setAuthTokens] = useState(localStorage.getItem("tokens"));
 
   const [state, setState] = useState({
     status: 'pending'
@@ -34,7 +34,7 @@ function AuthProvider({ children }) {
         status: 'success',
         error: null,
         user: user,
-        token: authTokens,
+        token: data,
         setTokens,
         removeTokens
       }

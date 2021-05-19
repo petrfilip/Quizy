@@ -3,10 +3,17 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from "./components/layout/AuthContext";
+import { SnackbarProvider } from "notistack";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SnackbarProvider maxSnack={5}>
+
+      <AuthProvider>
+        <App/>
+      </AuthProvider>
+    </SnackbarProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

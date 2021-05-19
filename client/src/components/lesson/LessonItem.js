@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import Skeleton from '@material-ui/lab/Skeleton';
 import ExamQuiz from "../quiz/ExamQuiz";
+import { useAuth } from "../layout/AuthContext";
 
 export default function LessonItem({ slug }) {
 
@@ -18,6 +19,8 @@ export default function LessonItem({ slug }) {
   const [error, setError] = useState()
   const history = useHistory();
   const location = useLocation();
+  const { user } = useAuth()
+
 
   useLayoutEffect(() => {
 
@@ -84,11 +87,15 @@ export default function LessonItem({ slug }) {
         <Grid item xs={6}>
           <OutlinedCard
             content={<Typography>Exam</Typography>}
-            action={<Button component={RouterLink}
+            action={user ? <Button component={RouterLink}
                             to={`${url}/exam`}
                             color={"secondary"}
-                            startIcon={<DoubleArrowIcon/>}
-            />}
+                            startIcon={<DoubleArrowIcon/>}/> :
+              <Button component={RouterLink}
+                      to={`/login`}
+                      color={"primary"}
+                      startIcon={<DoubleArrowIcon/>}>Log in</Button>
+            }
           />
         </Grid>
         <Grid item xs={6}>
@@ -122,7 +129,7 @@ export default function LessonItem({ slug }) {
         {data.questions && <Quiz quizData={data.questions}/>}
       </Route>
       <Route path={`${path}/exam`}>
-        {data.questions && <ExamQuiz quizData={data.questions}/>}
+        {data.questions && <ExamQuiz lesson={data}/>}
       </Route>
     </Switch>
   </>
