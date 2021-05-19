@@ -35,6 +35,16 @@ return function (App $app) {
 
         //todo /exam/inProgress -> will cause force test render
 
+        function seeded_shuffle(array &$items, $seed = false)
+        {
+            $items = array_values($items);
+            mt_srand($seed ? $seed : time());
+            for ($i = count($items) - 1; $i > 0; $i--) {
+                $j = mt_rand(0, $i);
+                list($items[$i], $items[$j]) = array($items[$j], $items[$i]);
+            }
+        }
+
         $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
             $data = LessonRepository::getBySlug($args["slug"]);
 
@@ -65,9 +75,52 @@ return function (App $app) {
         $group->post('/{slug}/exam', function (Request $request, Response $response, $args) {
             $data = LessonRepository::getBySlug($args["slug"]);
 
+            $finishedExam = $request->getParsedBody();
+            $userAnswers = $finishedExam["answers"];
+
+            $score = 0;
+
+            for ($i = 0; $i <= sizeOf($data["questions"]) - 1; $i++) {
+                /**
+                 * pick one
+                 */
+                if ($data["questions"][$i]["questionType"] === "pickOne") {
+                    if ($data["questions"][$i]["correct"] == $userAnswers[$i]["answer"]["index"]) {
+                        $score++;
+                        continue;
+                    }
+                }
+
+                /**
+                 * pick multiple
+                 */
+                if ($data["questions"][$i]["questionType"] === "pickMultiple") {
+                    $normalizedArray = array();
+                    for ($ni = 0; $ni <= sizeOf($userAnswers[$i]["answer"]) - 1; $ni++) {
+                        array_push($normalizedArray, $userAnswers[$i]["answer"][$ni]["checkedItem"]["index"]);
+                    }
+
+                    $normalizedArray = array_values($normalizedArray);
+                    if ($data["questions"][$i]["correct"] == $normalizedArray) {
+                        $score++;
+                        continue;
+                    }
+                }
+
+                /**
+                 * fill text exactly
+                 */
+                if ($data["questions"][$i]["questionType"] === "fillTextExactly") {
+                    if ($data["questions"][$i]["correct"] === $userAnswers[$i]["answer"]) {
+                        $score++;
+                        continue;
+                    }
+                }
+            }
+
 
             $unfinished = ExamRepository::findUnfinishedExamByUser("LESSON", intval($data["_id"]), intval($request->getAttribute("userId")));
-            $unfinished["score"] = 0;
+            $unfinished["score"] = $score;
             $unfinished["finishedAt"] = Utils::getCurrentDateTime();
             $unfinished = ExamRepository::insertOrUpdate($unfinished);
 
@@ -106,7 +159,8 @@ return function (App $app) {
 
         $group->post('', function (Request $request, Response $response, $args) {
             $dataToInsert = $request->getParsedBody();
-            $inserted = LessonRepository::insertOrUpdate($dataToInsert);
+            $userId = $request->getAttribute("userId");
+            $inserted = LessonRepository::insertOrUpdateVersionedRecord($dataToInsert, $userId);
             $payload = json_encode($inserted);
 
             $response = $response->withHeader('Content-Type', 'application/json');

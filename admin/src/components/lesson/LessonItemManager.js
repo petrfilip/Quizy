@@ -77,8 +77,7 @@ export default function LessonItemManager({ slug }) {
         if (!data._id) {
           history.push(json.slug)
         }
-        // setData(json) // todo add revision to entity
-
+        setData(json)
       }).then(() => {
       setIsPersisted(true)
       enqueueSnackbar('Lesson persisted', { variant: "success" });

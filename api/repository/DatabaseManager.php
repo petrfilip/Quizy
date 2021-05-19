@@ -21,9 +21,9 @@ final class DatabaseManager
     static public function getById($collectionStoreName, $id)
     {
         $collectionStore = DatabaseManager::getDataStore($collectionStoreName);
-        $loadedArray = $collectionStore->where("_id", "=", $id)->fetch();
+        $loadedArray = $collectionStore->findById($id);
         if (count($loadedArray)) {
-            return $loadedArray[0];
+            return $loadedArray;
         } else {
             return null;
         }
@@ -31,7 +31,7 @@ final class DatabaseManager
 
     static public function updateById($collectionStore, $data)
     {
-        $isUpdated = $collectionStore->where("_id", "=", $data["_id"])->update($data);
+        $isUpdated = $collectionStore->update($data);
         if (!$isUpdated) {
             throw new Exception('Unable to update data.');
         }
@@ -40,7 +40,7 @@ final class DatabaseManager
     static public function deleteById($collectionName, $id)
     {
         $collectionStore = DatabaseManager::getDataStore($collectionName);
-        $isDeleted = $collectionStore->where("_id", "=", $id)->delete();
+        $isDeleted = $collectionStore->deleteById($id);
         if (!$isDeleted) {
             throw new Exception('Unable to delete data.');
         }
@@ -63,6 +63,10 @@ final class DatabaseManager
         }
 
         $loadVersion = DatabaseManager::getById($collectionName, $id);
+
+        if ($data["sys"]["version"] != $loadVersion["sys"]["version"]) {
+            throw new Exception("Revision error");
+        }
 
         $data["sys"]["version"] = $data["sys"]["version"] + 1;
         $data["sys"]["updated"] = Utils::getCurrentDateTime();
@@ -94,6 +98,16 @@ final class DatabaseManager
             DatabaseManager::createAuditVersion($collectionName, $loadVersion);
         }
         return $loadVersion;
+    }
+
+    static public function insertOrUpdateVersionedRecord($collectionName, $data, $userId)
+    {
+        $id = $data["_id"];
+        if (empty($id)) {
+            return self::insertNewVersionedRecord($collectionName, $data, $userId);
+        } else {
+            return self::updateVersionedRecord($collectionName, $data, $userId);
+        }
     }
 
     static public function insertNewVersionedRecord($collectionName, $data, $userId)

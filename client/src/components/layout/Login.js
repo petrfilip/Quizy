@@ -59,7 +59,6 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [isPending, setIsPending] = useState(true)
   const { enqueueSnackbar } = useSnackbar();
-
   const { setTokens } = useAuth();
 
   useLayoutEffect(() => {

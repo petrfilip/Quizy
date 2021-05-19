@@ -7,6 +7,7 @@ use SleekDB\Store;
 final class LessonRepository
 {
     const REPOSITORY_NAME = 'quiz';
+
     static public function getDataStore(): Store
     {
         return new Store(self::REPOSITORY_NAME, DATABASE_ROOT);
@@ -34,9 +35,9 @@ final class LessonRepository
         return self::getDataStore()->deleteById($id);
     }
 
-    static public function insertOrUpdate($data): array
+    static public function insertOrUpdateVersionedRecord($data, $userId): array
     {
         $data = (array)$data;
-        return self::getDataStore()->updateOrInsert($data);
+        return DatabaseManager::insertOrUpdateVersionedRecord(self::REPOSITORY_NAME, $data, $userId);
     }
 }

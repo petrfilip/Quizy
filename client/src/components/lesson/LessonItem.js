@@ -9,7 +9,10 @@ import Button from "@material-ui/core/Button";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import Skeleton from '@material-ui/lab/Skeleton';
 import ExamQuiz from "../quiz/ExamQuiz";
-import { useAuth } from "../layout/AuthContext";
+import useUser from "../layout/UserHook";
+import GradeIcon from "@material-ui/icons/Grade";
+import EventAvailableIcon from "@material-ui/icons/EventAvailable";
+import DoneIcon from '@material-ui/icons/Done';
 
 export default function LessonItem({ slug }) {
 
@@ -19,18 +22,11 @@ export default function LessonItem({ slug }) {
   const [error, setError] = useState()
   const history = useHistory();
   const location = useLocation();
-  const { user } = useAuth()
+  const { user } = useUser()
+  let { path, url } = useRouteMatch();
 
 
   useLayoutEffect(() => {
-
-    if (slug === "newQuiz") {
-      setData({
-        title: "New quiz"
-      })
-      setIsPending(false)
-      return
-    }
 
     fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${slug}`)
       .then(response => {
@@ -40,25 +36,12 @@ export default function LessonItem({ slug }) {
         throw new Error(`Unable to get data: ${response.statusText}`)
       })
       .then(json => {
-
         setData(json)
       })
       .catch((err) => setError(err.message))
       .finally(() => setIsPending(false))
 
   }, [slug])
-
-  const choiceQuiz = <div onClick={() => {
-    history.push(`${location.pathname}/lessons`)
-    setCurrentAction("quiz")
-  }}>Quiz</div>
-
-  const choiceFlashcards = <div onClick={() => {
-    history.push(`${location.pathname}/flashcards`)
-    setCurrentAction("flashcards")
-  }}>Flashcards</div>
-
-  let { path, url } = useRouteMatch();
 
   const choicer = <Container maxWidth="md" style={{ minHeight: '500px' }}>
     <Paper style={{ padding: "10px" }}>
@@ -86,11 +69,15 @@ export default function LessonItem({ slug }) {
         </Grid>
         <Grid item xs={6}>
           <OutlinedCard
-            content={<Typography>Exam</Typography>}
+            content={<>
+              <Typography>Exam</Typography>
+              <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{(user?.achievements?.lessonList.reverse().find(item => item.examId = data._id)?.finishedAt)}</Button>
+              <Button startIcon={<GradeIcon />} color={"primary"}>{JSON.stringify(user?.achievements?.lessonList.reverse().find(item => item.examId = data._id)?.score)}</Button>
+            </>}
             action={user ? <Button component={RouterLink}
                             to={`${url}/exam`}
                             color={"secondary"}
-                            startIcon={<DoubleArrowIcon/>}/> :
+                            startIcon={user ? <DoneIcon /> : <DoubleArrowIcon/>}/> :
               <Button component={RouterLink}
                       to={`/login`}
                       color={"primary"}

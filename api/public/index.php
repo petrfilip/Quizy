@@ -2,6 +2,7 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Log\LoggerInterface;
 use Slim\Exception\HttpNotFoundException;
 use Slim\Factory\AppFactory;
 
@@ -39,7 +40,8 @@ $app = AppFactory::create();
 $app->add(CorsMiddleware::class);
 
 $app->addBodyParsingMiddleware();
-$app->addErrorMiddleware(true, true, true);
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+
 $app->addRoutingMiddleware();
 
 

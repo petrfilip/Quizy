@@ -8,6 +8,7 @@ import { Container, Paper, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useAuth } from "../layout/AuthContext";
 import { useSnackbar } from "notistack";
+import useUser from "../layout/UserHook";
 
 export default function ExamQuiz({ lesson }) {
 
@@ -18,6 +19,7 @@ export default function ExamQuiz({ lesson }) {
   const [metadata, setMetadata] = useState({})
   const { enqueueSnackbar } = useSnackbar()
   const { token } = useAuth();
+  const {refreshUser} = useUser();
 
   const onAnswerSubmitHandler = (question, answer, isCorrect) => {
     const answerQuestion = {
@@ -47,6 +49,7 @@ export default function ExamQuiz({ lesson }) {
     }).then(r => r.json())
       .then(json => {
         setMetadata(json)
+        refreshUser()
       })
       .catch(() => {
         enqueueSnackbar('Error when getting data', { variant: "error" });

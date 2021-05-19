@@ -9,6 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import { useAuth } from "../layout/AuthContext";
 import { useSnackbar } from "notistack";
 import List from "../layout/List";
+import useUser from "../layout/UserHook";
 
 const defaultGridItemSizes = {
   xs: 12,
@@ -41,30 +42,8 @@ const useStyles = makeStyles((theme) => ({
 function Profile(props) {
   const classes = useStyles();
 
-  const { enqueueSnackbar } = useSnackbar()
-  const { token } = useAuth();
-  const [data, setData] = useState([])
-  const { user } = useAuth()
-
-
-  useLayoutEffect(()=>{
-    fetch(`${process.env.REACT_APP_BASE_URI}/users/${user.user_id}`, {
-      method: 'get', // *GET, POST, PUT, DELETE, etc.
-      headers: {
-        'Authorization': 'Bearer ' + token
-      },
-    }).then(r => r.json())
-      .then(json => {
-        setData(json)
-      })
-      .catch(() => {
-        enqueueSnackbar('Error when getting data', { variant: "error" });
-      })
-      .finally(() => {
-      });
-  }, [])
-
-
+  const { user: userToken } = useAuth()
+  const { user: data } = useUser()
 
   return (
     <Container maxWidth="xs">
@@ -79,9 +58,9 @@ function Profile(props) {
           Profile
         </Typography>
 
-        {Object.entries(user).map(([key, value]) => {
+        {Object.entries(userToken).map(([key, value]) => {
           return <Grid container>
-            <Grid item xs={6} style={{textAlign: "right", paddingRight: "10px"}}>
+            <Grid item xs={6} style={{ textAlign: "right", paddingRight: "10px" }}>
               <strong>{key}:</strong>
             </Grid>
             <Grid item xs={6}>
