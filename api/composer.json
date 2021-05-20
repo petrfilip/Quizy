@@ -1,0 +1,10 @@
+{
+    "require": {
+        "firebase/php-jwt": "v5.2.1",
+        "slim/slim": "4.*",
+        "slim/psr7": "^1.4",
+        "rakibtg/sleekdb": "^2.10",
+        "phpmailer/phpmailer": "^6.4",
+        "php-di/slim-bridge": "^3.1"
+    }
+}

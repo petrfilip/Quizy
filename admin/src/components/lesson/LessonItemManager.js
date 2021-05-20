@@ -72,8 +72,15 @@ export default function LessonItemManager({ slug }) {
         'Authorization': 'Bearer ' + token
       },
       body: JSON.stringify(data) // body data type must match "Content-Type" header
-    }).then(r => r.json())
+    })
+      .then(response => {
+        if (response.ok) {
+          return response.json()
+        }
+        throw response;
+      })
       .then(json => {
+        debugger
         if (!data._id) {
           history.push(json.slug)
         }
@@ -82,8 +89,11 @@ export default function LessonItemManager({ slug }) {
       setIsPersisted(true)
       enqueueSnackbar('Lesson persisted', { variant: "success" });
     })
-      .catch(() => {
-        enqueueSnackbar('Lesson not persisted', { variant: "error" });
+      .catch((err) => {
+        err.json().then( errorMessage => {
+          enqueueSnackbar(`Lesson not persisted :: ${errorMessage.error}`, { variant: "error" })
+        })
+        ;
 
       })
       .finally(() => {
