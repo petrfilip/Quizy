@@ -2,7 +2,7 @@ import FlashCards from "../flashcards/FlashCards";
 import { Link as RouterLink, Route, Switch, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
 import Quiz from "../quiz/Quiz";
-import { Card, CardActions, Container, Grid, Paper } from "@material-ui/core";
+import { Card, CardActions, Container, Grid, makeStyles, Paper } from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -14,7 +14,13 @@ import GradeIcon from "@material-ui/icons/Grade";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import DoneIcon from '@material-ui/icons/Done';
 
+const useStyles = makeStyles((theme) => ({
+  info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
+}));
+
+
 export default function LessonItem({ slug }) {
+  const classes = useStyles();
 
   const [currentAction, setCurrentAction] = useState("choice")
   const [data, setData] = useState({})
@@ -24,7 +30,6 @@ export default function LessonItem({ slug }) {
   const location = useLocation();
   const { user } = useUser()
   let { path, url } = useRouteMatch();
-
 
   useLayoutEffect(() => {
 
@@ -47,10 +52,12 @@ export default function LessonItem({ slug }) {
     return user?.achievements?.lessonList.find(item => item.examId === data._id);
   }
 
-  const choicer = <Container maxWidth="md" style={{ minHeight: '500px' }}>
-    <Paper style={{ padding: "10px" }}>
+  const choicer = <Container maxWidth="md" style={{ marginTop: "20px" }}>
+    <Container className={classes.info}>Lesson</Container>
+    <Paper style={{ padding: "20px", minHeight: '500px' }}>
 
-      <Grid container spacing={2}>
+      <Typography variant={"h4"} >{data.title || <Skeleton/>}</Typography>
+      <Grid style={{marginTop: "10px"}} container spacing={2}>
         {data.flashcards && <Grid item xs={6}>
           <OutlinedCard
             content={<Typography>FlashCards</Typography>}
@@ -79,9 +86,9 @@ export default function LessonItem({ slug }) {
               {getAchievementItem() && <Button startIcon={<GradeIcon/>} color={"primary"}>{JSON.stringify(getAchievementItem()?.score)}</Button>}
             </>}
             action={user?.mail ? <Button component={RouterLink}
-                            to={`${url}/exam`}
-                            color={"secondary"}
-                            startIcon={getAchievementItem() ? <DoneIcon /> : <DoubleArrowIcon/>}/> :
+                                         to={`${url}/exam`}
+                                         color={"secondary"}
+                                         startIcon={getAchievementItem() ? <DoneIcon/> : <DoubleArrowIcon/>}/> :
               <Button component={RouterLink}
                       to={`/login`}
                       color={"primary"}
@@ -100,15 +107,10 @@ export default function LessonItem({ slug }) {
           />
         </Grid>
       </Grid>
-
     </Paper>
   </Container>
 
   return <>
-    <Container maxWidth="md">
-      <Typography variant={"h4"}>{data.title || <Skeleton/>}</Typography>
-    </Container>
-
     <Switch>
       <Route exact path={path}>
         {choicer}

@@ -4,11 +4,15 @@ import QuizScore from "./QuizScore";
 import { Timer } from "../Timer";
 import QuizProgress from "./QuizProgress";
 import Paging from "../Paging";
-import { Container, Paper, Typography } from "@material-ui/core";
+import { Container, makeStyles, Paper, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useAuth } from "../layout/AuthContext";
 import { useSnackbar } from "notistack";
 import useUser from "../layout/UserHook";
+
+const useStyles = makeStyles((theme) => ({
+  info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
+}));
 
 export default function ExamQuiz({ lesson }) {
 
@@ -19,7 +23,7 @@ export default function ExamQuiz({ lesson }) {
   const [metadata, setMetadata] = useState({})
   const { enqueueSnackbar } = useSnackbar()
   const { token } = useAuth();
-  const {refreshUser} = useUser();
+  const { refreshUser } = useUser();
 
   const onAnswerSubmitHandler = (question, answer, isCorrect) => {
     const answerQuestion = {
@@ -45,7 +49,7 @@ export default function ExamQuiz({ lesson }) {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({metadata, answers: newAnswer})
+      body: JSON.stringify({ metadata, answers: newAnswer })
     }).then(r => r.json())
       .then(json => {
         setMetadata(json)
@@ -64,9 +68,9 @@ export default function ExamQuiz({ lesson }) {
   }
 
   const questionPage = (
-    <Container maxWidth="md" style={{ minHeight: '500px' }}>
+    < >
 
-      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
+      <Container maxWidth="md" style={{ marginTop: "20px" }}>
         <Paper>
           {quizItems[currentQuestionIndex] && <QuizItem
             key={`quizItem-${currentQuestionIndex}`}
@@ -80,23 +84,24 @@ export default function ExamQuiz({ lesson }) {
 
 
       <Container maxWidth="md" style={{
-        margin: "10px", alignItems: "center",
+        alignItems: "center",
         flexDirection: "row", display: "flex", justifyContent: "space-between",
       }}>
         <Timer/>
         <QuizProgress current={answers.length} total={quizItems.length}/>
       </Container>
-    </Container>
+    </>
   )
+  const classes = useStyles();
+
 
   const resultPage = (
-    <Container maxWidth="md" style={{ minHeight: '500px' }}>
-      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
-        <Paper>
-          <Typography variant={"h2"}>Your results: {examResult} {metadata.score}</Typography>
-          <Button>Go to profile</Button>
-        </Paper>
-      </Container>
+    <Container maxWidth="md" style={{ marginTop: "20px" }}>
+      <div className={classes.info}>Results</div>
+      <Paper style={{ padding: "20px", minHeight: '500px' }}>
+        <Typography variant={"h2"}>Your results: {examResult} {metadata.score}</Typography>
+        <Button>Go to profile</Button>
+      </Paper>
     </Container>
   )
 
@@ -119,12 +124,12 @@ export default function ExamQuiz({ lesson }) {
   }
 
   const confirmStartPage = (
-    <Container maxWidth="md" style={{ minHeight: '500px' }}>
-      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
-        <Paper>
-          <Typography variant={"h2"} component={"button"} onClick={getExamData}>Start you exam</Typography>
+    <Container maxWidth="md" style={{ marginTop: "20px" }}>
+      <div className={classes.info}>Are you ready?</div>
+      <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center"}}>
+
+          <Typography variant={"h2"} component={"button"} onClick={getExamData}>Start exam</Typography>
         </Paper>
-      </Container>
     </Container>
   )
 

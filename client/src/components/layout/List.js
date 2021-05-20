@@ -162,8 +162,8 @@ const defaultGridItemSizes = {
   xs: 12,
   sm: 6,
   md: 3,
-  lg: 2,
-  xl: 2
+  lg: 3,
+  xl: 3
 }
 
 export default function List({ columns = defaultEmptyColumns, data, component, gridSizes = defaultGridItemSizes }) {

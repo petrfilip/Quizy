@@ -1,6 +1,6 @@
 import { Link as RouterLink, useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
-import { Card, CardActions, Container, Divider, Grid, Paper } from "@material-ui/core";
+import { Card, CardActions, Container, Divider, Grid, makeStyles, Paper } from "@material-ui/core";
 import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
@@ -9,7 +9,12 @@ import Skeleton from '@material-ui/lab/Skeleton';
 import List from "../layout/List";
 import LessonItemCard from "../lesson/LessonItemCard";
 
+const useStyles = makeStyles((theme) => ({
+  info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
+}));
+
 export default function CourseItem({ slug }) {
+  const classes = useStyles();
 
   const [currentAction, setCurrentAction] = useState("choice")
   const [data, setData] = useState({})
@@ -43,23 +48,17 @@ export default function CourseItem({ slug }) {
 
   }, [slug])
 
-
   let { path, url } = useRouteMatch();
 
-
-
   return <>
-    <Container maxWidth="md">
-      <Typography variant={"h4"}>{data.title || <Skeleton/>}</Typography>
-    </Container>
-
-    <Container maxWidth="md" style={{ minHeight: '500px' }}>
-      <Paper style={{ padding: "10px" }}>
 
 
-        {data.description}
-        <Divider/>
-        {data.lessonList && <List data={data.lessonList} component={(item) => LessonItemCard(item, ()=>{})}/>}
+    <Container maxWidth="md" style={{ marginTop: "20px" }}>
+      <div className={classes.info}>Course</div>
+      <Paper style={{ padding: "20px", minHeight: '500px' }}>
+        <Typography variant={"h4"}>{data.description}</Typography>
+        {data.lessonList && <List data={data.lessonList} component={(item) => LessonItemCard(item, () => {
+        })}/>}
       </Paper>
     </Container>
 

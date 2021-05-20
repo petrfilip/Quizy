@@ -51,10 +51,10 @@ export default function Quiz({ quizData }) {
   }
 
   return (
-    <Container maxWidth="md" style={{ minHeight: '500px' }}>
+    <>
 
-      <Container maxWidth="md" style={{ minHeight: '500px', margin: "10px" }}>
-        <Paper>
+      <Container maxWidth="md" style={{ marginTop: "20px" }}>
+        <Paper style={{ minHeight: '500px' }}>
           {quizItems[currentQuestionIndex] && <QuizItem
             key={`quizItem-${currentQuestionIndex}`}
             question={quizItems[currentQuestionIndex]}
@@ -67,20 +67,21 @@ export default function Quiz({ quizData }) {
 
 
       <Container maxWidth="md" style={{
-        margin: "10px", alignItems: "center",
+        marginTop: "20px", alignItems: "center",
         flexDirection: "row", display: "flex", justifyContent: "space-between",
       }}>
-        <Timer/>
+        {/*<Timer/>*/}
         <QuizProgress current={answers.length} total={quizItems.length}/>
         <QuizScore score={getScore()} total={answers.length}/>
         <QuizScore score={getScore()} total={quizItems.length}/>
-      </Container><Container maxWidth="md" style={{ textAlign: "center", margin: "10px" }}>
-      <Paper>
-        <Paging paging={paging}/>
-        {/*<Button color={"primary"} fullWidth={true}>Odeslat hotový formulář</Button>*/}
-      </Paper>
-    </Container>
-    </Container>
+      </Container>
+      <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }}>
+        <Paper>
+          <Paging paging={paging}/>
+          {/*<Button color={"primary"} fullWidth={true}>Odeslat hotový formulář</Button>*/}
+        </Paper>
+      </Container>
+    </>
   )
 }
 

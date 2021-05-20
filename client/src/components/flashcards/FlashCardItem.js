@@ -1,10 +1,7 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import MarkdownPreview from "@uiw/react-markdown-preview";
-import "./FlashCardItem.css"
-import { Avatar, Container, Fab, makeStyles, Paper, Typography } from "@material-ui/core";
+import { Avatar, Container, makeStyles, Paper, Typography } from "@material-ui/core";
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import FlipCameraAndroidIcon from '@material-ui/icons/FlipCameraAndroid';
-import AddIcon from "@material-ui/icons/Add";
 import ReactCardFlip from 'react-card-flip';
 
 const useStyles = makeStyles((theme) => ({
