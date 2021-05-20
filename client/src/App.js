@@ -14,10 +14,11 @@ import CourseItem from "./components/course/CourseItem";
 import { useAuth } from "./components/layout/AuthContext";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Login from "./components/layout/Login";
+import useUser from "./components/layout/UserHook";
 
 function App() {
 
-  const { user } = useAuth()
+  const { user } = useUser()
 
   const nav = user ? [
     {
@@ -36,7 +37,7 @@ function App() {
       icon: <ViewComfyIcon/>
     },
     {
-      title: user.user_mail,
+      title: user.mail,
       to: "/profile",
       icon: <AccountCircleIcon/>
     },
@@ -125,7 +126,7 @@ function CourseItemPage() {
 
 function Logout() {
   const { removeTokens } = useAuth()
-  removeTokens()
+  removeTokens();
   return <Redirect to="/"/>;
 }
 

@@ -8,8 +8,14 @@ const useUser = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [data, setData] = useState(JSON.parse(localStorage.getItem("user") || "{}"))
 
-  console.log(JSON.stringify(localStorage.getItem("user")))
   const refreshUser = () => {
+
+    if (token == null) {
+      localStorage.removeItem("user");
+      setData(null)
+      return
+    }
+
     fetch(`${process.env.REACT_APP_BASE_URI}/users/${user.user_id}`, {
       method: 'get', // *GET, POST, PUT, DELETE, etc.
       headers: {
@@ -28,8 +34,8 @@ const useUser = () => {
   }
 
   useLayoutEffect(() => {
-    !data && refreshUser()
-  }, [])
+    (!data?.mail || !token) && refreshUser()
+  }, [token])
 
   return ({ user: data, refreshUser });
 };

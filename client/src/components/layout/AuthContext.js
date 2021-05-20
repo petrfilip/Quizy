@@ -9,12 +9,13 @@ function AuthProvider({ children }) {
 
   const removeTokens = () => {
     localStorage.removeItem("tokens");
+    setAuthTokens(null)
 
     setState({
       status: 'success',
       error: null,
       user: null,
-      token: authTokens,
+      token: null,
       setTokens,
       removeTokens
     })

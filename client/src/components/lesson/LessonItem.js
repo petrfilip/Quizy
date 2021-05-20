@@ -74,11 +74,11 @@ export default function LessonItem({ slug }) {
         <Grid item xs={6}>
           <OutlinedCard
             content={<>
-              <Typography>Exam </Typography>
+              <Typography>Exam</Typography>
               {getAchievementItem() && <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{(getAchievementItem()?.finishedAt)}</Button>}
               {getAchievementItem() && <Button startIcon={<GradeIcon/>} color={"primary"}>{JSON.stringify(getAchievementItem()?.score)}</Button>}
             </>}
-            action={user ? <Button component={RouterLink}
+            action={user?.mail ? <Button component={RouterLink}
                             to={`${url}/exam`}
                             color={"secondary"}
                             startIcon={getAchievementItem() ? <DoneIcon /> : <DoubleArrowIcon/>}/> :

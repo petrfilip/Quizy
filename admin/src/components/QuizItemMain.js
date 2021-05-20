@@ -34,7 +34,6 @@ export default function QuizItemMain({ data, onChangeCallback }) {
     <MDEditor
       value={data.description || ""}
       onChange={(src) => {
-        debugger
         handleInputChange({
             target: {
               value: src,
