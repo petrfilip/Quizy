@@ -43,6 +43,10 @@ export default function LessonItem({ slug }) {
 
   }, [slug])
 
+  function getAchievementItem() {
+    return user?.achievements?.lessonList.find(item => item.examId === data._id);
+  }
+
   const choicer = <Container maxWidth="md" style={{ minHeight: '500px' }}>
     <Paper style={{ padding: "10px" }}>
 
@@ -70,14 +74,14 @@ export default function LessonItem({ slug }) {
         <Grid item xs={6}>
           <OutlinedCard
             content={<>
-              <Typography>Exam</Typography>
-              <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{(user?.achievements?.lessonList.reverse().find(item => item.examId = data._id)?.finishedAt)}</Button>
-              <Button startIcon={<GradeIcon />} color={"primary"}>{JSON.stringify(user?.achievements?.lessonList.reverse().find(item => item.examId = data._id)?.score)}</Button>
+              <Typography>Exam </Typography>
+              {getAchievementItem() && <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{(getAchievementItem()?.finishedAt)}</Button>}
+              {getAchievementItem() && <Button startIcon={<GradeIcon/>} color={"primary"}>{JSON.stringify(getAchievementItem()?.score)}</Button>}
             </>}
             action={user ? <Button component={RouterLink}
                             to={`${url}/exam`}
                             color={"secondary"}
-                            startIcon={user ? <DoneIcon /> : <DoubleArrowIcon/>}/> :
+                            startIcon={getAchievementItem() ? <DoneIcon /> : <DoubleArrowIcon/>}/> :
               <Button component={RouterLink}
                       to={`/login`}
                       color={"primary"}

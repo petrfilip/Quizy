@@ -65,7 +65,7 @@ final class DatabaseManager
         $loadVersion = DatabaseManager::getById($collectionName, $id);
 
         if ($data["sys"]["version"] != $loadVersion["sys"]["version"]) {
-            throw new Exception("Revision error");
+            throw new Exception("Version error - the record has been modified from another source!");
         }
 
         $data["sys"]["version"] = $data["sys"]["version"] + 1;

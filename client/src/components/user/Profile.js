@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from 'react';
+import React from 'react';
 import { Paper, Typography } from "@material-ui/core";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -7,9 +7,9 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import { useAuth } from "../layout/AuthContext";
-import { useSnackbar } from "notistack";
 import List from "../layout/List";
 import useUser from "../layout/UserHook";
+import AchievementCard from "./AchievementCard";
 
 const defaultGridItemSizes = {
   xs: 12,
@@ -72,12 +72,16 @@ function Profile(props) {
 
       </Paper>
 
-      {data?.achievements?.lessonList.length && <List gridSizes={defaultGridItemSizes} data={data.achievements.lessonList || []} component={(item) => {
-        return <div>{JSON.stringify(item)}</div>
+      {data?.achievements?.lessonList.length && <List gridSizes={defaultGridItemSizes} data={reverse(data.achievements.lessonList) || []} component={(item) => {
+        return <AchievementCard item={item} />
       }}/>}
 
     </Container>
   );
+}
+
+function reverse(array){
+  return array.map((item,idx) => array[array.length-1-idx])
 }
 
 export default Profile;

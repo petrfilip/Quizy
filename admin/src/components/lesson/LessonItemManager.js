@@ -80,7 +80,6 @@ export default function LessonItemManager({ slug }) {
         throw response;
       })
       .then(json => {
-        debugger
         if (!data._id) {
           history.push(json.slug)
         }
