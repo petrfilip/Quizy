@@ -1,11 +1,11 @@
 import React from "react";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
-import { FormControlLabel, Paper, Switch, TextField, Typography } from "@material-ui/core";
+import { FormControlLabel, FormHelperText, Switch, TextField, Typography } from "@material-ui/core";
 import UploadImageArea from "./file-manager/UploadImageArea";
 import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
+import * as immutable from 'object-path-immutable'
 
 export default function QuizItemMain({ data, onChangeCallback }) {
 
@@ -14,7 +14,7 @@ export default function QuizItemMain({ data, onChangeCallback }) {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    onChangeCallback({ ...data, [name]: value });
+    onChangeCallback(immutable.set(data, name, value));
   }
 
   const onSaveCallbackHandler = (file) => {
@@ -59,6 +59,8 @@ export default function QuizItemMain({ data, onChangeCallback }) {
         <Grid container direction={'column'} spacing={3}>
           <Grid item>
             <TextField
+              onChange={handleInputChange}
+              name={"examParameters.minimalScore"}
               helperText={"Minimal score for success"}
               variant={"outlined"}
               label="Minimal score"
@@ -74,35 +76,44 @@ export default function QuizItemMain({ data, onChangeCallback }) {
           </Grid>
           <Grid item>
             <TextField
+              name={"examParameters.questionsInExam"}
+              onChange={handleInputChange}
               helperText={"How many questions will be generated in the exam"}
               variant={"outlined"}
               label="Questions in exams"
               type="number"
-              defaultValue={data?.questions?.length || 0}
+              defaultValue={data?.questions?.length || 1}
               fullWidth={true}
               InputProps={{
                 inputProps: {
-                  max: data?.questions?.length || 0, min: 0
+                  max: data?.questions?.length || 1, min: 1
                 }
               }}
             />
           </Grid>
           <Grid item>
+
             <FormControlLabel
               control={
                 <Switch
+                  onChange={handleInputChange}
                   checked={"checked"}
-                  name="checkedB"
+                  name="examParameters.minimalScore"
                   color="primary"
                 />
               }
 
-              label="Repeatable"
+              label={<Typography>Repeatable</Typography>}
             />
+            <FormHelperText>Can be done multiple times</FormHelperText>
+
           </Grid>
         </Grid>
       </Grid>
     </Grid>
 
+    <pre style={{fontSize: "8px"}}>
+      {JSON.stringify(data, null, 2)}
+    </pre>
   </div>
 }
