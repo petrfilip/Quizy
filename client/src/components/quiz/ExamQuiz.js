@@ -4,7 +4,7 @@ import QuizScore from "./QuizScore";
 import { Timer } from "../Timer";
 import QuizProgress from "./QuizProgress";
 import Paging from "../Paging";
-import { Container, makeStyles, Paper, Typography } from "@material-ui/core";
+import { Box, Container, makeStyles, Paper, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { useAuth } from "../layout/AuthContext";
 import { useSnackbar } from "notistack";
@@ -94,7 +94,6 @@ export default function ExamQuiz({ lesson }) {
   )
   const classes = useStyles();
 
-
   const resultPage = (
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
       <div className={classes.info}>Results</div>
@@ -126,10 +125,16 @@ export default function ExamQuiz({ lesson }) {
   const confirmStartPage = (
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
       <div className={classes.info}>Are you ready?</div>
-      <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center"}}>
+      <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center" }}>
 
-          <Typography variant={"h2"} component={"button"} onClick={getExamData}>Start exam</Typography>
-        </Paper>
+        {lesson?.examParameters && <>
+          <Box>Minimal score {lesson.examParameters.minimalScore}</Box>
+          <Box>Count of questions {lesson.examParameters.questionsInExam}</Box>
+          <Box>Time limit {lesson.examParameters.timeLimit}</Box>
+          </>
+          }
+        <Typography variant={"h2"} component={"button"} onClick={getExamData}>Start exam</Typography>
+      </Paper>
     </Container>
   )
 

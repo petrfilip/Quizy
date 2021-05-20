@@ -1,11 +1,13 @@
 import React from "react";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
-import { FormControlLabel, FormHelperText, Switch, TextField, Typography } from "@material-ui/core";
+import { Button, FormControlLabel, FormHelperText, Switch, TextField, Typography } from "@material-ui/core";
 import UploadImageArea from "./file-manager/UploadImageArea";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import * as immutable from 'object-path-immutable'
+import IconButton from "@material-ui/core/IconButton";
+import ClearIcon from "@material-ui/icons/Clear";
 
 export default function QuizItemMain({ data, onChangeCallback }) {
 
@@ -15,6 +17,15 @@ export default function QuizItemMain({ data, onChangeCallback }) {
     const name = target.name;
 
     onChangeCallback(immutable.set(data, name, value));
+  }
+
+  const setValue = (path, value) => {
+    handleInputChange({
+      target: {
+        value: value,
+        name: path
+      }
+    })
   }
 
   const onSaveCallbackHandler = (file) => {
@@ -91,6 +102,23 @@ export default function QuizItemMain({ data, onChangeCallback }) {
               }}
             />
           </Grid>
+          {/*<Grid item>*/}
+          {/*  <TextField*/}
+          {/*    name={"examParameters.timeLimit"}*/}
+          {/*    onChange={handleInputChange}*/}
+          {/*    helperText={"Time limit for exam"}*/}
+          {/*    variant={"outlined"}*/}
+          {/*    label="Time limit (in minutes)"*/}
+          {/*    type="number"*/}
+          {/*    defaultValue={data?.questions?.length || 1}*/}
+          {/*    fullWidth={true}*/}
+          {/*    InputProps={{*/}
+          {/*      inputProps: {*/}
+          {/*        max: data?.questions?.length || 1, min: 1*/}
+          {/*      }*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Grid>*/}
           <Grid item>
 
             <FormControlLabel
@@ -105,14 +133,55 @@ export default function QuizItemMain({ data, onChangeCallback }) {
 
               label={<Typography>Repeatable</Typography>}
             />
-            <FormHelperText>Can be done multiple times</FormHelperText>
+            <FormHelperText>Can be exam executed multiple times</FormHelperText>
+
+          </Grid>
+          <Grid item>
+            <TextField
+              onChange={handleInputChange}
+              helperText={"When the exam will be available"}
+              name="examParameters.availableFrom"
+              id="datetime-local"
+              label={"Available from"}
+              type="datetime-local"
+              defaultValue="2017-05-24T10:30"
+              InputProps={{
+                endAdornment: (
+                  <IconButton size={"small"}>
+                    <ClearIcon/>
+                  </IconButton>
+                )
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <TextField
+              onChange={handleInputChange}
+              helperText={"When the exam will be hidden"}
+              name="examParameters.availableTo"
+              id="datetime-local"
+              label="Available to"
+              type="datetime-local"
+              defaultValue={null}
+              value={data.examParameters.availableTo}
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                endAdornment: (
+                  <IconButton size={"small"} onClick={() => setValue("examParameters.availableTo", null)}>
+                    <ClearIcon/>
+                  </IconButton>
+                )
+              }}
+            />
 
           </Grid>
         </Grid>
       </Grid>
     </Grid>
 
-    <pre style={{fontSize: "8px"}}>
+    <pre style={{ fontSize: "8px" }}>
       {JSON.stringify(data, null, 2)}
     </pre>
   </div>
