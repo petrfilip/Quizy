@@ -15,6 +15,7 @@ import { useAuth } from "./components/layout/AuthContext";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Login from "./components/layout/Login";
 import useUser from "./components/layout/UserHook";
+import { ExamProvider } from "./components/layout/ExamContext";
 
 function App() {
 
@@ -69,43 +70,41 @@ function App() {
     },
   ]
 
-
-
   return (
     <div className="App">
-
-
       <Router>
         <div>
-          <Navbar items={nav}/>
-          <div className={"page-content"}>
-            <Switch>
-              <Route path="/lessons/:slug">
-                <LessonItemPage/>
-              </Route>
-              <Route path="/lessons">
-                <LessonPage/>
-              </Route>
-              <Route path="/courses/:slug">
-                <CourseItemPage/>
-              </Route>
-              <Route path="/courses">
-                <CoursePage/>
-              </Route>
-              <Route path="/profile">
-                <Profile/>
-              </Route>
-              <Route path="/login">
-                <Login/>
-              </Route>
-              <Route path="/logout">
-                <Logout/>
-              </Route>
-              <Route path="/">
-                <Dashboard/>
-              </Route>
-            </Switch>
-          </div>
+          <ExamProvider>
+            <Navbar items={nav}/>
+            <div className={"page-content"}>
+              <Switch>
+                <Route path="/lessons/:slug">
+                  <LessonItemPage/>
+                </Route>
+                <Route path="/lessons">
+                  <LessonPage/>
+                </Route>
+                <Route path="/courses/:slug">
+                  <CourseItemPage/>
+                </Route>
+                <Route path="/courses">
+                  <CoursePage/>
+                </Route>
+                <Route path="/profile">
+                  <Profile/>
+                </Route>
+                <Route path="/login">
+                  <Login/>
+                </Route>
+                <Route path="/logout">
+                  <Logout/>
+                </Route>
+                <Route path="/">
+                  <Dashboard/>
+                </Route>
+              </Switch>
+            </div>
+          </ExamProvider>
         </div>
       </Router>
 

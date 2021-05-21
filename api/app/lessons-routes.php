@@ -55,12 +55,11 @@ return function (App $app) {
                 $exam->startedAt = Utils::getCurrentDateTime();
                 $exam->finishedAt = null;
                 $exam->userId = $request->getAttribute("userId");
-                $exam->type = "LESSON";
+                $exam->type = "LESSONS";
                 $exam->examId = $data["_id"];
                 $exam->examTitle = $data["title"];
+                $exam->examSlug = $data["slug"];
                 $unfinished = ExamRepository::insertOrUpdate($exam);
-
-
             }
 
             $out = array();

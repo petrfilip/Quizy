@@ -34,4 +34,13 @@ final class ExamRepository
             ->getQuery()
             ->first();
     }
+
+    public static function findUnfinishedExam($userId): array
+    {
+        return  self::getDataStore()->createQueryBuilder()
+            ->where(["userId", "=", $userId])
+            ->where(["finishedAt", "=", null])
+            ->getQuery()
+            ->first();
+    }
 }
