@@ -44,6 +44,7 @@ final class JwtMiddleware implements MiddlewareInterface
         }
 
         $request = $request->withAttribute("userId", $tokenData->user_id);
+        $request = $request->withAttribute("userRole", $tokenData->user_role);
         return $handler->handle($request);
     }
 }

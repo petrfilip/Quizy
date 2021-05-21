@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 use App\ErrorUtils;
 use App\Middleware\JwtMiddleware;
+use App\Middleware\RoleMiddleware;
 use App\UserRepository;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -25,7 +26,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
         /**
          * Get all user's labels
@@ -38,21 +39,25 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        });//->addMiddleware(new JwtMiddleware());;
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
         /**
          * Get user by id
          */
         $group->get('/{id}', function (Request $request, Response $response) {
-
             $inputJson = $request->getAttributes();
+            if ($request->getAttribute("userId") != $inputJson["id"] || $request->getAttribute("userId") != "ADMIN") {
+                throw new Exception("Access denied");
+            }
+
+
             $data = UserRepository::getById($inputJson["id"]);
             $payload = json_encode($data);
 
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        });
+        })->addMiddleware(new JwtMiddleware());;
 
         /**
          * Get users by any conditions
@@ -66,11 +71,11 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        });
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
 
         /**
-         * Create new user
+         * Create new user via admin
          */
         $group->post('', function (Request $request, Response $response) {
             $inputJson = $request->getParsedBody();
@@ -117,7 +122,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($results));
             return $response;
-        });
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
         /**
          * Delete user
@@ -129,7 +134,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());;
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
     });
 
 
