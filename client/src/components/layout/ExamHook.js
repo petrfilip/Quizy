@@ -58,6 +58,7 @@ const useExam = (lesson) => {
   const submitResults = (newAnswer) => {
     const exam = JSON.parse(localStorage.getItem("exam") || null);
 
+    setResults({})
     setQuizItems(null)
     setCurrentQuestionIndex(0)
     fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${exam.metadata.examSlug}/exam`, {
