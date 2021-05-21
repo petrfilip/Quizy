@@ -110,7 +110,11 @@ export default function PickMultiple({ questionItem, selectedItem, onSubmit }) {
           {renderButton(index, item)}
         </div>)}
 
-      <Button fullWidth variant={"contained"} onClick={() => {
+      <Button
+        disabled={selected.length < 1}
+        fullWidth
+        variant={"contained"}
+        onClick={() => {
         if (isSubmitted) {
           return
         }

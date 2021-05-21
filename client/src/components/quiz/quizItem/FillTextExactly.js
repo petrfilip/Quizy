@@ -56,7 +56,11 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
     )}
 
 
-    <Button variant={"contained"} fullWidth onClick={() => {
+    <Button
+      disabled={selected.length < answers.length}
+      variant={"contained"}
+      fullWidth
+      onClick={() => {
       if (isSubmitted) {
         return
       }

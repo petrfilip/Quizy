@@ -11,7 +11,7 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
 
   useLayoutEffect(() => {
     setIsSubmitted(selectedItem || false)
-    setSelected(selectedItem || [])
+    setSelected(selectedItem)
   }, [questionItem.index])
 
   const isCorrect = () => {
@@ -26,7 +26,7 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
   }
 
   const isInSelected = (item) => {
-    return selected && selected.index == item.index
+    return selected && selected.index == item.index || false
   }
 
   const onCheckHandler = (checkedItem, checked) => {
@@ -101,7 +101,10 @@ export default function PickOne({ questionItem, selectedItem, onSubmit }) {
           {renderButton(index, item)}
         </div>)}
 
-      <Button fullWidth variant={"contained"} onClick={() => {
+      <Button fullWidth
+              disabled={!selected}
+              variant={"contained"}
+              onClick={() => {
         if (isSubmitted) {
           return
         }
