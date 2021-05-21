@@ -112,7 +112,7 @@ return function (App $app) {
 
             // prepare the questions
             $questions = $lesson["questions"];
-            $questionsInExam = !empty($lesson["examParameters"]["questionsInExam"]) ? $lesson["examParameters"]["questionsInExam"] : sizeof($questions);
+            $questionsInExam = !empty($lesson["examParameters"]["questionsInExam"]) ? (intval($lesson["examParameters"]["questionsInExam"]) < sizeof($questions) ? intval($lesson["examParameters"]["questionsInExam"]) : sizeof($questions) ) : sizeof($questions);
             $questions = array_slice($questions, 0, $questionsInExam);
             seededShuffle($questions, $unfinished["_id"]);
 
@@ -133,13 +133,14 @@ return function (App $app) {
                  * pick multiple
                  */
                 if ($questions[$i]["questionType"] === "pickMultiple") {
-                    $normalizedArray = array();
+                    $normalizedIncomingArray = array();
                     for ($ni = 0; $ni <= sizeOf($userAnswers[$i]["answer"]) - 1; $ni++) {
-                        array_push($normalizedArray, $userAnswers[$i]["answer"][$ni]["checkedItem"]["index"]);
+                        array_push($normalizedIncomingArray, $userAnswers[$i]["answer"][$ni]["checkedItem"]["index"]);
                     }
 
-                    $normalizedArray = array_values($normalizedArray);
-                    if ($questions[$i]["correct"] == $normalizedArray) {
+                    $normalizedIncomingArray = array_values($normalizedIncomingArray);
+                    $normalizedAnswers = array_map( function($value) { return (int)$value; }, $questions[$i]["correct"] );
+                    if (sort($normalizedAnswers) == sort($normalizedIncomingArray)) {
                         $correct++;
                         continue;
                     }
