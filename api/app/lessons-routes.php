@@ -46,6 +46,11 @@ return function (App $app) {
 
         $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
             $lesson = LessonRepository::getBySlug($args["slug"]);
+
+            if (empty($lesson)) {
+                throw new Exception("Unable to find lesson");
+            }
+
             $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
 
 
@@ -91,7 +96,18 @@ return function (App $app) {
             $userAnswers = $finishedExam["answers"];
 
             $lesson = LessonRepository::getBySlug($args["slug"]);
+            if (empty($lesson)) {
+                throw new Exception("Unable to find lesson");
+            }
+
+
             $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
+
+            if (empty($unfinished)) {
+                throw new Exception("The exam has not been started");
+            }
+
+
 
             $score = 0;
 
@@ -102,6 +118,7 @@ return function (App $app) {
             seededShuffle($questions, $unfinished["_id"]);
 
             // evaluate answers
+            //region evaluate answers
             for ($i = 0; $i <= sizeOf($questions) - 1; $i++) {
                 /**
                  * pick one
@@ -139,15 +156,19 @@ return function (App $app) {
                     }
                 }
             }
+            //endregion
 
 
-            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
             $unfinished["score"] = $score;
             $unfinished["finishedAt"] = Utils::getCurrentDateTime();
             $unfinished = ExamRepository::insertOrUpdate($unfinished);
 
 
             $user = UserRepository::getById($request->getAttribute("userId"));
+
+            if (empty($user)) {
+                throw new Exception("Unable to find user");
+            }
 
 
             if (!array_key_exists("achievements", $user)) {
