@@ -33,19 +33,20 @@ return function (App $app) {
             return $response;
         });
 
-        function seededShuffle(array &$array, $seed) {
+        function seededShuffle(array &$array, $seed)
+        {
             mt_srand($seed);
             $size = count($array);
             for ($i = 0; $i < $size; ++$i) {
-                list($chunk) = array_splice($array, mt_rand(0, $size-1), 1);
+                list($chunk) = array_splice($array, mt_rand(0, $size - 1), 1);
                 array_push($array, $chunk);
             }
         }
 
         $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
-            $data = LessonRepository::getBySlug($args["slug"]);
+            $lesson = LessonRepository::getBySlug($args["slug"]);
 
-            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($data["_id"]), intval($request->getAttribute("userId")));
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
 
             if (empty($unfinished)) {
                 $exam = new stdClass();
@@ -53,14 +54,19 @@ return function (App $app) {
                 $exam->finishedAt = null;
                 $exam->userId = $request->getAttribute("userId");
                 $exam->type = "LESSONS";
-                $exam->examId = $data["_id"];
-                $exam->examTitle = $data["title"];
-                $exam->examSlug = $data["slug"];
+                $exam->examId = $lesson["_id"];
+                $exam->examTitle = $lesson["title"];
+                $exam->examSlug = $lesson["slug"];
                 $unfinished = ExamRepository::insertOrUpdate($exam);
             }
 
-            $questions = $data["questions"];
+            // prepare questions
+            $questions = $lesson["questions"];
+            $questionsInExam = !empty($lesson["examParameters"]["questionsInExam"]) ? $lesson["examParameters"]["questionsInExam"] : sizeof($questions);
+            $questions = array_slice($questions, 0, $questionsInExam);
             seededShuffle($questions, $unfinished["_id"]);
+
+            // prepare output
             $out = array();
             $out["metadata"] = $unfinished;
             $out["questions"] = $questions;
@@ -79,7 +85,10 @@ return function (App $app) {
 
             $score = 0;
 
+            // prepare the questions
             $questions = $lesson["questions"];
+            $questionsInExam = !empty($lesson["examParameters"]["questionsInExam"]) ? $lesson["examParameters"]["questionsInExam"] : sizeof($questions);
+            $questions = array_slice($questions, 0, $questionsInExam);
             seededShuffle($questions, $unfinished["_id"]);
 
             for ($i = 0; $i <= sizeOf($questions) - 1; $i++) {
