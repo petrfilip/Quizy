@@ -90,7 +90,7 @@ export default function QuizItemMain({ data, onChangeCallback }) {
               variant={"outlined"}
               label="Questions in exams"
               type="number"
-              defaultValue={data?.questions?.length || 1}
+              value={data?.examParameters?.questionsInExam}
               fullWidth={true}
               InputProps={{
                 inputProps: {
@@ -122,60 +122,63 @@ export default function QuizItemMain({ data, onChangeCallback }) {
               control={
                 <Switch
                   onChange={handleInputChange}
-                  checked={"checked"}
-                  name="examParameters.minimalScore"
+                  checked={data?.examParameters?.repeatable != null ? data.examParameters.repeatable : true  }
+                  name="examParameters.repeatable"
                   color="primary"
                 />
               }
-
               label={<Typography>Repeatable</Typography>}
             />
             <FormHelperText>Can be exam executed multiple times</FormHelperText>
 
           </Grid>
-          <Grid item>
-            <TextField
-              onChange={handleInputChange}
-              helperText={"When the exam will be available"}
-              name="examParameters.availableFrom"
-              id="datetime-local"
-              label={"Available from"}
-              type="datetime-local"
-              defaultValue="2017-05-24T10:30"
-              InputProps={{
-                endAdornment: (
-                  <IconButton size={"small"}>
-                    <ClearIcon/>
-                  </IconButton>
-                )
-              }}
-            />
-          </Grid>
-          <Grid item>
-            <TextField
-              onChange={handleInputChange}
-              helperText={"When the exam will be hidden"}
-              name="examParameters.availableTo"
-              id="datetime-local"
-              label="Available to"
-              type="datetime-local"
-              defaultValue={null}
-              value={data.examParameters.availableTo}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              InputProps={{
-                endAdornment: (
-                  <IconButton size={"small"} onClick={() => setValue("examParameters.availableTo", null)}>
-                    <ClearIcon/>
-                  </IconButton>
-                )
-              }}
-            />
+          {/*<Grid item>*/}
+          {/*  <TextField*/}
+          {/*    onChange={handleInputChange}*/}
+          {/*    helperText={"When the exam will be available"}*/}
+          {/*    name="examParameters.availableFrom"*/}
+          {/*    id="datetime-local"*/}
+          {/*    label={"Available from"}*/}
+          {/*    type="datetime-local"*/}
+          {/*    value={data?.examParameters?.availableFrom || null}*/}
+          {/*    InputProps={{*/}
+          {/*      endAdornment: (*/}
+          {/*        <IconButton size={"small"}>*/}
+          {/*          <ClearIcon/>*/}
+          {/*        </IconButton>*/}
+          {/*      )*/}
+          {/*    }}*/}
+          {/*  />*/}
+          {/*</Grid>*/}
+          {/*<Grid item>*/}
+          {/*  <TextField*/}
+          {/*    onChange={handleInputChange}*/}
+          {/*    helperText={"When the exam will be hidden"}*/}
+          {/*    name="examParameters.availableTo"*/}
+          {/*    id="datetime-local"*/}
+          {/*    label="Available to"*/}
+          {/*    type="datetime-local"*/}
+          {/*    defaultValue={null}*/}
+          {/*    value={data?.examParameters?.availableTo || null}*/}
+          {/*    InputLabelProps={{*/}
+          {/*      shrink: true,*/}
+          {/*    }}*/}
+          {/*    InputProps={{*/}
+          {/*      endAdornment: (*/}
+          {/*        <IconButton size={"small"} onClick={() => setValue("examParameters.availableTo", null)}>*/}
+          {/*          <ClearIcon/>*/}
+          {/*        </IconButton>*/}
+          {/*      )*/}
+          {/*    }}*/}
+          {/*  />*/}
 
-          </Grid>
+          {/*</Grid>*/}
         </Grid>
       </Grid>
     </Grid>
+
+    <pre style={{ fontSize: "10px" }}>
+      {JSON.stringify(data, null, 2)}
+    </pre>
   </div>
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\ErrorUtils;
 use App\MediaRepository;
 use App\Middleware\JwtMiddleware;
+use App\Middleware\RoleMiddleware;
 use App\Utils;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -95,7 +96,7 @@ return function (App $app) {
             } else {
                 return $response->withStatus(503);
             }
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
         $group->put('/directory', function (Request $request, Response $response, $args) {
 //todo rename folder, find all files and directories containing old name and rename it
@@ -133,7 +134,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($inserted));
             return $response;
-        });//->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
 
         $group->put('/file', function (Request $request, Response $response, $args) {
@@ -143,7 +144,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($inserted));
             return $response;
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
 
         /**
@@ -168,6 +169,6 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write(json_encode($inserted));
             return $response;
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
     });
 };

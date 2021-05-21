@@ -109,6 +109,7 @@ return function (App $app) {
 
         /* create first user */
         $user = new stdClass();
+        $user->role = "ADMIN";
         $user->mail = $inputJson["mail"];
         $user->password = password_hash($inputJson["password"], PASSWORD_BCRYPT);
 
@@ -120,7 +121,7 @@ return function (App $app) {
 
     /**
      * Login user by mail and password
-     * The method provides new JET token
+     * The method provides new JWT token
      */
     $app->group('/login', function (Group $group) {
 
@@ -147,6 +148,7 @@ return function (App $app) {
             $payload = array(
                 "user_id" => $loadedUser["_id"],
                 "user_mail" => $loadedUser["mail"],
+                "user_role" => !empty($loadedUser["role"]) ? $loadedUser["role"] : "USER",
                 "iss" => $actual_link,
                 "aud" => $actual_link,
                 "iat" => $issuedAt,

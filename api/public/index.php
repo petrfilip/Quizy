@@ -14,6 +14,7 @@ use Slim\Exception\HttpNotFoundException;
 require __DIR__ . '/../vendor/autoload.php';
 require __DIR__ . './../src/Middleware/CorsMiddleware.php';
 require __DIR__ . './../src/Middleware/JwtMiddleware.php';
+require __DIR__ . './../src/Middleware/RoleMiddleware.php';
 
 require __DIR__ . '/../repository/DatabaseManager.php';
 require __DIR__ . '/../repository/exam-repository.php';

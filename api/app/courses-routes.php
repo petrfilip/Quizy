@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\CourseRepository;
 use App\LessonRepository;
 use App\Middleware\JwtMiddleware;
+use App\Middleware\RoleMiddleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -48,7 +49,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());;
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
         $group->post('', function (Request $request, Response $response, $args) {
             $dataToInsert = $request->getParsedBody();
@@ -58,6 +59,6 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
     });
 };

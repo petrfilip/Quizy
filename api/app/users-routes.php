@@ -82,6 +82,7 @@ return function (App $app) {
                 $inputJson = array();
                 $inputJson[0]["mail"] = $mail;
                 $inputJson[0]["name"] = $name;
+                $inputJson[0]["role"] = "USER";
             }
 
 
@@ -98,6 +99,7 @@ return function (App $app) {
                 $user->mail = $value["mail"];
                 $user->name = $value["name"];
                 $user->labels = $value["labels"];
+                $user->role = $value["role"];
 
                 if (!empty($value["password"])) {
                     $user->password = password_hash($value["password"], PASSWORD_BCRYPT);

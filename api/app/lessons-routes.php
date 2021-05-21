@@ -4,6 +4,7 @@ declare(strict_types=1);
 use App\ExamRepository;
 use App\LessonRepository;
 use App\Middleware\JwtMiddleware;
+use App\Middleware\RoleMiddleware;
 use App\UserRepository;
 use App\Utils;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -167,8 +168,6 @@ return function (App $app) {
             return $response;
         })->addMiddleware(new JwtMiddleware());
 
-        //todo exam routes
-
         $group->delete('/{id}', function (Request $request, Response $response, $args) {
             $data = LessonRepository::deleteById($args["id"]); // add deleteAt
             $payload = json_encode($data);
@@ -176,7 +175,7 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
 
         $group->post('', function (Request $request, Response $response, $args) {
             $dataToInsert = $request->getParsedBody();
@@ -187,6 +186,6 @@ return function (App $app) {
             $response = $response->withHeader('Content-Type', 'application/json');
             $response->getBody()->write($payload);
             return $response;
-        })->addMiddleware(new JwtMiddleware());
+        })->addMiddleware(new JwtMiddleware())->addMiddleware(new RoleMiddleware("ADMIN"));
     });
 };
