@@ -108,8 +108,7 @@ return function (App $app) {
             }
 
 
-
-            $score = 0;
+            $correct = 0;
 
             // prepare the questions
             $questions = $lesson["questions"];
@@ -125,7 +124,7 @@ return function (App $app) {
                  */
                 if ($questions[$i]["questionType"] === "pickOne") {
                     if ($questions[$i]["correct"] == $userAnswers[$i]["answer"]["index"]) {
-                        $score++;
+                        $correct++;
                         continue;
                     }
                 }
@@ -141,7 +140,7 @@ return function (App $app) {
 
                     $normalizedArray = array_values($normalizedArray);
                     if ($questions[$i]["correct"] == $normalizedArray) {
-                        $score++;
+                        $correct++;
                         continue;
                     }
                 }
@@ -151,7 +150,7 @@ return function (App $app) {
                  */
                 if ($questions[$i]["questionType"] === "fillTextExactly") {
                     if ($questions[$i]["correct"] === $userAnswers[$i]["answer"]) {
-                        $score++;
+                        $correct++;
                         continue;
                     }
                 }
@@ -159,7 +158,10 @@ return function (App $app) {
             //endregion
 
 
-            $unfinished["score"] = $score;
+            $unfinished["score"] = $correct == 0 ? 0 : round($correct / $questionsInExam * 100, 0);
+            $unfinished["correctlyAnswered"] = $correct;
+            $unfinished["totalQuestions"] = intval($questionsInExam);
+            $unfinished["minimalScore"] = intval($lesson["examParameters"]["minimalScore"]);
             $unfinished["finishedAt"] = Utils::getCurrentDateTime();
             $unfinished = ExamRepository::insertOrUpdate($unfinished);
 
@@ -200,6 +202,19 @@ return function (App $app) {
 
         $group->post('', function (Request $request, Response $response, $args) {
             $dataToInsert = $request->getParsedBody();
+
+            if (empty($dataToInsert["examParameters"])) {
+                $dataToInsert["examParameters"] = array();
+            }
+
+            if (empty($dataToInsert["examParameters"]["minimalScore"])) {
+                $dataToInsert["examParameters"]["minimalScore"] = 66;
+            }
+            if (empty($dataToInsert["examParameters"]["questionsInExam"])) {
+                $dataToInsert["examParameters"]["questionsInExam"] = 20;
+            }
+
+
             $userId = $request->getAttribute("userId");
             $inserted = LessonRepository::insertOrUpdateVersionedRecord($dataToInsert, $userId);
             $payload = json_encode($inserted);

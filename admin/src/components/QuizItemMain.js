@@ -1,12 +1,10 @@
 import React from "react";
 import urlSlug from 'url-slug'
 import MDEditor from "@uiw/react-md-editor";
-import { Button, FormControlLabel, FormHelperText, Switch, TextField, Typography } from "@material-ui/core";
+import { FormControlLabel, FormHelperText, Switch, TextField, Typography } from "@material-ui/core";
 import UploadImageArea from "./file-manager/UploadImageArea";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import IconButton from "@material-ui/core/IconButton";
-import ClearIcon from "@material-ui/icons/Clear";
 
 export default function QuizItemMain({ data, onChangeCallback }) {
 
@@ -16,15 +14,6 @@ export default function QuizItemMain({ data, onChangeCallback }) {
     const name = target.name;
 
     onChangeCallback(name, value);
-  }
-
-  const setValue = (path, value) => {
-    handleInputChange({
-      target: {
-        value: value,
-        name: path
-      }
-    })
   }
 
   const onSaveCallbackHandler = (file) => {
@@ -90,7 +79,7 @@ export default function QuizItemMain({ data, onChangeCallback }) {
               variant={"outlined"}
               label="Questions in exams"
               type="number"
-              value={data?.examParameters?.questionsInExam}
+              value={data?.examParameters?.questionsInExam || 20}
               fullWidth={true}
               InputProps={{
                 inputProps: {
