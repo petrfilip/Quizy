@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
 import { useSnackbar } from "notistack";
 import useUser from "./UserHook";
@@ -23,7 +23,7 @@ const useExam = (lesson) => {
     localStorage.setItem("exam", JSON.stringify({ metadata, questions, answers, index }))
   }
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const exam = JSON.parse(localStorage.getItem("exam") || null);
     if (exam) {
       setCurrentQuestionIndex(exam.index);
@@ -31,8 +31,8 @@ const useExam = (lesson) => {
       setAnswers(exam.answers)
       setMetadata(exam.metadata)
 
-      exam.metadata && history?.push(`/lessons/${exam.metadata.examSlug}/exam`)
       setExam(exam.metadata)
+      exam.metadata && history?.push(`/lessons/${exam.metadata.examSlug}/exam`)
 
     }
   }, [])
@@ -51,25 +51,29 @@ const useExam = (lesson) => {
     persistToLocalStorage(metadata, quizItems, newAnswers, currentQuestionIndex + 1)
 
     if (quizItems.length === currentQuestionIndex + 1) {
-      setQuizItems(null)
-      setCurrentQuestionIndex(0)
       submitResults(newAnswers)
-      localStorage.removeItem("exam");
-      setExam(undefined)
     }
   }
 
   const submitResults = (newAnswer) => {
-    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${lesson.slug}/exam`, {
+    const exam = JSON.parse(localStorage.getItem("exam") || null);
+
+    setQuizItems(null)
+    setCurrentQuestionIndex(0)
+    fetch(`${process.env.REACT_APP_BASE_URI}/lessons/${exam.metadata.examSlug}/exam`, {
       method: 'post', // *GET, POST, PUT, DELETE, etc.
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({ metadata, answers: newAnswer })
+      body: JSON.stringify({ metadata: exam.metadata, answers: newAnswer })
     }).then(r => r.json())
       .then(json => {
         setResults(json)
+        setExam(undefined)
+        setCurrentQuestionIndex(null)
+        setQuizItems(null)
+        localStorage.removeItem("exam");
         refreshUser()
       })
       .catch(() => {
@@ -78,6 +82,11 @@ const useExam = (lesson) => {
       .finally(() => {
       });
 
+  }
+
+  const cancelExam =  () => {
+    submitResults([])
+    history.push("/profile")
   }
 
   const loadExamData = () => {
@@ -111,6 +120,7 @@ const useExam = (lesson) => {
     onAnswerSubmitHandler,
     currentQuestionIndex,
     results,
+    cancelExam
   });
 };
 

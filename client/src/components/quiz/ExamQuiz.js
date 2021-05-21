@@ -3,6 +3,8 @@ import { Timer } from "../Timer";
 import { Box, Container, makeStyles, Paper, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import useExam from "../layout/ExamHook";
+import { useContext } from "react";
+import { ExamContext } from "../layout/ExamContext";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -11,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ExamQuiz({ lesson }) {
 
   const { question, onAnswerSubmitHandler, currentQuestionIndex, loadExamData, results } = useExam(lesson)
+  const { exam } = useContext(ExamContext)
 
   const questionPage = (
     <>
@@ -64,7 +67,7 @@ export default function ExamQuiz({ lesson }) {
 
   return (<>
     {!question && !results && confirmStartPage}
-    {question && !results && questionPage}
+    {exam && question && !results && questionPage}
     {results && resultPage}
   </>)
 }

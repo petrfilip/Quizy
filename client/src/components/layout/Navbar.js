@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Navbar({ items }) {
   const classes = useStyles();
   const { exam } = useContext(ExamContext)
-  let useExam1 = useExam();
+  let {cancelExam} = useExam();
 
 
   const [open, setOpen] = React.useState(false);
@@ -39,6 +39,11 @@ export default function Navbar({ items }) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleCancelExam = () => {
+    setOpen(false);
+    cancelExam()
+  }
 
   const navbar = (
     <div className={classes.root}>
@@ -72,19 +77,18 @@ export default function Navbar({ items }) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{"Use Google's location service?"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{"Cancel exam?"}</DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Let Google help apps determine location. This means sending anonymous location data to
-                Google, even when no apps are running.
+                If you cancel the exam then you will lose all your gathered answers and the exam will be submitted with 0 points.
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Disagree
+              <Button variant={"outlined"} onClick={handleCancelExam} color="secondary">
+                Cancel exam and lose all points
               </Button>
-              <Button onClick={handleClose} color="primary" autoFocus>
-                Agree
+              <Button variant={"outlined"} onClick={handleClose} color="primary" autoFocus>
+                Back to exam
               </Button>
             </DialogActions>
           </Dialog>
