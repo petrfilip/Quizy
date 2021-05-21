@@ -177,9 +177,5 @@ export default function QuizItemMain({ data, onChangeCallback }) {
         </Grid>
       </Grid>
     </Grid>
-
-    <pre style={{ fontSize: "8px" }}>
-      {JSON.stringify(data, null, 2)}
-    </pre>
   </div>
 }

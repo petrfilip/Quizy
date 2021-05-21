@@ -33,15 +33,12 @@ return function (App $app) {
             return $response;
         });
 
-        //todo /exam/inProgress -> will cause force test render
-
-        function seeded_shuffle(array &$items, $seed = false)
-        {
-            $items = array_values($items);
-            mt_srand($seed ? $seed : time());
-            for ($i = count($items) - 1; $i > 0; $i--) {
-                $j = mt_rand(0, $i);
-                list($items[$i], $items[$j]) = array($items[$j], $items[$i]);
+        function seededShuffle(array &$array, $seed) {
+            mt_srand($seed);
+            $size = count($array);
+            for ($i = 0; $i < $size; ++$i) {
+                list($chunk) = array_splice($array, mt_rand(0, $size-1), 1);
+                array_push($array, $chunk);
             }
         }
 
@@ -50,7 +47,7 @@ return function (App $app) {
 
             $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($data["_id"]), intval($request->getAttribute("userId")));
 
-            if (sizeof($unfinished) === 0) {
+            if (empty($unfinished)) {
                 $exam = new stdClass();
                 $exam->startedAt = Utils::getCurrentDateTime();
                 $exam->finishedAt = null;
@@ -62,29 +59,35 @@ return function (App $app) {
                 $unfinished = ExamRepository::insertOrUpdate($exam);
             }
 
+            $questions = $data["questions"];
+            seededShuffle($questions, $unfinished["_id"]);
             $out = array();
-            $out["questions"] = $data["questions"];
             $out["metadata"] = $unfinished;
+            $out["questions"] = $questions;
 
             $response = $response->withHeader('Content-Type', 'application/json');
-            $response->getBody()->write(json_encode($out)); //todo return randomly generated questions
+            $response->getBody()->write(json_encode($out));
             return $response;
         })->addMiddleware(new JwtMiddleware());
 
         $group->post('/{slug}/exam', function (Request $request, Response $response, $args) {
-            $data = LessonRepository::getBySlug($args["slug"]);
-
             $finishedExam = $request->getParsedBody();
             $userAnswers = $finishedExam["answers"];
 
+            $lesson = LessonRepository::getBySlug($args["slug"]);
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
+
             $score = 0;
 
-            for ($i = 0; $i <= sizeOf($data["questions"]) - 1; $i++) {
+            $questions = $lesson["questions"];
+            seededShuffle($questions, $unfinished["_id"]);
+
+            for ($i = 0; $i <= sizeOf($questions) - 1; $i++) {
                 /**
                  * pick one
                  */
-                if ($data["questions"][$i]["questionType"] === "pickOne") {
-                    if ($data["questions"][$i]["correct"] == $userAnswers[$i]["answer"]["index"]) {
+                if ($questions[$i]["questionType"] === "pickOne") {
+                    if ($questions[$i]["correct"] == $userAnswers[$i]["answer"]["index"]) {
                         $score++;
                         continue;
                     }
@@ -93,14 +96,14 @@ return function (App $app) {
                 /**
                  * pick multiple
                  */
-                if ($data["questions"][$i]["questionType"] === "pickMultiple") {
+                if ($questions[$i]["questionType"] === "pickMultiple") {
                     $normalizedArray = array();
                     for ($ni = 0; $ni <= sizeOf($userAnswers[$i]["answer"]) - 1; $ni++) {
                         array_push($normalizedArray, $userAnswers[$i]["answer"][$ni]["checkedItem"]["index"]);
                     }
 
                     $normalizedArray = array_values($normalizedArray);
-                    if ($data["questions"][$i]["correct"] == $normalizedArray) {
+                    if ($questions[$i]["correct"] == $normalizedArray) {
                         $score++;
                         continue;
                     }
@@ -109,8 +112,8 @@ return function (App $app) {
                 /**
                  * fill text exactly
                  */
-                if ($data["questions"][$i]["questionType"] === "fillTextExactly") {
-                    if ($data["questions"][$i]["correct"] === $userAnswers[$i]["answer"]) {
+                if ($questions[$i]["questionType"] === "fillTextExactly") {
+                    if ($questions[$i]["correct"] === $userAnswers[$i]["answer"]) {
                         $score++;
                         continue;
                     }
@@ -118,7 +121,7 @@ return function (App $app) {
             }
 
 
-            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($data["_id"]), intval($request->getAttribute("userId")));
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
             $unfinished["score"] = $score;
             $unfinished["finishedAt"] = Utils::getCurrentDateTime();
             $unfinished = ExamRepository::insertOrUpdate($unfinished);
