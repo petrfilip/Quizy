@@ -14,7 +14,7 @@ import {  Prompt } from "react-router-dom";
 import { useAuth } from "../../app/AuthContext";
 import FlashCardManager from "../flashcard/FlashCardManager";
 import * as immutable from 'object-path-immutable'
-
+import ReportProblemIcon from '@material-ui/icons/ReportProblem';
 
 export default function LessonItemManager({ slug }) {
 
@@ -136,7 +136,8 @@ export default function LessonItemManager({ slug }) {
 
   data?.questions?.map(item => tabs.push(
     {
-      label: item.question,
+      label: <Button startIcon={!item?.correct?.length ? <ReportProblemIcon/> : ""}>
+        {item.question}</Button>,
       index: tabs.length,
       question: item,
       Component: Item
