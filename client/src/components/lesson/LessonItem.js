@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
 }));
 
-
 export default function LessonItem({ slug }) {
   const classes = useStyles();
 
@@ -56,8 +55,8 @@ export default function LessonItem({ slug }) {
     <Container className={classes.info}>Lesson</Container>
     <Paper style={{ padding: "20px", minHeight: '500px' }}>
 
-      <Typography variant={"h4"} >{data.title || <Skeleton/>}</Typography>
-      <Grid style={{marginTop: "10px"}} container spacing={2}>
+      <Typography variant={"h4"}>{data.title || <Skeleton/>}</Typography>
+      <Grid style={{ marginTop: "10px" }} container spacing={2}>
         {data.flashcards && <Grid item xs={6}>
           <OutlinedCard
             content={<Typography>FlashCards</Typography>}
@@ -82,17 +81,22 @@ export default function LessonItem({ slug }) {
           <OutlinedCard
             content={<>
               <Typography>Exam</Typography>
-              {getAchievementItem() && <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{(getAchievementItem()?.finishedAt)}</Button>}
-              {getAchievementItem() && <Button startIcon={<GradeIcon/>} color={"primary"}>{JSON.stringify(getAchievementItem()?.score)}</Button>}
-            </>}
-            action={user?.mail ? <Button component={RouterLink}
-                                         to={`${url}/exam`}
-                                         color={"secondary"}
-                                         startIcon={getAchievementItem() ? <DoneIcon/> : <DoubleArrowIcon/>}/> :
+                 </>}
+            action={user?.mail ? <><Button
+                disabled={getAchievementItem() && (!data?.examParameters?.repeatable || data?.examParameters === undefined)}
+                component={RouterLink}
+                to={`${url}/exam`}
+                color={"secondary"}
+                startIcon={getAchievementItem() ? <DoneIcon/> : <DoubleArrowIcon/>}/>
+                {getAchievementItem() && <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{(getAchievementItem()?.finishedAt)}</Button>}
+                {getAchievementItem() && <Button startIcon={<GradeIcon/>} color={"primary"}>{JSON.stringify(getAchievementItem()?.score)}</Button>}
+
+              </> :
               <Button component={RouterLink}
                       to={`/login`}
                       color={"primary"}
                       startIcon={<DoubleArrowIcon/>}>Log in</Button>
+
             }
           />
         </Grid>

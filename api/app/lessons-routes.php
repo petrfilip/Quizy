@@ -45,8 +45,17 @@ return function (App $app) {
 
         $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
             $lesson = LessonRepository::getBySlug($args["slug"]);
-
             $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($lesson["_id"]), intval($request->getAttribute("userId")));
+
+
+            if ($lesson["examParameters"]["repeatable"] === false) {
+
+                $user = UserRepository::getById($request->getAttribute("userId"));
+                $found = empty($user["achievements"]) ? array_search(53, array_column($user["achievements"]["lessonList"], 'examId')) : false;
+                if (!$found) {
+                    throw new Exception("The lesson is not repeatable");
+                }
+            }
 
             if (empty($unfinished)) {
                 $exam = new stdClass();
@@ -91,6 +100,7 @@ return function (App $app) {
             $questions = array_slice($questions, 0, $questionsInExam);
             seededShuffle($questions, $unfinished["_id"]);
 
+            // evaluate answers
             for ($i = 0; $i <= sizeOf($questions) - 1; $i++) {
                 /**
                  * pick one
