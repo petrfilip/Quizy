@@ -39,16 +39,22 @@ export default function ExamQuiz({ lesson }) {
   )
   const classes = useStyles();
 
+  const resultPageContent = (<>
+      <Typography variant={"h2"}>Your result: {results?.score} %</Typography>
+      {
+        lesson.examParameters.minimalScore < results?.score ?
+          <Typography variant={"h3"} color={"primary"}>You passed the exam</Typography> :
+          <Typography variant={"h3"} color={"primary"}>You failed the exam</Typography>
+      }
+      <Button>Go to profile</Button>
+    </>
+  )
+
   const resultPage = (
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
       <div className={classes.info}>Results</div>
-      <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center"}}>
-        <Typography variant={"h2"}>Your result: {results?.score} %</Typography>
-        {lesson.examParameters.minimalScore > results?.score ?
-          <Typography variant={"h3"} color={"primary"}>You passed the exam</Typography> :
-          <Typography variant={"h3"} color={"primary"}>You failed the exam</Typography>
-        }
-        <Button>Go to profile</Button>
+      <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center" }}>
+        {results?.score !== undefined  && resultPageContent }
       </Paper>
     </Container>
   )

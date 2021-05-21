@@ -46,7 +46,7 @@ return function (App $app) {
          */
         $group->get('/{id}', function (Request $request, Response $response) {
             $inputJson = $request->getAttributes();
-            if ($request->getAttribute("userId") != $inputJson["id"] || $request->getAttribute("userId") != "ADMIN") {
+            if (intval($request->getAttribute("userId")) !== intval($inputJson["id"]) && $request->getAttribute("userId") != "ADMIN") {
                 throw new Exception("Access denied");
             }
 
