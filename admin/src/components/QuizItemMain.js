@@ -5,7 +5,6 @@ import { Button, FormControlLabel, FormHelperText, Switch, TextField, Typography
 import UploadImageArea from "./file-manager/UploadImageArea";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import * as immutable from 'object-path-immutable'
 import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
 
@@ -16,7 +15,7 @@ export default function QuizItemMain({ data, onChangeCallback }) {
     const value = target.type === 'checkbox' ? target.checked : target.value;
     const name = target.name;
 
-    onChangeCallback(immutable.set(data, name, value));
+    onChangeCallback(name, value);
   }
 
   const setValue = (path, value) => {
@@ -29,11 +28,9 @@ export default function QuizItemMain({ data, onChangeCallback }) {
   }
 
   const onSaveCallbackHandler = (file) => {
-    onChangeCallback({
-      ...data, "heroImage": {
-        mediaId: file._id,
-        path: file.publicPath
-      }
+    onChangeCallback("heroImage", {
+      mediaId: file._id,
+      path: file.publicPath
     })
   }
 

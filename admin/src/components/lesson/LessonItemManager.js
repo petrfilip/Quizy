@@ -13,6 +13,7 @@ import VerticalTabs from "../../app/TabPanel";
 import {  Prompt } from "react-router-dom";
 import { useAuth } from "../../app/AuthContext";
 import FlashCardManager from "../flashcard/FlashCardManager";
+import * as immutable from 'object-path-immutable'
 
 
 export default function LessonItemManager({ slug }) {
@@ -104,8 +105,12 @@ export default function LessonItemManager({ slug }) {
     setData({ ...changed })
   }
 
+  const onMainDataChangeHandler = (key, value) => {
+    setData((current) => {return immutable.set(current, key, value)});
+  }
+
   const Main = () => (<>
-    {data && <QuizItemMain data={data} onChangeCallback={onDataChangeHandler}/>}
+    {data && <QuizItemMain data={data} onChangeCallback={onMainDataChangeHandler}/>}
   </>)
 
   const FlashCards = () =>( <>
