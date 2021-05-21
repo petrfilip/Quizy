@@ -48,7 +48,7 @@ return function (App $app) {
         $group->get('/{slug}/exam', function (Request $request, Response $response, $args) {
             $data = LessonRepository::getBySlug($args["slug"]);
 
-            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSON", intval($data["_id"]), intval($request->getAttribute("userId")));
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($data["_id"]), intval($request->getAttribute("userId")));
 
             if (sizeof($unfinished) === 0) {
                 $exam = new stdClass();
@@ -118,7 +118,7 @@ return function (App $app) {
             }
 
 
-            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSON", intval($data["_id"]), intval($request->getAttribute("userId")));
+            $unfinished = ExamRepository::findUnfinishedExamByUser("LESSONS", intval($data["_id"]), intval($request->getAttribute("userId")));
             $unfinished["score"] = $score;
             $unfinished["finishedAt"] = Utils::getCurrentDateTime();
             $unfinished = ExamRepository::insertOrUpdate($unfinished);

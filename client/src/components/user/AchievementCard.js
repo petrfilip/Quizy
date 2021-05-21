@@ -11,7 +11,7 @@ export default function AchievementCard({ item }) {
     <Card variant="outlined">
       <CardContent>
         <Typography>
-          {item.examTitle} {item._id}
+          {item.examTitle} ID:{item._id}
         </Typography>
         <Button startIcon={<EventAvailableIcon/>} color={"primary"}>{item.finishedAt}</Button>
         <Button startIcon={<GradeIcon />} color={"primary"}>{item.score}</Button>
