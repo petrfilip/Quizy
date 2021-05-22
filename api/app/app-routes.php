@@ -69,12 +69,12 @@ return function (App $app) {
     $app->post('/app/init', function (Request $request, Response $response, $args) {
 
         if (Utils::isApplicationInitialized()) {
-            return $response->withStatus(400);
+            throw new Exception("Application already initialized");
         }
 
         $inputJson = $request->getParsedBody();
         if ($inputJson == null) {
-            return $response->withStatus(424);
+            throw new Exception("No data");
         }
 
         /* init required directories */
@@ -91,13 +91,11 @@ return function (App $app) {
         $inputJson = $request->getParsedBody();
 
         if (!filter_var($inputJson["mail"], FILTER_VALIDATE_EMAIL)) {
-            $response->getBody()->write("INVALID EMAIL");
-            return $response;
+            throw new Exception("Invalid email");
         }
 
         if (!Utils::isPasswordValid($inputJson["password"])) {
-            $response->getBody()->write("INVALID PASSWORD");
-            return $response;
+            throw new Exception("Invalid password");
         }
 
 
@@ -105,6 +103,10 @@ return function (App $app) {
         $txt = '<?php ';
         fwrite($configFile, $txt);
         $txt = 'define("JWT_KEY", "' . Utils::randomPassword() . '");';
+        $txt .= 'define("EMAIL_HOST", "' . $inputJson["emailHost"] . '");';
+        $txt .= 'define("EMAIL_PORT", "' . $inputJson["emailPort"] . '");';
+        $txt .= 'define("EMAIL_USERNAME", "' . $inputJson["emailUsername"] . '");';
+        $txt .= 'define("EMAIL_PASSWORD", "' . $inputJson["emailPassword"] . '");';
         fwrite($configFile, $txt);
         fclose($configFile);
 

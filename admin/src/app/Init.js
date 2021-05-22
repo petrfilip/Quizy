@@ -15,7 +15,7 @@ import { useSnackbar } from "notistack";
 import List from "./List";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
-import { Accordion, AccordionDetails, AccordionSummary } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, Divider } from "@material-ui/core";
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 function Copyright() {
@@ -165,6 +165,64 @@ export default function Init() {
             type="password"
             id="password"
             autoComplete="current-password"
+          />
+
+          <Divider/>
+
+          <TextField
+            disabled={isInitialized}
+            error={isError}
+            onChange={handleInputChange}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="emailHost"
+            label="Email host"
+            type="text"
+            id="emailHost"
+          />
+
+          <TextField
+            disabled={isInitialized}
+            error={isError}
+            onChange={handleInputChange}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="emailPort"
+            label="Email port"
+            type="number"
+            id="emailPort"
+          />
+
+          <TextField
+            disabled={isInitialized}
+            error={isError}
+            onChange={handleInputChange}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="emailUsername"
+            label="Email username"
+            type="text"
+            id="emailUsername"
+          />
+
+          <TextField
+            disabled={isInitialized}
+            error={isError}
+            onChange={handleInputChange}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            name="emailPassword"
+            label="Email password"
+            type="text"
+            id="emailPassword"
           />
 
           <Accordion>
