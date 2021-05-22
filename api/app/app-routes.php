@@ -6,6 +6,7 @@ use App\ErrorUtils;
 use App\UserRepository;
 use App\Utils;
 use Firebase\JWT\JWT;
+use Firebase\JWT\SignatureInvalidException;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\App;
@@ -128,6 +129,10 @@ return function (App $app) {
         $group->options('', function (Request $request, Response $response, $args) {
             $response = $response->withHeader('Content-Type', 'application/json');
             return $response;
+        });
+
+        $group->post('/reset', function (Request $request, Response $response) {
+
         });
 
         $group->post('', function (Request $request, Response $response) {

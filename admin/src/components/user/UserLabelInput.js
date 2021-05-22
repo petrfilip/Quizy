@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useState } from 'react';
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import TextField from "@material-ui/core/TextField";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../app/AuthContext";
 
 const UserLabelInput = ({defaultValues = [], onChange}) => {
   const { t } = useTranslation();
@@ -9,13 +10,21 @@ const UserLabelInput = ({defaultValues = [], onChange}) => {
   const [availableLabels, setAvailableLabels] = useState([]);
   const [isPending, setIsPending] = useState(true)
   const [isError, setIsError] = useState(false);
+  const { token } = useAuth();
+
 
   const filter = createFilterOptions();
 
 
   useLayoutEffect(() => {
 
-    fetch(`${process.env.REACT_APP_BASE_URI}/users/labels`)
+    fetch(`${process.env.REACT_APP_BASE_URI}/users/labels`,{
+      method: 'GET', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+      },
+    })
       .then(response => {
         if (response.ok) {
           return response.json()

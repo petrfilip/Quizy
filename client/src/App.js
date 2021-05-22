@@ -17,6 +17,8 @@ import Login from "./components/layout/Login";
 import useUser from "./components/layout/UserHook";
 import { ExamProvider } from "./components/layout/ExamContext";
 import { useTranslation } from "react-i18next";
+import ChangePassword from "./components/layout/ChangePassword";
+import PasswordReset from "./components/layout/PasswordRequest";
 
 function App() {
 
@@ -97,6 +99,12 @@ function App() {
                 </Route>
                 <Route path="/login">
                   <Login/>
+                </Route>
+                <Route path="/password/reset">
+                  <PasswordReset/>
+                </Route>
+                <Route path="/password">
+                  <ChangePassword/>
                 </Route>
                 <Route path="/logout">
                   <Logout/>

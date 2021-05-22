@@ -25,6 +25,9 @@ require __DIR__ . '/../repository/user-repository.php';
 require __DIR__ . '/../app/ErrorUtils.php';
 require __DIR__ . '/../app/Utils.php';
 
+ require __DIR__ . '/../app/service/EmailService.php';
+
+
 define("DATABASE_ROOT", __DIR__ . "/../database");
 define("CONFIG_FILE", __DIR__ . './../config.php');
 require CONFIG_FILE;

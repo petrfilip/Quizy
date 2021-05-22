@@ -16,6 +16,7 @@ import UploadImageArea from "../file-manager/UploadImageArea";
 import * as XLSX from "xlsx";
 import UserLabelInput from "./UserLabelInput";
 import { useTranslation } from "react-i18next";
+import { useAuth } from "../../app/AuthContext";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -46,6 +47,7 @@ export default function AddUsers() {
   const [isPending, setIsPending] = useState(false)
   const [userLabels, setUserLabels] = useState([]);
   const [updatedValue, forceUpdate] = useReducer((x) => x + 1, 0);
+  const { token } = useAuth();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -62,7 +64,8 @@ export default function AddUsers() {
     fetch(`${process.env.REACT_APP_BASE_URI}/users`, {
       method: 'POST', // *GET, POST, PUT, DELETE, etc.
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
       },
       body: JSON.stringify(usersToCreate) // body data type must match "Content-Type" header
     })
