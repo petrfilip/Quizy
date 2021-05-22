@@ -28,7 +28,7 @@ const cs = {
     title_minimalScore: "Minimální skóre",
     title_countOfQuestions: "Počet otázek",
     title_repeatable: "Lze opakovat",
-    title_examResult: "Výsledek test",
+    title_examResult: "Výsledek testu",
     button_goToProfile: "Přejít na profil",
     edit: "Upravit",
     delete: "Smazat",

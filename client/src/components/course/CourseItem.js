@@ -46,8 +46,6 @@ export default function CourseItem({ slug }) {
 
   }, [slug])
 
-  let { path, url } = useRouteMatch();
-
   return <>
 
 

@@ -26,7 +26,7 @@ const cs = {
     title_countOfQuestions: "Počet otázek",
     title_repeatable: "Lze opakovat",
     title_areYouReady: "Můžeme začít?",
-    title_examResult: "Výsledek test",
+    title_examResult: "Výsledek testu",
     title_yourExamResult: "Získáváš",
     title_passedExamResult: "Zkouška dopadla úspěšně",
     title_failedExamResult: "Zkouška nebyla splněna",

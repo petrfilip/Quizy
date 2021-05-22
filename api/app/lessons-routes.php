@@ -140,7 +140,7 @@ return function (App $app) {
 
                     $normalizedIncomingArray = array_values($normalizedIncomingArray);
                     $normalizedAnswers = array_map( function($value) { return (int)$value; }, $questions[$i]["correct"] );
-                    if (sort($normalizedAnswers) == sort($normalizedIncomingArray)) {
+                    if (( count( $normalizedAnswers ) == count( $normalizedIncomingArray ) && !array_diff( $normalizedAnswers, $normalizedIncomingArray ) ) ) {
                         $correct++;
                         continue;
                     }
