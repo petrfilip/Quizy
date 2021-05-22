@@ -8,13 +8,14 @@ import { Button, ButtonGroup } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
 import SaveIcon from "@material-ui/icons/Save";
-import {  useSnackbar } from 'notistack';
+import { useSnackbar } from 'notistack';
 import VerticalTabs from "../../app/TabPanel";
-import {  Prompt } from "react-router-dom";
+import { Prompt } from "react-router-dom";
 import { useAuth } from "../../app/AuthContext";
 import FlashCardManager from "../flashcard/FlashCardManager";
 import * as immutable from 'object-path-immutable'
 import ReportProblemIcon from '@material-ui/icons/ReportProblem';
+import { useTranslation } from "react-i18next";
 
 export default function LessonItemManager({ slug }) {
 
@@ -27,7 +28,7 @@ export default function LessonItemManager({ slug }) {
   const [_, forceUpdate] = useReducer((x) => x + 1, 0);
   const [selectedTab, setSelectedTab] = useState(0)
   const { token } = useAuth();
-
+  const { t } = useTranslation();
 
   useEffect(() => {
     setIsPersisted(false)
@@ -61,7 +62,6 @@ export default function LessonItemManager({ slug }) {
 
   const persistQuizHandler = () => {
 
-
     if (!data.slug) {
       data.slug = urlSlug(data.title)
     }
@@ -90,7 +90,7 @@ export default function LessonItemManager({ slug }) {
       enqueueSnackbar('Lesson persisted', { variant: "success" });
     })
       .catch((err) => {
-        err.json().then( errorMessage => {
+        err.json().then(errorMessage => {
           enqueueSnackbar(`Lesson not persisted :: ${errorMessage.error}`, { variant: "error" })
         })
         ;
@@ -106,25 +106,27 @@ export default function LessonItemManager({ slug }) {
   }
 
   const onMainDataChangeHandler = (key, value) => {
-    setData((current) => {return immutable.set(current, key, value)});
+    setData((current) => {
+      return immutable.set(current, key, value)
+    });
   }
 
   const Main = () => (<>
     {data && <QuizItemMain data={data} onChangeCallback={onMainDataChangeHandler}/>}
   </>)
 
-  const FlashCards = () =>( <>
-    {data && <FlashCardManager data={data} onChangeCallback={onDataChangeHandler} />}
+  const FlashCards = () => (<>
+    {data && <FlashCardManager data={data} onChangeCallback={onDataChangeHandler}/>}
   </>)
 
   const tabs = [
     {
-      label: 'Main', // Tab title
+      label: t('lim_main'), // Tab title
       index: 0,         // Tab index
       Component: Main // Tab Component
     },
     {
-      label: 'FlashCards',
+      label: t('lim_flashcards'),
       index: 1,
       Component: FlashCards
     }
@@ -153,7 +155,7 @@ export default function LessonItemManager({ slug }) {
     const defaultQuestion = {
       questionType: "pickOne",
       answerType: "simpleInput",
-      question: `New ${data.questions.length}`,
+      question: `${t('lim_newPrefix')} ${data.questions.length}`,
       answers: [
         { text: "" },
         { text: "" }
@@ -175,22 +177,23 @@ export default function LessonItemManager({ slug }) {
     setSelectedTab(selectedTab - 1)
   }
 
-
   return data != null ? (<div>
     {/*{isPending && "Loading data..."}*/}
     {error && <div>{error}</div>}
 
     <Prompt
       when={!isPersisted}
-      message={location =>
-        `The lesson is not saved. Are you sure you wanna leave without saving it?`
-      }
+      message={location => t('lim_unsavedWarning')}
     />
 
     <ButtonGroup color="primary" aria-label="outlined primary button group">
-      <Button variant={isPersisted && "outlined" || "contained"} startIcon={<SaveIcon/>} color={"primary"} onClick={persistQuizHandler} disabled={data.title === "New quiz"}>Persist lesson</Button>
-      <Button startIcon={<AddIcon/>} onClick={addNewQuestionHandler}>Add question</Button>
-      <Button startIcon={<DeleteIcon/>} color={"secondary"} onClick={removeQuestionHandler} disabled={selectedTab <= 1}>Delete question</Button>
+      <Button variant={isPersisted && "outlined" || "contained"}
+              startIcon={<SaveIcon/>} color={"primary"}
+              onClick={persistQuizHandler}
+              disabled={data.title === "New quiz"}>{t('lim_persistLesson')}</Button>
+      <Button startIcon={<AddIcon/>} onClick={addNewQuestionHandler}>{t('lim_addNewQuestion')}</Button>
+      <Button startIcon={<DeleteIcon/>} color={"secondary"}
+              onClick={removeQuestionHandler} disabled={selectedTab <= 1}>{t('lim_addDeleteQuestion')}</Button>
     </ButtonGroup>
     <VerticalTabs tabs={tabs} selectedTab={selectedTab} setSelectedTab={setSelectedTab}/>
 

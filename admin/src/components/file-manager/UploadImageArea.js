@@ -6,7 +6,7 @@ import { useDropzone } from "react-dropzone";
 import Typography from "@material-ui/core/Typography";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 
-const UploadImageArea = ({ initialFile, location, onSaveCallback, onDropFiles }) => {
+const UploadImageArea = ({ initialFile, location, onSaveCallback, onDropFiles, label = "Drop image here"}) => {
   const [open, setOpen] = useState(false);
   const [file, setFile] = useState();
 
@@ -46,7 +46,7 @@ const UploadImageArea = ({ initialFile, location, onSaveCallback, onDropFiles })
   const { enqueueSnackbar } = useSnackbar();
   const [isPending, setIsPending] = useState(false)
 
-  useEffect(()=> {
+  useEffect(() => {
     initialFile && setFile(`${process.env.REACT_APP_BASE_URI}${initialFile}`);
   }, [initialFile])
 
@@ -98,17 +98,17 @@ const UploadImageArea = ({ initialFile, location, onSaveCallback, onDropFiles })
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
   return (
-      <Paper {...getRootProps()}  variant={"outlined"} className={isDragActive && classes.paperOverlay || classes.paper}>
+    <Paper {...getRootProps()} variant={"outlined"} className={isDragActive && classes.paperOverlay || classes.paper}>
 
-        <input {...getInputProps()} />
-        {file && <img
-          className={isDragActive && classes.imageOverlay || classes.image}
-          src={file}
-        />}
-        <div/>
-        <CloudUploadIcon />
-        {isDragActive ? <Typography>drop</Typography> : <Typography>Drop image here</Typography>}
-      </Paper>
+      <input {...getInputProps()} />
+      {file && <img
+        className={isDragActive && classes.imageOverlay || classes.image}
+        src={file}
+      />}
+      <div/>
+      <CloudUploadIcon/>
+      {isDragActive ? <Typography>drop</Typography> : <Typography>{label}</Typography>}
+    </Paper>
   );
 };
 

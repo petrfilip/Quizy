@@ -7,8 +7,10 @@ import UploadImageArea from "../file-manager/UploadImageArea";
 import FolderIcon from "@material-ui/icons/Folder";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import FileManager from "../file-manager/FileManager";
+import { useTranslation } from "react-i18next";
 
 export default function FlashCardItemEditor({ flashcard }) {
+  const { t } = useTranslation();
 
   const [componentData, setComponentData] = useState(flashcard)
   const [open, setOpen] = React.useState(false);
@@ -50,7 +52,7 @@ export default function FlashCardItemEditor({ flashcard }) {
     <FileDialog/>
     <TextField
       fullWidth
-      placeholder={"Flash cart title"}
+      placeholder={t('title_flashcardsTitle')}
       type={"text"}
       name={"title"}
       value={componentData.title}

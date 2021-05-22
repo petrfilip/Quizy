@@ -2,8 +2,11 @@ import React from 'react';
 import FlashCardItemEditor from "./FlashCardItemEditor";
 import { Button, Typography } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import { useTranslation } from "react-i18next";
 
 const FlashCardManager = ({data, onChangeCallback}) => {
+  const { t } = useTranslation();
+
 
   const addNewFlashcard = () => {
 
@@ -18,7 +21,7 @@ const FlashCardManager = ({data, onChangeCallback}) => {
 
   return (
     <>
-      <Typography variant="h5">Flash Cards</Typography>
+      <Typography variant="h5">{t('title_flashcards')}</Typography>
       {data?.flashcards?.map((item, index) =>
 
         <div key={`fc-${index}`}>
@@ -28,7 +31,7 @@ const FlashCardManager = ({data, onChangeCallback}) => {
       )}
       <Button startIcon={<AddIcon/>}
               variant={"outlined"}
-              onClick={addNewFlashcard}>Add flashcard</Button>
+              onClick={addNewFlashcard}>{t('button_addFlashcard')}</Button>
 
     </>
   );

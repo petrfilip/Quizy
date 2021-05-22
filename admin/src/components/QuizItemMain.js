@@ -5,8 +5,10 @@ import { FormControlLabel, FormHelperText, Switch, TextField, Typography } from 
 import UploadImageArea from "./file-manager/UploadImageArea";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import { useTranslation } from "react-i18next";
 
 export default function QuizItemMain({ data, onChangeCallback }) {
+  const { t } = useTranslation();
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -24,9 +26,13 @@ export default function QuizItemMain({ data, onChangeCallback }) {
   }
 
   return <div>
-    <Typography variant="h5">Lesson info</Typography>
+    {/*<Typography variant="h5">{t('qim_titleLessonInfo')}</Typography>*/}
+    <FormHelperText>{t('qim_formTitle')}</FormHelperText>
+
     <TextField fullWidth type={"text"} name={"title"} value={data.title || ""} onChange={handleInputChange}/>
     <TextField fullWidth disabled={true} type={"text"} name={"slug"} value={urlSlug(data.title || "")} onChange={handleInputChange}/>
+
+    <FormHelperText>{t('qim_formDescription')}</FormHelperText>
 
     <MDEditor
       value={data.description || ""}
@@ -45,22 +51,22 @@ export default function QuizItemMain({ data, onChangeCallback }) {
     <Grid container spacing={3}>
       <Grid item xs={6}>
         <Box paddingBottom={2} paddingTop={2}>
-          <Typography variant="h5">Hero image</Typography>
+          <Typography variant="h5">{t('qim_formHeroImage')}</Typography>
         </Box>
         <UploadImageArea location={`/`} initialFile={data?.heroImage?.path} onSaveCallback={onSaveCallbackHandler}/>
       </Grid>
       <Grid item xs={6}>
         <Box paddingBottom={2} paddingTop={2}>
-          <Typography variant="h5">Exam parameters</Typography>
+          <Typography variant="h5">{t('qim_formTitleExamParameters')}</Typography>
         </Box>
         <Grid container direction={'column'} spacing={3}>
           <Grid item>
             <TextField
               onChange={handleInputChange}
               name={"examParameters.minimalScore"}
-              helperText={"Minimal score for success"}
+              helperText={t('qim_formMinimalScoreDescription')}
               variant={"outlined"}
-              label="Minimal score"
+              label={t('qim_formMinimalScoreTitle')}
               type="number"
               defaultValue={66}
               fullWidth={true}
@@ -75,9 +81,9 @@ export default function QuizItemMain({ data, onChangeCallback }) {
             <TextField
               name={"examParameters.questionsInExam"}
               onChange={handleInputChange}
-              helperText={"How many questions will be generated in the exam"}
+              helperText={t('qim_formQuestionsInExamDescription')}
               variant={"outlined"}
-              label="Questions in exams"
+              label={t('qim_formQuestionsInExamTitle')}
               type="number"
               value={data?.examParameters?.questionsInExam || 20}
               fullWidth={true}
@@ -116,9 +122,9 @@ export default function QuizItemMain({ data, onChangeCallback }) {
                   color="primary"
                 />
               }
-              label={<Typography>Repeatable</Typography>}
+              label={<Typography color={"textSecondary"}>{t('qim_formRepeatableTitle')}</Typography>}
             />
-            <FormHelperText>Can be exam executed multiple times</FormHelperText>
+            <FormHelperText>{t('qim_formRepeatableDescription')}</FormHelperText>
 
           </Grid>
           {/*<Grid item>*/}
@@ -166,8 +172,8 @@ export default function QuizItemMain({ data, onChangeCallback }) {
       </Grid>
     </Grid>
 
-    <pre style={{ fontSize: "10px" }}>
-      {JSON.stringify(data, null, 2)}
-    </pre>
+    {/*<pre style={{ fontSize: "10px" }}>*/}
+    {/*  {JSON.stringify(data, null, 2)}*/}
+    {/*</pre>*/}
   </div>
 }

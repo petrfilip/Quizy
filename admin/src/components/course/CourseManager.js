@@ -12,6 +12,8 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
 import List from "../../app/List";
+import { useTranslation } from "react-i18next";
+import CourseItemCard from "./CourseItemCard";
 
 export default function CourseManager() {
 
@@ -20,6 +22,7 @@ export default function CourseManager() {
   const [error, setError] = useState();
   const { enqueueSnackbar } = useSnackbar();
   const { token } = useAuth();
+  const { t } = useTranslation();
 
   useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/courses`)
@@ -81,7 +84,7 @@ export default function CourseManager() {
   ];
 
   return <Container maxWidth={"lg"}>
-    <Typography variant="h4">Courses</Typography>
+    <Typography variant="h4">{t('navbar_courses')}</Typography>
 
     {/*{isPending && "Loading data"}*/}
     {error}
@@ -91,47 +94,9 @@ export default function CourseManager() {
             variant="outlined"
             to={`/courses/newCourse`}
             component={RouterLink}
-    >Add new course</Button>
-    <List isPending={isPending} columns={columns} data={data} component={(item) => {
-      return OutlinedCard(item, deleteItemDialog)
-    }}/>
+    >{t('cm_addNewCourse')}</Button>
+    <List isPending={isPending} columns={columns} data={data} component={(item) => <CourseItemCard lessonItem={item} onDelete={deleteItemDialog}/>
+    }/>
   </Container>
 
 }
-
-function OutlinedCard(lessonItem, onDelete) {
-
-  return (
-    <Card variant="outlined">
-      {/*<CardMedia*/}
-      {/*  style={{*/}
-      {/*    width: "auto",*/}
-      {/*    maxHeight: "200px",*/}
-      {/*  }}*/}
-      {/*  component="img"*/}
-      {/*  alt="Contemplative Reptile"*/}
-      {/*  image="https://via.placeholder.com/500"*/}
-      {/*  title="Contemplative Reptile"*/}
-      {/*/>*/}
-      <CardContent>
-        <Typography>
-          {lessonItem.title}
-        </Typography>
-
-
-      </CardContent>
-      <CardActions>
-        {/*<Badge badgeContent={lessonItem && lessonItem.flashcards && lessonItem.flashcards.length || "0"} color="primary">*/}
-        {/*  <MenuBookIcon/>*/}
-        {/*</Badge>*/}
-        {/*<Badge badgeContent={lessonItem.questions && lessonItem.questions.length || "0"} color="primary">*/}
-        {/*  <QuestionAnswerIcon/>*/}
-        {/*</Badge>*/}
-
-        <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/courses/${lessonItem.slug}`}>Edit</Button>
-        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(lessonItem)}>Delete</Button>
-      </CardActions>
-    </Card>
-  );
-}
-

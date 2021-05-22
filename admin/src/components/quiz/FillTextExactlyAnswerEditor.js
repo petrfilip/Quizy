@@ -1,13 +1,16 @@
 import AnswerFields from "./AnswerFields";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import MarkdownPreview from '@uiw/react-markdown-preview';
-import { Button, Checkbox, FormControlLabel } from "@material-ui/core";
+import { Button, Checkbox, FormControlLabel, Typography } from "@material-ui/core";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import { useTranslation } from "react-i18next";
 
-export default function FillTextExactlyAnswerEditor({ question, answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
+export default function FillTextExactlyAnswerEditor({ question, answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType, onQuestionChange }) {
 
   const [showPreview, setShowPreview] = useState(false)
+  const { t } = useTranslation();
+
 
   useLayoutEffect(() => {
     const matches = question.match(/\${([^}]+)}/g)
@@ -50,11 +53,15 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
 
   return <>
     <div>
-      {question && !question.match(/\${([^}]+)}/g) && "This `${1}` is placeholder. Put `${2}` into the question. "
-      + "Which cause new field. For each placeholder use unique inner text such as `${3}`, `${4}`, or `${what}``.  "}
+      {question && !question.match(/\${([^}]+)}/g) && <>
+        <Typography>{t('qe_templates')}</Typography>
+        <Button variant={"outlined"} onClick={()=> onQuestionChange(t('qe_template_1_content'))}>{t('qe_template_1_title')}</Button>
+        <Button variant={"outlined"} onClick={()=> onQuestionChange(t('qe_template_2_content'))}>{t('qe_template_2_title')}</Button>
+        {/*<Button variant={"outlined"} onClick={()=> onQuestionChange(t('qe_template_3_content'))}>{t('qe_template_3_title')}</Button>*/}
+      </>}
       {showPreview ?
         <Button variant={"text"} startIcon={<VisibilityOffIcon/>} onClick={() => setShowPreview(false)}><MarkdownPreview source={text}/></Button> :
-        <Button variant={"text"} startIcon={<VisibilityIcon/>} onClick={() => setShowPreview(true)}>Show result preview</Button>}
+        <Button variant={"text"} startIcon={<VisibilityIcon/>} onClick={() => setShowPreview(true)}>{t('qe_showPreview')}</Button>}
     </div>
     {question.match(/\${([^}]+)}/g) && answers && answers.map((item, index) =>
       <div key={`fillExact-${index}`}>
@@ -78,7 +85,7 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
     )}
 
     <div>
-      <FormControlLabel
+      {false && <FormControlLabel
         control={
           <Checkbox
             checked={parameters?.ignoreCases}
@@ -88,9 +95,9 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
           />
         }
         label="Ignore cases"
-      />
+      />}
 
-      <FormControlLabel
+      {false && <FormControlLabel
         control={
           <Checkbox
             checked={parameters?.stripEmptyCharacters}
@@ -100,7 +107,7 @@ export default function FillTextExactlyAnswerEditor({ question, answers, onAnswe
           />
         }
         label="Strip empty characters"
-      />
+      />}
     </div>
 
   </>

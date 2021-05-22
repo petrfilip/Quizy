@@ -5,10 +5,12 @@ import MDEditor from "@uiw/react-md-editor";
 import FillTextFromOptionsAnswerEditor from "./FillTextFromOptionsAnswerEditor";
 import FillTextExactlyAnswerEditor from "./FillTextExactlyAnswerEditor";
 import { FormControl, InputLabel, makeStyles, MenuItem, Select } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 export default function QuizQuestionEditor({ question }) {
 
   const [data, setData] = useState(question)
+  const { t } = useTranslation();
 
   const handleInputChange = (event) => {
     const target = event.target;
@@ -35,7 +37,7 @@ export default function QuizQuestionEditor({ question }) {
   const onUpdateParametersHandler = (parameters) => {
     data.parameters = parameters
     question.parameters = parameters;
-    setData({...data})
+    setData({ ...data })
   }
 
   const classes = makeStyles((theme) => ({
@@ -48,38 +50,39 @@ export default function QuizQuestionEditor({ question }) {
     },
   }))();
 
+  const onQuestionChange = (src) => {
+    handleInputChange({
+        target: {
+          value: src,
+          name: "question"
+        }
+      }
+    )
+  }
+
   return <>
     <FormControl className={classes.formControl}>
-      <InputLabel id="demo-simple-select-label">Question type</InputLabel>
+      <InputLabel id="demo-simple-select-label">{t('qqe_questionType')}</InputLabel>
       <Select value={data.questionType} name={"questionType"} onChange={handleInputChange}>
-        <MenuItem value={"pickOne"}>Pick one</MenuItem>
-        <MenuItem value={"pickMultiple"}>Pick multiple</MenuItem>
-        <MenuItem value={"sequence"}>Sequence</MenuItem>
-        <MenuItem value={"fillTextFromOptions"}>Fill text from options</MenuItem>
-        <MenuItem value={"fillTextExactly"}>Fill text exactly</MenuItem>
+        <MenuItem value={"pickOne"}>{t('qqe_pickOne')}</MenuItem>
+        <MenuItem value={"pickMultiple"}>{t('qqe_pickMultiple')}</MenuItem>
+        {/*<MenuItem value={"sequence"}>Sequence</MenuItem>*/}
+        {/*<MenuItem value={"fillTextFromOptions"}>Fill text from options</MenuItem>*/}
+        <MenuItem value={"fillTextExactly"}>{t('qqe_pickFillTextExactly')}</MenuItem>
       </Select>
     </FormControl>
 
     <FormControl className={classes.formControl}>
-      <InputLabel id="demo-simple-select-label"> Answer type:</InputLabel>
+      <InputLabel id="demo-simple-select-label">{t('qqe_answerType')}</InputLabel>
       <Select value={data.answerType} name={"answerType"} onChange={handleInputChange}>
-        <MenuItem value={"simpleInput"}>Simple input</MenuItem>
-        <MenuItem value={"markdown"}>Markdown</MenuItem>
+        <MenuItem value={"simpleInput"}>{t('qqe_simpleInput')}</MenuItem>
+        <MenuItem value={"markdown"}>{t('qqe_markdown')}</MenuItem>
       </Select>
     </FormControl>
 
     <MDEditor
       value={data.question || ""}
-      onChange={(src) => {
-        handleInputChange({
-            target: {
-              value: src,
-              name: "question"
-            }
-          }
-        )
-      }
-      }
+      onChange={onQuestionChange}
     />
 
 
@@ -120,6 +123,7 @@ export default function QuizQuestionEditor({ question }) {
       onUpdateParameters={onUpdateParametersHandler}
       onCorrectAnswerChange={onCorrectAnswerChangeHandler}
       onAnswerChange={answerChangedHandler}
+      onQuestionChange={onQuestionChange}
       answerType={data.answerType}
     />}
 

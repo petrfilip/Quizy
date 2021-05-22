@@ -8,6 +8,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSnackbar } from "notistack";
 import { useAuth } from "../../app/AuthContext";
 import LessonCard from "./LessonCard";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles({
   root: {
@@ -20,6 +21,7 @@ const useStyles = makeStyles({
 
 export default function LessonManager() {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
@@ -87,7 +89,7 @@ export default function LessonManager() {
   ];
 
   return <Container maxWidth={"lg"}>
-    <Typography variant="h4">Lessons</Typography>
+    <Typography variant="h4">{t('title_lesson')}</Typography>
 
     {/*{isPending && "Loading data"}*/}
     {error}
@@ -97,9 +99,9 @@ export default function LessonManager() {
             variant="outlined"
             to={`/lessons/newQuiz`}
             component={RouterLink}
-    >Add new lesson</Button>
+    >{t('lm_addNewLesson')}</Button>
     <List isPending={isPending} columns={columns} data={data} component={(item) => {
-      return LessonCard(item, deleteItemDialog)
+      return <LessonCard lessonItem={item} onDelete={deleteItemDialog}/>
     }}/>
     </Container>
 

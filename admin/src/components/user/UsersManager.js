@@ -8,6 +8,7 @@ import { useAuth } from "../../app/AuthContext";
 import List from "../../app/List";
 import { Container } from "@material-ui/core";
 import UserCard from "./UserCard";
+import { useTranslation } from "react-i18next";
 
 export default function UserLoader() {
 
@@ -16,6 +17,7 @@ export default function UserLoader() {
   const [error, setError] = useState();
   const { enqueueSnackbar } = useSnackbar();
   const { token } = useAuth();
+  const { t } = useTranslation();
 
   useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/users`, {
@@ -87,7 +89,7 @@ export default function UserLoader() {
   ];
 
   return <Container maxWidth={"lg"}>
-    <Typography variant="h4">Users</Typography>
+    <Typography variant="h4">{t('navbar_users')}</Typography>
 
     {error}
     <Button color={"primary"}
@@ -95,7 +97,7 @@ export default function UserLoader() {
             variant="outlined"
             to={`/users/new`}
             component={RouterLink}
-    >Add new user</Button>
+    >{t('cm_addNewUsers')}</Button>
     <List isPending={isPending} columns={columns} data={data} component={(item) => <UserCard
       onTagClick={showUsersByTag}
       userItem={item}

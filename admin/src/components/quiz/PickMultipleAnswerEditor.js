@@ -4,10 +4,12 @@ import { Button } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Checkbox from '@material-ui/core/Checkbox';
 import AddIcon from "@material-ui/icons/Add";
+import { useTranslation } from "react-i18next";
 
 export default function PickMultipleAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, answerType }) {
 
   const [correct, setCorrect] = useState(correctAnswer && Array.isArray(correctAnswer) && correctAnswer || [])
+  const { t } = useTranslation();
 
   const onInputChange = (event) => {
     const target = event.target;
@@ -65,7 +67,7 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
       </div>
     )}
 
-    <Button startIcon={<AddIcon />} onClick={addNewAnswer}>Add more answer</Button>
+    <Button startIcon={<AddIcon />} onClick={addNewAnswer}>{t('qe_addAnotherAnswer')}</Button>
 
 
   </>

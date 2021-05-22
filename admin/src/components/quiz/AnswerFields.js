@@ -9,10 +9,12 @@ import { Button, TextField } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import EditIcon from "@material-ui/icons/Edit"; //Example style, you can use another
 import VisibilityOffIcon from '@material-ui/icons/VisibilityOff';
+import { useTranslation } from "react-i18next";
 
 export default function AnswerFields({ id, answer, onInputChange, answerType }) {
 
   const [shownReasons, setShownReasons] = useState(false)
+  const { t } = useTranslation();
 
   const markdown = <MDEditor
     value={answer.text || ""}
@@ -72,9 +74,9 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
       {/*<textarea id={id} name={"reason"} value={answer.reason} onChange={onInputChange}/>*/}
 
 
-      {!shownReasons && !answer.reason && <Button startIcon={<AddIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>Add reason</Button>}
-      {!shownReasons && answer.reason && <Button startIcon={<EditIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>Edit reason</Button>}
-      {shownReasons && <Button startIcon={<VisibilityOffIcon/>} color={"secondary"} onClick={() => setShownReasons(false)}>Hide reason</Button>}
+      {!shownReasons && !answer.reason && <Button startIcon={<AddIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>{t('qe_addReason')}</Button>}
+      {!shownReasons && answer.reason && <Button startIcon={<EditIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>{t('qe_editReason')}</Button>}
+      {shownReasons && <Button startIcon={<VisibilityOffIcon/>} color={"secondary"} onClick={() => setShownReasons(false)}>{t('qe_hideReason')}</Button>}
       {shownReasons && <MDEditor
         height={100}
         preview={'edit'}

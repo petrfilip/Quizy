@@ -10,6 +10,7 @@ import EditIcon from "@material-ui/icons/Edit";
 import { Link as RouterLink } from "react-router-dom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
 // const useStyles = makeStyles({
 //   root: {
@@ -20,8 +21,9 @@ import React from "react";
 //   },
 // });
 
-export default function LessonCard(lessonItem, onDelete) {
+export default function LessonCard({ lessonItem, onDelete }) {
   // const classes = useStyles();
+  const { t } = useTranslation();
 
   return (
     <Card variant="outlined">
@@ -46,8 +48,10 @@ export default function LessonCard(lessonItem, onDelete) {
           <QuestionAnswerIcon/>
         </Badge>
 
-        <Button color={"primary"} startIcon={<EditIcon/>} component={RouterLink} to={`/lessons/${lessonItem.slug}`}>Edit</Button>
-        <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(lessonItem)}>Delete</Button>
+        <Button color={"primary"} startIcon={<EditIcon/>}
+                component={RouterLink} to={`/lessons/${lessonItem.slug}`}>{t('edit')}</Button>
+        <Button color={"secondary"} startIcon={<DeleteIcon/>}
+                onClick={() => onDelete(lessonItem)}>{t('delete')}</Button>
       </CardActions>
     </Card>
   );

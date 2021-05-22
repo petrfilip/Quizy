@@ -7,8 +7,11 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import OpenInNewIcon from '@material-ui/icons/OpenInNew';
+import { useTranslation } from "react-i18next";
 
 const UserCard = ({ userItem, onDelete, onClick, onTagClick }) => {
+  const { t } = useTranslation();
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -20,8 +23,8 @@ const UserCard = ({ userItem, onDelete, onClick, onTagClick }) => {
           label={label}/>)}
       </CardContent>
       <CardActions>
-        {onDelete && <Button color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(userItem)}/>}
-        {onClick && <Button color={"primary"} startIcon={<OpenInNewIcon/>} onClick={() => onClick(userItem)}/>}
+        {onDelete && <Button title={t('delete')} color={"secondary"} startIcon={<DeleteIcon/>} onClick={() => onDelete(userItem)}/>}
+        {onClick && <Button title={t('detail')} color={"primary"} startIcon={<OpenInNewIcon/>} onClick={() => onClick(userItem)}/>}
       </CardActions>
     </Card>
   );

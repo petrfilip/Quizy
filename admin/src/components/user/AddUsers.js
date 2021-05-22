@@ -15,6 +15,7 @@ import Grid from "@material-ui/core/Grid";
 import UploadImageArea from "../file-manager/UploadImageArea";
 import * as XLSX from "xlsx";
 import UserLabelInput from "./UserLabelInput";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,6 +39,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function AddUsers() {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const [isError, setIsError] = useState(false);
   const [users, setUsers] = useState([{}]);
@@ -46,8 +48,6 @@ export default function AddUsers() {
   const [updatedValue, forceUpdate] = useReducer((x) => x + 1, 0);
 
   const { enqueueSnackbar } = useSnackbar();
-
-
 
   function createUsers(e) {
     e.preventDefault()
@@ -86,14 +86,13 @@ export default function AddUsers() {
 
   }
 
-
   return (<Container maxWidth={"lg"}>
       <Button color={"primary"}
               startIcon={<AddIcon/>}
               variant="outlined"
               to={`/users`}
               component={RouterLink}
-      >List users</Button>
+      >{t('cm_userList')}</Button>
       <Container component="main" maxWidth="sm">
         <Backdrop open={isPending}>
           <CircularProgress color="inherit"/>
@@ -106,11 +105,11 @@ export default function AddUsers() {
             <AccountCircleIcon/>
           </Avatar>
           <Typography component="h1" variant="h5">
-            Create new users
+            {t('cm_addNewUsers')}
           </Typography>
           <form className={classes.form} noValidate={true} onSubmit={createUsers}>
 
-            <UserLabelInput defaultValues={userLabels} onChange={setUserLabels} />
+            <UserLabelInput defaultValues={userLabels} onChange={setUserLabels}/>
 
             {users.map((user, index) => <Grid key={`user-${updatedValue}-${index}`} container spacing={4}>
               <Grid item xs={6}>
@@ -137,7 +136,7 @@ export default function AddUsers() {
                   required
                   fullWidth
                   id="name"
-                  label="User name"
+                  label={t('cm_userName')}
                   name="name"
                   autoComplete="off"
                 />
@@ -166,7 +165,7 @@ export default function AddUsers() {
                   required
                   fullWidth
                   id="mail"
-                  label="Mail Address"
+                  label={t('cm_userMail')}
                   name="mail"
                   autoComplete="off"
                 />
@@ -174,32 +173,32 @@ export default function AddUsers() {
             </Grid>)}
 
 
-            <UploadImageArea location={"/"} onDropFiles={(files) => {
-              var f = files[0];
-              var reader = new FileReader();
-              reader.onload = function(e) {
-                var data = e.target.result;
-                let readedData = XLSX.read(data, { type: 'binary' });
-                const wsname = readedData.SheetNames[0];
-                const ws = readedData.Sheets[wsname];
+            <UploadImageArea location={"/"}
+                             label={t('cm_userDropImport')}
+                             onDropFiles={(files) => {
+                               var f = files[0];
+                               var reader = new FileReader();
+                               reader.onload = function(e) {
+                                 var data = e.target.result;
+                                 let readedData = XLSX.read(data, { type: 'binary' });
+                                 const wsname = readedData.SheetNames[0];
+                                 const ws = readedData.Sheets[wsname];
 
-                /* Convert array to json*/
-                const dataParse = XLSX.utils.sheet_to_json(ws, { header: 1 });
-                const importedUsers = dataParse.map((row => ({ name: row[0], mail: row[1] })))
-                importedUsers.push({})
-                setUsers((currentValue) => [...currentValue, ...importedUsers])
-              };
-              reader.readAsBinaryString(f)
-            }}/>
+                                 /* Convert array to json*/
+                                 const dataParse = XLSX.utils.sheet_to_json(ws, { header: 1 });
+                                 const importedUsers = dataParse.map((row => ({ name: row[0], mail: row[1] })))
+                                 importedUsers.push({})
+                                 setUsers((currentValue) => [...currentValue, ...importedUsers])
+                               };
+                               reader.readAsBinaryString(f)
+                             }}/>
             <Button
               type="submit"
               fullWidth
               variant="contained"
               color="primary"
               className={classes.submit}
-            >
-              Create user
-            </Button>
+            >{t('cm_userCreateButton')}</Button>
           </form>
         </div>
 

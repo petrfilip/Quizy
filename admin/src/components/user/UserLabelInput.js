@@ -1,8 +1,10 @@
 import React, { useLayoutEffect, useState } from 'react';
 import { Autocomplete, createFilterOptions } from "@material-ui/lab";
 import TextField from "@material-ui/core/TextField";
+import { useTranslation } from "react-i18next";
 
 const UserLabelInput = ({defaultValues = [], onChange}) => {
+  const { t } = useTranslation();
 
   const [availableLabels, setAvailableLabels] = useState([]);
   const [isPending, setIsPending] = useState(true)
@@ -79,7 +81,7 @@ const UserLabelInput = ({defaultValues = [], onChange}) => {
             e.key === 'Enter' && e.preventDefault();
           }}
           variant="outlined"
-          label="Select user labels"
+          label={t('cm_userLabels')}
         />
       )}
     />

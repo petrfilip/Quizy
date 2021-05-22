@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Redirect, Route, Switch, useParams } from "react-router-dom";
 import LessonManager from "../components/lesson/LessonManager";
 import LessonItemManager from "../components/lesson/LessonItemManager";
-import UsersLoader from "../components/user/UsersLoader";
+import UsersLoader from "../components/user/UsersManager";
 import "./Main.css"
 import Navbar from "./Navbar";
 import PeopleIcon from '@material-ui/icons/People';
@@ -25,38 +25,41 @@ import AddUsers from "../components/user/AddUsers";
 import UserDetails from "../components/user/UserDetails";
 import UsersLabelsOverview from "../components/user/UsersLabelsOverview";
 import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
+import { useTranslation } from "react-i18next";
 
 export default function Main() {
   const { user } = useAuth()
+  const { t } = useTranslation();
+
 
   const nav = user && [
     {
-      title: "Dashboard",
+      title: t('navbar_dashboard'),
       to: "/",
       icon: <HomeIcon/>
     },
     {
-      title: "Lessons",
+      title: t('navbar_lessons'),
       to: "/lessons",
       icon: <MenuBookIcon/>
     },
     {
-      title: "Courses",
+      title: t('navbar_courses'),
       to: "/courses",
       icon: <ViewComfyIcon/>
     },
     {
-      title: "Results",
+      title: t('navbar_results'),
       to: "/users/labels/",
       icon: <AssignmentTurnedInIcon/>
     },
     {
-      title: "Users",
+      title:  t('navbar_users'),
       to: "/users",
       icon: <PeopleIcon/>
     },
     {
-      title: "File manager",
+      title: t('navbar_fileManager'),
       to: "/file-manager",
       icon: <PermMediaIcon/>
     },

@@ -3,10 +3,12 @@ import { useState } from "react";
 import { Button, FormControl, InputLabel, Radio, TextField } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import AddIcon from "@material-ui/icons/Add";
+import { useTranslation } from "react-i18next";
 
 export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAnswer, onCorrectAnswerChange, parameters, onUpdateParameters, answerType }) {
 
   const [correct, setCorrect] = useState(correctAnswer && correctAnswer || undefined)
+  const { t } = useTranslation();
 
   const onCorrectAnswerChangeHandler = (event) => {
     const target = event.target;
@@ -62,10 +64,10 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
       </div>
     )}
 
-    <Button startIcon={<AddIcon/>} onClick={addNewAnswer}>Add more answer</Button>
+    <Button startIcon={<AddIcon/>} onClick={addNewAnswer}>{t('qe_addAnotherAnswer')}</Button>
 
     <hr/>
-    <TextField label={"Column layout"} type="number" name={"layout"} max={4} min={1} value={parameters?.layout} onChange={updateParameters}/>
+    {false && <TextField label={"Column layout"} type="number" name={"layout"} max={4} min={1} value={parameters?.layout} onChange={updateParameters}/>}
 
   </>
 }
