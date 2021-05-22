@@ -11,6 +11,7 @@ import useExam from "./ExamHook";
 import CloseIcon from '@material-ui/icons/Close';
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
 import { ExamContext } from "./ExamContext";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,6 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Navbar({ items }) {
   const classes = useStyles();
+  const { t } = useTranslation();
+
   const { exam } = useContext(ExamContext)
   let {cancelExam} = useExam();
 
@@ -77,19 +80,13 @@ export default function Navbar({ items }) {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">{"Cancel exam?"}</DialogTitle>
+            <DialogTitle id="alert-dialog-title">{t('title_cancelExamQuestion')}</DialogTitle>
             <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                If you cancel the exam then you will lose all your gathered answers and the exam will be submitted with 0 points.
-              </DialogContentText>
+              <DialogContentText id="alert-dialog-description">{t('title_cancelExamExplanation')}</DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button variant={"outlined"} onClick={handleCancelExam} color="secondary">
-                Cancel exam and lose all points
-              </Button>
-              <Button variant={"outlined"} onClick={handleClose} color="primary" autoFocus>
-                Back to exam
-              </Button>
+              <Button variant={"outlined"} onClick={handleCancelExam} color="secondary">{t('title_cancelExamButtonCancel')}</Button>
+              <Button variant={"outlined"} onClick={handleClose} color="primary" autoFocus>{t('title_cancelExamButtonContinue')}</Button>
             </DialogActions>
           </Dialog>
         </Toolbar>

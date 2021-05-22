@@ -15,7 +15,7 @@ const cs = {
     button_moveToExam: "Přejít na zkoušku",
     title_doYouKnow: "Znáš správnou odpověd?",
     title_selectOneOption: "Vyber správnou odpověď",
-    title_selectMultipleOptions: "Vyber správné odpověďi",
+    title_selectMultipleOptions: "Vyber správné odpovědi",
     title_fillFieldsExactly: "Vyplň přesně chybějící výrazy",
     button_done: "Hotovo",
     button_correct: "Správně",
@@ -35,6 +35,10 @@ const cs = {
     search: "vyhledat",
     noItemCorrespondToCriteria: "Zadaným kritériím nevyhovuje žádný záznam",
     title_profile: "Profil",
+    title_cancelExamQuestion: "Opravdu chcete přerušit zkoušku?",
+    title_cancelExamExplanation: "Pokud přerušíte zkoušku, ztratíte odpovědi a budete mít 0 bodů. Tento výsledek naleznete i ve svém profilu.",
+    title_cancelExamButtonCancel: "Přerušit zkoušku a získat 0 bodů",
+    title_cancelExamButtonContinue: "Pokračovat ve zkoušce"
   }
 };
 
