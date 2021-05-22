@@ -57,8 +57,7 @@ export default function CourseItem({ slug }) {
       <div className={classes.info}>Course</div>
       <Paper style={{ padding: "20px", minHeight: '500px' }}>
         <Typography variant={"h4"}>{data.description}</Typography>
-        {data.lessonList && <List data={data.lessonList} component={(item) => LessonItemCard(item, () => {
-        })}/>}
+        {data.lessonList && <List data={data.lessonList} component={(item) => <LessonItemCard lessonItem={item} />} />}
       </Paper>
     </Container>
 

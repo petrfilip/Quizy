@@ -11,7 +11,7 @@ export default function LessonItemCard({ lessonItem, onClick }) {
 
   return (
     <Card variant="outlined">
-      {lessonItem.heroImage && <CardMedia
+      {lessonItem?.heroImage && <CardMedia
         style={{
           width: "auto",
           maxHeight: "200px",
