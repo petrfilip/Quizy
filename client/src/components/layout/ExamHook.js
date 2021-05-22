@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useAuth } from "./AuthContext";
 import { useSnackbar } from "notistack";
 import useUser from "./UserHook";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { ExamContext } from "./ExamContext";
 
 const useExam = (lesson) => {
@@ -14,6 +14,7 @@ const useExam = (lesson) => {
   const { refreshUser } = useUser();
   const { enqueueSnackbar } = useSnackbar()
   const history = useHistory();
+  const location = useLocation();
   const { setExam } = useContext(ExamContext)
 
   const [results, setResults] = useState(null)
@@ -25,17 +26,20 @@ const useExam = (lesson) => {
 
   useLayoutEffect(() => {
     const exam = JSON.parse(localStorage.getItem("exam") || null);
-    if (exam) {
+    console.log(location.pathname)
+    if (quizItems?.length === 0 && exam) {
       setCurrentQuestionIndex(exam.index);
       setQuizItems(exam.questions)
       setAnswers(exam.answers)
       setMetadata(exam.metadata)
-
       setExam(exam.metadata)
-      exam.metadata && history?.push(`/lessons/${exam.metadata.examSlug}/exam`)
-
     }
-  }, [])
+
+    if (exam?.questions?.length > 0 && exam?.metadata &&  location.pathname !== `/lessons/${exam.metadata.examSlug}/exam`){
+      history?.push(`/lessons/${exam.metadata.examSlug}/exam`)
+    }
+
+  }, [location])
 
   const onAnswerSubmitHandler = (question, answer, isCorrect) => {
     const answerQuestion = {
@@ -87,6 +91,7 @@ const useExam = (lesson) => {
 
   const cancelExam =  () => {
     submitResults([])
+    localStorage.removeItem("exam");
     history.push("/profile")
   }
 

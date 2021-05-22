@@ -1,8 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="development" type="CompoundRunConfigurationType">
-    <toRun name="admin - start" type="js.build_tools.npm" />
     <toRun name="client start" type="js.build_tools.npm" />
     <toRun name="API" type="PhpBuiltInWebServerConfigurationType" />
+    <toRun name="Debug" type="PhpWebAppRunConfigurationType" />
+    <toRun name="admin - start" type="js.build_tools.npm" />
     <method v="2" />
   </configuration>
 </component>

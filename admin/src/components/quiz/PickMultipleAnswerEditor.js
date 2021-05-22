@@ -35,6 +35,7 @@ export default function PickMultipleAnswerEditor({ answers, onAnswerChange, corr
   }
 
   const removeAnswer = (index) => {
+    setCorrect([]) // todo improve
     answers.splice(index, 1)
     onAnswerChange([...answers])
   }

@@ -14,7 +14,6 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
 
   const [shownReasons, setShownReasons] = useState(false)
 
-
   const markdown = <MDEditor
     value={answer.text || ""}
     onChange={(src) => {
@@ -32,7 +31,7 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
 
   const simpleInput = <TextField id={`${id}`} type={"text"}
                                  autoComplete={"off"}
-                             name={"text"} value={answer.text} onChange={onInputChange}/>
+                                 name={"text"} value={answer.text} onChange={onInputChange}/>
 
   const codeEditor = <Editor
     value={answer?.text || ""}
@@ -74,7 +73,7 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
 
 
       {!shownReasons && !answer.reason && <Button startIcon={<AddIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>Add reason</Button>}
-      {!shownReasons && answer.reason && <Button startIcon={<EditIcon />} color={"secondary"} onClick={() => setShownReasons(true)}>Edit reason</Button>}
+      {!shownReasons && answer.reason && <Button startIcon={<EditIcon/>} color={"secondary"} onClick={() => setShownReasons(true)}>Edit reason</Button>}
       {shownReasons && <Button startIcon={<VisibilityOffIcon/>} color={"secondary"} onClick={() => setShownReasons(false)}>Hide reason</Button>}
       {shownReasons && <MDEditor
         height={100}
@@ -93,7 +92,6 @@ export default function AnswerFields({ id, answer, onInputChange, answerType }) 
         }
         }
       />}
-
 
 
     </>

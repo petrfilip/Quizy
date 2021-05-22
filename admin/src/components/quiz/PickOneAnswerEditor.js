@@ -37,6 +37,7 @@ export default function PickOneAnswerEditor({ answers, onAnswerChange, correctAn
   }
 
   const removeAnswer = (index) => {
+    setCorrect([]) // todo improve
     answers.splice(index, 1)
     onAnswerChange([...answers])
   }
