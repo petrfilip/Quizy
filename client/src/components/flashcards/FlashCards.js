@@ -3,7 +3,7 @@ import Paging from "../Paging";
 import { useState } from "react";
 import { Container, Paper } from "@material-ui/core";
 
-export default function FlashCards({ flashcards }) {
+export default function FlashCards({ flashcards, onLastItem }) {
 
   const [currentFlashcardIndex, setCurrentFlashcardIndex] = useState(0);
 
@@ -22,7 +22,7 @@ export default function FlashCards({ flashcards }) {
 
       <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }}>
         <Paper>
-          <Paging paging={paging}/>
+          <Paging paging={paging} onLast={onLastItem}/>
         </Paper>
       </Container>
     </>

@@ -5,6 +5,7 @@ import Button from "@material-ui/core/Button";
 import useExam from "../layout/ExamHook";
 import { useContext } from "react";
 import { ExamContext } from "../layout/ExamContext";
+import { Link as RouterLink } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -46,7 +47,11 @@ export default function ExamQuiz({ lesson }) {
           <Typography variant={"h3"} color={"primary"}>You passed the exam</Typography> :
           <Typography variant={"h3"} color={"primary"}>You failed the exam</Typography>
       }
-      <Button>Go to profile</Button>
+      <Button
+        variant={"contained"}
+        component={RouterLink}
+        to={`/profile`}
+        color={"primary"}>Go to profile</Button>
     </>
   )
 
@@ -54,7 +59,7 @@ export default function ExamQuiz({ lesson }) {
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
       <div className={classes.info}>Results</div>
       <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center" }}>
-        {results?.score !== undefined  && resultPageContent }
+        {results?.score !== undefined && resultPageContent}
       </Paper>
     </Container>
   )

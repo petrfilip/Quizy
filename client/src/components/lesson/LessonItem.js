@@ -81,7 +81,7 @@ export default function LessonItem({ slug }) {
           <OutlinedCard
             content={<>
               <Typography>Exam</Typography>
-                 </>}
+            </>}
             action={user?.mail ? <><Button
                 disabled={getAchievementItem() && (!data?.examParameters?.repeatable || data?.examParameters === undefined)}
                 component={RouterLink}
@@ -120,10 +120,18 @@ export default function LessonItem({ slug }) {
         {choicer}
       </Route>
       <Route path={`${path}/flashcards`}>
-        {data.flashcards && <FlashCards flashcards={data.flashcards}/>}
+        {data.flashcards && <FlashCards flashcards={data.flashcards}
+                                        onLastItem={<Button component={RouterLink}
+                                                            to={`${path}/quiz`}
+                                                            color={"secondary"}
+                                        ><DoubleArrowIcon/>Move to quiz</Button>}/>}
       </Route>
       <Route path={`${path}/quiz`}>
-        {data.questions && <Quiz quizData={data.questions}/>}
+        {data.questions && <Quiz quizData={data.questions}
+                                 onLastItem={<Button component={RouterLink}
+                                                     to={`${path}/exam`}
+                                                     color={"secondary"}
+                                 ><DoubleArrowIcon/>Move to exam</Button>}/>}
       </Route>
       <Route path={`${path}/exam`}>
         {data.questions && <ExamQuiz lesson={data}/>}

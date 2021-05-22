@@ -7,7 +7,7 @@ import Paging from "../Paging";
 import { Container, Paper } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
-export default function Quiz({ quizData }) {
+export default function Quiz({ quizData, onLastItem }) {
 
   useEffect(() => {
     const quiz = quizData.map((item, index) => {
@@ -77,7 +77,7 @@ export default function Quiz({ quizData }) {
       </Container>
       <Container maxWidth="md" style={{ marginTop: "20px", textAlign: "center" }}>
         <Paper>
-          <Paging paging={paging}/>
+          <Paging paging={paging} onLast={onLastItem}/>
           {/*<Button color={"primary"} fullWidth={true}>Odeslat hotový formulář</Button>*/}
         </Paper>
       </Container>

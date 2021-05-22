@@ -62,7 +62,7 @@ const CourseInput = ({defaultValue = {}, onChange}) => {
       getOptionLabel={(option) => option.title}
       style={{ width: "100%" }}
       renderInput={(params) => <TextField
-        {...params} label="Courses" variant="outlined" />}
+        {...params} label="Select courses" variant="outlined" />}
     />
 
   );

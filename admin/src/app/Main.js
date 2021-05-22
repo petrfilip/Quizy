@@ -24,6 +24,7 @@ import Typography from "@material-ui/core/Typography";
 import AddUsers from "../components/user/AddUsers";
 import UserDetails from "../components/user/UserDetails";
 import UsersLabelsOverview from "../components/user/UsersLabelsOverview";
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 export default function Main() {
   const { user } = useAuth()
@@ -43,6 +44,11 @@ export default function Main() {
       title: "Courses",
       to: "/courses",
       icon: <ViewComfyIcon/>
+    },
+    {
+      title: "Results",
+      to: "/users/labels/",
+      icon: <AssignmentTurnedInIcon/>
     },
     {
       title: "Users",

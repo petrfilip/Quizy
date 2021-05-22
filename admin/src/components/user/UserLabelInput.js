@@ -79,7 +79,7 @@ const UserLabelInput = ({defaultValues = [], onChange}) => {
             e.key === 'Enter' && e.preventDefault();
           }}
           variant="outlined"
-          label="User labels"
+          label="Select user labels"
         />
       )}
     />
