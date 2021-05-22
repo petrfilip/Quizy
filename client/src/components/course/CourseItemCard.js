@@ -6,11 +6,13 @@ import { Link as RouterLink } from "react-router-dom";
 import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
 import { useTranslation } from "react-i18next";
 
-export default function LessonItemCard({ lessonItem, onClick }) {
+export default function CourseItemCard({ lessonItem, onClick }) {
   const { t } = useTranslation();
+
 
   return (
     <Card variant="outlined">
+
       {lessonItem.heroImage && <CardMedia
         style={{
           width: "auto",
@@ -29,8 +31,7 @@ export default function LessonItemCard({ lessonItem, onClick }) {
 
       </CardContent>
       <CardActions>
-        <Button color={"secondary"} component={RouterLink}
-                startIcon={<DoubleArrowIcon/>} to={`/lessons/${lessonItem.slug}`} >{t('button_learn')}</Button>
+        <Button color={"secondary"} component={RouterLink} startIcon={<DoubleArrowIcon/>} to={`/courses/${lessonItem.slug}`} >{t('button_learn')}</Button>
       </CardActions>
     </Card>
   );

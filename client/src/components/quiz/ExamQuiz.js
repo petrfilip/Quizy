@@ -6,6 +6,7 @@ import useExam from "../layout/ExamHook";
 import { useContext } from "react";
 import { ExamContext } from "../layout/ExamContext";
 import { Link as RouterLink } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -15,6 +16,8 @@ export default function ExamQuiz({ lesson }) {
 
   const { question, onAnswerSubmitHandler, currentQuestionIndex, loadExamData, results } = useExam(lesson)
   const { exam } = useContext(ExamContext)
+  const { t } = useTranslation();
+
 
   const questionPage = (
     <>
@@ -41,23 +44,23 @@ export default function ExamQuiz({ lesson }) {
   const classes = useStyles();
 
   const resultPageContent = (<>
-      <Typography variant={"h2"}>Your result: {results?.score} %</Typography>
+      <Typography variant={"h2"}>{t('title_yourExamResult')}: {results?.score} %</Typography>
       {
         lesson.examParameters.minimalScore < results?.score ?
-          <Typography variant={"h3"} color={"primary"}>You passed the exam</Typography> :
-          <Typography variant={"h3"} color={"primary"}>You failed the exam</Typography>
+          <Typography variant={"h3"} color={"primary"}>{t('title_passedExamResult')}</Typography> :
+          <Typography variant={"h3"} color={"primary"}>{t('title_failedExamResult')}</Typography>
       }
       <Button
         variant={"contained"}
         component={RouterLink}
         to={`/profile`}
-        color={"primary"}>Go to profile</Button>
+        color={"primary"}>{t('button_goToProfile')}</Button>
     </>
   )
 
   const resultPage = (
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
-      <div className={classes.info}>Results</div>
+      <div className={classes.info}>{t('title_examResult')}</div>
       <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center" }}>
         {results?.score !== undefined && resultPageContent}
       </Paper>
@@ -66,16 +69,17 @@ export default function ExamQuiz({ lesson }) {
 
   const confirmStartPage = (
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
-      <div className={classes.info}>Are you ready?</div>
+      <div className={classes.info}>{t('title_areYouReady')}</div>
       <Paper style={{ padding: "20px", minHeight: '500px', textAlign: "center" }}>
 
         {lesson?.examParameters && <>
-          <Box>Minimal score {lesson.examParameters.minimalScore}</Box>
-          <Box>Count of questions {lesson.examParameters.questionsInExam}</Box>
-          <Box>Time limit {lesson.examParameters.timeLimit}</Box>
+          <Box>{t('title_minimalScore')}: {lesson.examParameters.minimalScore} %</Box>
+          <Box>{t('title_countOfQuestions')}: {lesson.examParameters.questionsInExam}</Box>
+          <Box>{t('title_repeatable')}: {!!lesson.examParameters.repeatable ? t('yes') : t('no')}</Box>
+          {false && <Box>Time limit {lesson.examParameters.timeLimit}</Box>}
         </>
         }
-        <Typography variant={"h2"} component={"button"} onClick={loadExamData}>Start exam</Typography>
+        <Typography variant={"h2"} component={"button"} onClick={loadExamData}>{t('button_startExam')}</Typography>
       </Paper>
     </Container>
   )

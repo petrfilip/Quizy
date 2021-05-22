@@ -7,6 +7,7 @@ import FillTextExactly from "./quizItem/FillTextExactly";
 import { Badge, Container, makeStyles } from "@material-ui/core";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -18,6 +19,8 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
   const [selected, setSelected] = useState(answer)
   const [customView, setCustomView] = useState()
   const [showCustomView, setShowCustomView] = useState(true)
+  const { t } = useTranslation();
+
 
   useLayoutEffect(() => {
     setSelected(answer);
@@ -31,9 +34,9 @@ export default function QuizItem({ question, answer, onAnswerSubmit }) {
   return (
     <>
       <div className={classes.info}>
-        {question.questionType === 'pickOne' && "Select one option"}
-        {question.questionType === 'pickMultiple' && "Select correct answer/s"}
-        {question.questionType === 'fillTextExactly' && "Fill fields exactly"}
+        {question.questionType === 'pickOne' && t('title_selectOneOption')}
+        {question.questionType === 'pickMultiple' && t('title_selectMultipleOptions')}
+        {question.questionType === 'fillTextExactly' && t('title_fillFieldsExactly')}
       </div>
 
       <Container maxWidth="md" style={{ minHeight: '580px' }}>

@@ -3,6 +3,7 @@ import MarkdownPreview from "@uiw/react-markdown-preview";
 import { Avatar, Container, makeStyles, Paper, Typography } from "@material-ui/core";
 import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
 import ReactCardFlip from 'react-card-flip';
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -14,6 +15,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function FlashCardItem({ flashcard, index }) {
   const classes = useStyles();
+  const { t } = useTranslation();
+
 
   const [isTurned, setIsTurned] = useState(false)
 
@@ -24,7 +27,7 @@ export default function FlashCardItem({ flashcard, index }) {
   const frontSide = (<Paper>
 
     <Container className={classes.info}>
-      <Typography>Do you know... </Typography>
+      <Typography>{t('title_doYouKnow')}</Typography>
     </Container>
     <Container maxWidth="md" style={{
       alignItems: 'center', minHeight: '580px', textAlign: "center", paddingTop: "25%", display: 'flex',

@@ -13,6 +13,7 @@ import useUser from "../layout/UserHook";
 import GradeIcon from "@material-ui/icons/Grade";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import DoneIcon from '@material-ui/icons/Done';
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -29,6 +30,8 @@ export default function LessonItem({ slug }) {
   const location = useLocation();
   const { user } = useUser()
   let { path, url } = useRouteMatch();
+  const { t } = useTranslation();
+
 
   useLayoutEffect(() => {
 
@@ -52,14 +55,14 @@ export default function LessonItem({ slug }) {
   }
 
   const choicer = <Container maxWidth="md" style={{ marginTop: "20px" }}>
-    <Container className={classes.info}>Lesson</Container>
+    <Container className={classes.info}>{t('title_lesson')}</Container>
     <Paper style={{ padding: "20px", minHeight: '500px' }}>
 
       <Typography variant={"h4"}>{data.title || <Skeleton/>}</Typography>
       <Grid style={{ marginTop: "10px" }} container spacing={2}>
         {data.flashcards && <Grid item xs={6}>
           <OutlinedCard
-            content={<Typography>FlashCards</Typography>}
+            content={<Typography>{t('title_flashcards')}</Typography>}
             action={<Button component={RouterLink}
                             to={`${url}/flashcards`}
                             color={"secondary"}
@@ -69,7 +72,7 @@ export default function LessonItem({ slug }) {
         </Grid>}
         <Grid item xs={6}>
           <OutlinedCard
-            content={<Typography>Quiz</Typography>}
+            content={<Typography>{t('title_quiz')}</Typography>}
             action={<Button component={RouterLink}
                             to={`${url}/quiz`}
                             color={"secondary"}
@@ -80,7 +83,7 @@ export default function LessonItem({ slug }) {
         <Grid item xs={6}>
           <OutlinedCard
             content={<>
-              <Typography>Exam</Typography>
+              <Typography>{t('title_exam')}</Typography>
             </>}
             action={user?.mail ? <><Button
                 disabled={getAchievementItem() && (!data?.examParameters?.repeatable || data?.examParameters === undefined)}
@@ -100,7 +103,7 @@ export default function LessonItem({ slug }) {
             }
           />
         </Grid>
-        <Grid item xs={6}>
+        {false && <Grid item xs={6}>
           <OutlinedCard
             content={<Typography>Feedback</Typography>}
             action={<Button component={RouterLink}
@@ -109,7 +112,7 @@ export default function LessonItem({ slug }) {
                             startIcon={<DoubleArrowIcon/>}
             />}
           />
-        </Grid>
+        </Grid>}
       </Grid>
     </Paper>
   </Container>
@@ -124,14 +127,14 @@ export default function LessonItem({ slug }) {
                                         onLastItem={<Button component={RouterLink}
                                                             to={`${path}/quiz`}
                                                             color={"secondary"}
-                                        ><DoubleArrowIcon/>Move to quiz</Button>}/>}
+                                        ><DoubleArrowIcon/>{t('button_moveToQuiz')}</Button>}/>}
       </Route>
       <Route path={`${path}/quiz`}>
         {data.questions && <Quiz quizData={data.questions}
                                  onLastItem={<Button component={RouterLink}
                                                      to={`${path}/exam`}
                                                      color={"secondary"}
-                                 ><DoubleArrowIcon/>Move to exam</Button>}/>}
+                                 ><DoubleArrowIcon/>{t('button_moveToExam')}</Button>}/>}
       </Route>
       <Route path={`${path}/exam`}>
         {data.questions && <ExamQuiz lesson={data}/>}

@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useAsyncDebounce, useFilters, useGlobalFilter, useTable } from 'react-table'
 import { Grid, TextField } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 // A great library for fuzzy filtering/sorting items
 
 // Define a default UI for filtering
@@ -10,6 +11,8 @@ function GlobalFilter({
   globalFilter,
   setGlobalFilter,
 }) {
+  const { t } = useTranslation();
+
   const count = preGlobalFilteredRows.length
   const [value, setValue] = React.useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
@@ -18,7 +21,7 @@ function GlobalFilter({
 
   return (
     <TextField fullWidth id="outlined-basic"
-               label="Search"
+               label={t('search')}
                variant="outlined"
                value={value || ""}
                onChange={e => {
@@ -56,6 +59,8 @@ fuzzyTextFilterFn.autoRemove = val => !val
 
 // Our table component
 function Table({ columns, data, component, gridSizes }) {
+  const { t } = useTranslation();
+
   const filterTypes = React.useMemo(
     () => ({
       // Add a new fuzzyTextFilterFn filter type.
@@ -126,7 +131,7 @@ function Table({ columns, data, component, gridSizes }) {
 
         {state.globalFilter && rows.length === 0 &&
         <Grid key={`not-found-item`} item xs={12} sm={12} md={13} lg={12} xl={12}>
-          No item correspond to search criteria
+          {t('noItemCorrespondToCriteria')}
         </Grid>}
 
 

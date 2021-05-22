@@ -1,17 +1,17 @@
-import { Link as RouterLink } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
-import { Card, CardActions, CardMedia, Container } from "@material-ui/core";
-import CardContent from "@material-ui/core/CardContent";
+import { Container } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import List from "../layout/List";
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
+import { useTranslation } from "react-i18next";
+import CourseItemCard from "./CourseItemCard";
 
 export default function CoursePage() {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
+  const { t } = useTranslation();
+
 
   useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/courses`)
@@ -36,10 +36,10 @@ export default function CoursePage() {
   ];
 
   return <Container maxWidth={"lg"}>
-    <Typography variant="h2">All courses</Typography>
+    <Typography variant="h2">{t('title_allCourses')}</Typography>
     {/*{isPending && "Loading data"}*/}
     {error}
-    <List columns={columns} data={data} component={(item) => OutlinedCard(item, ()=>{})}/>
+    <List columns={columns} data={data} component={(item) => <CourseItemCard  lessonItem={item}/>}/>
 
     {/*{data.map(item => <div key={`quizLink-${item.slug}`}><Link to={`/course/${item.slug}`}>{item.title}</Link></div>)}*/}
   </Container>
@@ -47,34 +47,7 @@ export default function CoursePage() {
 }
 
 
-function OutlinedCard(lessonItem, onClick) {
 
-  return (
-    <Card variant="outlined">
-
-      {lessonItem.heroImage && <CardMedia
-          style={{
-            width: "auto",
-            maxHeight: "200px",
-          }}
-        loading="lazy"
-        component="img"
-        image={`${process.env.REACT_APP_BASE_URI}${lessonItem?.heroImage?.path}`}
-        alt={lessonItem.title}
-      />}
-      <CardContent>
-        <Typography>
-          {lessonItem.title}
-        </Typography>
-
-
-      </CardContent>
-      <CardActions>
-        <Button color={"secondary"} component={RouterLink} startIcon={<DoubleArrowIcon/>} to={`/courses/${lessonItem.slug}`} >Learn</Button>
-      </CardActions>
-    </Card>
-  );
-}
 
 
 

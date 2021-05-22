@@ -10,6 +10,7 @@ import { useAuth } from "../layout/AuthContext";
 import List from "../layout/List";
 import useUser from "../layout/UserHook";
 import AchievementCard from "./AchievementCard";
+import { useTranslation } from "react-i18next";
 
 const defaultGridItemSizes = {
   xs: 12,
@@ -41,6 +42,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile(props) {
   const classes = useStyles();
+  const { t } = useTranslation();
+
 
   const { user: userToken } = useAuth()
   const { user: data } = useUser()
@@ -55,19 +58,23 @@ function Profile(props) {
         </Avatar>
 
         <Typography component="h1" variant="h5">
-          Profile
+          {t('title_profile')}
         </Typography>
 
-        {Object.entries(userToken).map(([key, value]) => {
-          return <Grid container>
-            <Grid item xs={6} style={{ textAlign: "right", paddingRight: "10px" }}>
-              <strong>{key}:</strong>
-            </Grid>
-            <Grid item xs={6}>
-              {value}
-            </Grid>
-          </Grid>
-        })}
+      <Typography>
+        {userToken.user_mail}
+      </Typography>
+
+        {/*{Object.entries(userToken).map(([key, value]) => {*/}
+        {/*  return <Grid container>*/}
+        {/*    <Grid item xs={6} style={{ textAlign: "right", paddingRight: "10px" }}>*/}
+        {/*      <strong>{key}:</strong>*/}
+        {/*    </Grid>*/}
+        {/*    <Grid item xs={6}>*/}
+        {/*      {value}*/}
+        {/*    </Grid>*/}
+        {/*  </Grid>*/}
+        {/*})}*/}
 
 
       </Paper>

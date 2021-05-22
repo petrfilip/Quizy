@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { Button, TextField } from "@material-ui/core";
+import { useTranslation } from "react-i18next";
 
 export default function FillTextExactly({ questionItem, selectedItem, onSubmit, setCustomView }) {
 
   const { question, answers, correct } = questionItem;
   const [selected, setSelected] = useState(selectedItem || [])
   const [isSubmitted, setIsSubmitted] = useState(selectedItem && selectedItem.length)
+  const { t } = useTranslation();
 
   const onInputChange = (event) => {
     const target = event.target;
@@ -68,9 +70,9 @@ export default function FillTextExactly({ questionItem, selectedItem, onSubmit, 
     }
     }
     >
-      {!isSubmitted && "Hotovo"}
-      {isSubmitted && isCorrect() && "Správně"}
-      {isSubmitted && !isCorrect() && "Chyba"}
+      {!isSubmitted && t('button_done')}
+      {isSubmitted && isCorrect() && t('button_correct')}
+      {isSubmitted && !isCorrect() && t('button_incorrect')}
     </Button>
   </>
 

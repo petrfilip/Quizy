@@ -7,12 +7,15 @@ import Button from "@material-ui/core/Button";
 import List from "../layout/List";
 import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import LessonItemCard from "./LessonItemCard";
+import { useTranslation } from "react-i18next";
 
 export default function LessonPage() {
 
   const [data, setData] = useState([])
   const [isPending, setIsPending] = useState(true)
   const [error, setError] = useState()
+  const { t } = useTranslation();
+
 
   useLayoutEffect(() => {
     fetch(`${process.env.REACT_APP_BASE_URI}/lessons`)
@@ -37,10 +40,11 @@ export default function LessonPage() {
   ];
 
   return <Container maxWidth={"lg"}>
-    <Typography variant="h2">All lessons</Typography>
+    <Typography variant="h2">{t('title_allLessons')}</Typography>
     {/*{isPending && "Loading data"}*/}
     {error}
-    <List columns={columns} data={data} component={(item) => LessonItemCard(item, ()=>{})}/>
+    <List columns={columns} data={data}
+          component={(item) => <LessonItemCard lessonItem={item} /> }/>
   </Container>
 
 }

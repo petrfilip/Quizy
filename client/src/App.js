@@ -16,24 +16,26 @@ import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import Login from "./components/layout/Login";
 import useUser from "./components/layout/UserHook";
 import { ExamProvider } from "./components/layout/ExamContext";
+import { useTranslation } from "react-i18next";
 
 function App() {
 
-  const { user } = useUser()
+  const { user } = useUser();
+  const { t } = useTranslation();
 
   const nav = user ? [
     {
-      title: "Dashboard",
+      title: t('navbar_dashboard'),
       to: "/",
       icon: <HomeIcon/>
     },
     {
-      title: "Lessons",
+      title: t('navbar_lessons'),
       to: "/lessons",
       icon: <MenuBookIcon/>
     },
     {
-      title: "Courses",
+      title: t('navbar_courses'),
       to: "/courses",
       icon: <ViewComfyIcon/>
     },
@@ -49,22 +51,22 @@ function App() {
     }
   ] : [
     {
-      title: "Dashboard",
+      title: t('navbar_dashboard'),
       to: "/",
       icon: <HomeIcon/>
     },
     {
-      title: "Lessons",
+      title: t('navbar_lessons'),
       to: "/lessons",
       icon: <MenuBookIcon/>
     },
     {
-      title: "Courses",
+      title: t('navbar_courses'),
       to: "/courses",
       icon: <ViewComfyIcon/>
     },
     {
-      title: "Log in",
+      title: t('navbar_login'),
       to: "/login",
       icon: <AccountCircleIcon/>
     },
