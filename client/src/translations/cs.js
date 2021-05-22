@@ -8,6 +8,7 @@ const cs = {
     button_learn: "Začít",
     title_allLessons: "Všechny lekce",
     title_allCourses: "Všechny kurzy",
+    title_course: "Kurz",
     title_flashcards: "Kartičky",
     title_quiz: "Kvíz",
     title_exam: "Zkouška",

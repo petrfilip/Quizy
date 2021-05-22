@@ -1,13 +1,10 @@
-import { Link as RouterLink, useHistory, useLocation, useRouteMatch } from "react-router-dom";
+import { useHistory, useLocation, useRouteMatch } from "react-router-dom";
 import { useLayoutEffect, useState } from "react";
-import { Card, CardActions, Container, Divider, Grid, makeStyles, Paper } from "@material-ui/core";
-import CardContent from "@material-ui/core/CardContent";
+import { Container, makeStyles, Paper } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
-import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-import Skeleton from '@material-ui/lab/Skeleton';
 import List from "../layout/List";
 import LessonItemCard from "../lesson/LessonItemCard";
+import { useTranslation } from "react-i18next";
 
 const useStyles = makeStyles((theme) => ({
   info: { color: theme.palette.primary.contrastText, backgroundColor: theme.palette.primary.main, textAlign: "center", padding: "15px" },
@@ -15,6 +12,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CourseItem({ slug }) {
   const classes = useStyles();
+  const { t } = useTranslation();
 
   const [currentAction, setCurrentAction] = useState("choice")
   const [data, setData] = useState({})
@@ -54,9 +52,10 @@ export default function CourseItem({ slug }) {
 
 
     <Container maxWidth="md" style={{ marginTop: "20px" }}>
-      <div className={classes.info}>Course</div>
+      <div className={classes.info}>{t('title_course')}</div>
       <Paper style={{ padding: "20px", minHeight: '500px' }}>
-        <Typography variant={"h4"}>{data.description}</Typography>
+        <Typography variant={"h4"}>{data.title}</Typography>
+        <Typography color={"textSecondary"}>{data.description}</Typography>
         {data.lessonList && <List data={data.lessonList} component={(item) => <LessonItemCard lessonItem={item} />} />}
       </Paper>
     </Container>
