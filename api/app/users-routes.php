@@ -94,38 +94,39 @@ return function (App $app) {
 
             $results = array();
             foreach ($inputJson as $value) {
-//                $loadedUser = UserRepository::getByMail($value["mail"]);
-//                if (!empty($loadedUser)) {
-//                    $response->getBody()->write(json_encode(ErrorUtils::error(ErrorUtils::USER_ALREADY_EXISTS)));
-//                    return $response->withStatus(403);
-//                }
+                $savedUser = null;
+                $loadedUser = UserRepository::getByMail($value["mail"]);
+                if (!empty($loadedUser)) { // existing user
+                    $loadedUser["labels"] = !empty($loadedUser["labels"]) ? $loadedUser["labels"] : array();
+                    $loadedUser["labels"] = array_values(array_unique(array_merge($loadedUser["labels"], $value["labels"]), SORT_REGULAR));
+                    $savedUser = UserRepository::insertOrUpdate($loadedUser);
+                } else { // new user
+                    $user = new stdClass();
+                    $user->mail = $value["mail"];
+                    $user->name = $value["name"];
+                    $user->labels = $value["labels"];
+                    $user->role = !empty($value["role"]) ? empty($value["role"]) : "USER";
 
+                    if (!empty($value["password"])) {
+                        $user->password = password_hash($value["password"], PASSWORD_BCRYPT);
+                    } else {
 
-                $user = new stdClass();
-                $user->mail = $value["mail"];
-                $user->name = $value["name"];
-                $user->labels = $value["labels"];
-                $user->role = !empty($value["role"]) ? empty($value["role"]) : "USER";
+                        $issuedAt = time();
+                        $expire = $issuedAt + 2592000; // 60 seconds * 60 minutes * 24 hours * 30 days //todo is it ok?
 
-                if (!empty($value["password"])) {
-                    $user->password = password_hash($value["password"], PASSWORD_BCRYPT);
-                } else {
+                        $token = array(
+                            "user_mail" => $value["mail"],
+                            "exp" => $expire
+                        );
+                        $jwt = JWT::encode($token, JWT_KEY, 'HS256');
 
-                    $issuedAt = time();
-                    $expire = $issuedAt + 2592000; // 60 seconds * 60 minutes * 24 hours * 30 days //todo is it ok?
-
-                    $token = array(
-                        "user_mail" => $value["mail"],
-                        "exp" => $expire
-                    );
-                    $jwt = JWT::encode($token, JWT_KEY, 'HS256');
-
-                    $emailBody = "Kliknutím na <a href='https://localhost:3006/password?reset={$jwt}'>odkaz změníte heslo</a>";
-                    EmailService::sendMail($value["mail"], "Nové heslo", $emailBody);
+                        $emailBody = "Kliknutím na <a href='https://localhost:3006/password?reset={$jwt}'>odkaz změníte heslo</a>";
+                        EmailService::sendMail($value["mail"], "Nové heslo", $emailBody);
+                    }
+                    $savedUser = UserRepository::insertOrUpdate($user);
                 }
-
-                $savedUser = UserRepository::insertOrUpdate($user);
                 unset($savedUser["password"]);
+                unset($savedUser["achievements"]);
                 array_push($results, $savedUser);
             }
 
