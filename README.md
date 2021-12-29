@@ -18,6 +18,25 @@ The backend is made in PHP (with Slim framework). To run the backend is possible
 
 ---
 
+| Student demo                          | Teacher demo                          |
+|---------------------------------------|---------------------------------------|
+| [![Student demo](demo-student.gif)](demo-student.gif) | [![Teacher demo](demo-teacher.gif)](demo-teacher.gif) |
+
+## Another teacher functionality
+
+| Add simple question with multiple options           | Add exactly fillable question with multiple answers                   |
+|-----------------------------------------------|-----------------------------------------------------------------|
+| [![](demo-question2.png)](demo-question2.png) | [![Question with code](demo-question1.png)](demo-question1.png) |
+
+
+### Score
+[![Score board](demo-score.png)](demo-score.png)
+### Course management
+[![Course management](demo-course.png)](demo-course.png)
+### File manager
+[![File managemer](fm-demo.gif)](fm-demo.gif)
+---
+
 Whole application is composed of the following objects:
 - lesson - contains study materials and quiz questions 
 - course - which wraps more lessons
